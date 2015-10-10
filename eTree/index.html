@@ -1,0 +1,32 @@
+<html>
+<head>
+	<title>test</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./eTree.css">
+</head>
+<body>
+	<div id="easyTree"></div>
+
+	<a href="javascript:void(0);" onclick="show();">click me</a>
+</body>
+<script type="text/javascript" src="../eTree/eTree.js"></script>
+<script type="text/javascript">
+	var treeData = {"name": "Jason", "id": 1 ,children: [{"name": "Tom", "id": 2, children:[{"name":"Sam", "id":5}]}, {"name": "Jack", "id": 3}]};
+
+	var et = eTree.init({
+		"id": "easyTree",	//页面中元素ID，树生成在这个元素里，禁止使用"eTree"
+		"data": treeData,	//生成树的数据
+		"showParam": "name",	//树节点要显示的字段名称
+		"selected": [{"name":"Sam", "id":5}, {"name":"Jack", "id":3}],	//设置被选中
+		"checkbox": false,	//设为多选
+		"isPid": false,	//当数据为[{"name":"Jason", "id":1}, {"name":"Tom", "id":2, "pId":1}]格式时，将isPid设为true
+		"select": function(d) {	//选中树节点时触发，只为checkbox为false时有效
+			console.log(d);
+		}
+	});
+
+	function show() {
+		console.log(et.getSelected());
+	}
+</script>
+</html>
