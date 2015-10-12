@@ -184,7 +184,7 @@
 		// 					checkParents(this.parentNode);
 		// 				};
 
-		// 				if(Array===selected.constructor) {
+		// 				if(Object.prototype.toString.call(selected) === "[object Array]") {
 		// 					for(var i=0, len=selected.length; i<len; i++) {
 		// 						if(selected[i].id==data.id) {
 		// 							var d = {};
