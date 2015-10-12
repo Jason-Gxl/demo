@@ -5,12 +5,54 @@
 		if(!opts.id || !opts.data) return ;
 		if(opts.data.constructor===Array && 0==opts.data.length) return ;
 
-		//创建树
-		// var makeTree = function(obj) {
+		// //创建树
+		// var makeTree = function(obj, wrap) {
 		// 	//配置信息
 		// 	var opts = obj.opts;
-		// 	//包裹器
-		// 	var wrap = document.getElementById(opts.id);
+
+		// 	var checkChilds = function(parent, flag) {
+		// 		var selected = obj.getSelected();
+		// 		var _childs = [];
+		// 		var chks = [];
+		// 		var getChilds = function(p) {
+		// 			var childs = p.children;
+		// 			for(var i=0,len=childs.length; i<len; i++) {
+		// 				_childs.push(childs[i]);
+		// 				if(childs[i].children) {
+		// 					getChilds(childs[i]);
+		// 				}
+		// 			}
+		// 		};
+		// 		getChilds(parent);
+		// 		for(var i=0,len=_childs.length; i<len; i++) {
+		// 			if(_childs[i].nodeType==1 && _childs[i].type=="checkbox") {
+		// 				chks.push(_childs[i]);
+		// 			}
+		// 		}
+		// 		if(flag) {
+		// 			for(var i=1,len=chks.length; i<len; i++) {
+		// 				chks[i].checked = true;
+		// 				var id = chks[i].getAttribute("did");
+		// 				for(var j=0,l=opts.__list.length; j<l; j++) {
+		// 					if(opts.__list[j].id==id) {
+		// 						selected.push(opts.__list[j]);
+		// 					}
+		// 				}
+		// 			}
+		// 		} else {
+		// 			for(var i=1,len=chks.length; i<len; i++) {
+		// 				chks[i].checked = false;
+		// 				var id = chks[i].getAttribute("did");
+		// 				for(var j=0; j<selected.length; ) {
+		// 					if(selected[j].id==id) {
+		// 						selected.splice(j, 1);
+		// 					} else {
+		// 						j++;
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	};
 
 		// 	//获取所有子元素
 		// 	var getChilds = function(childs, p) {
@@ -23,6 +65,7 @@
 
 		// 	//父元素监控，如果所有子节点都被选中，父节点也标为选中状态
 		// 	var checkParents = function(child) {
+		// 		if(child.parentNode.id=="eTree") return;
 		// 		var selected = obj.getSelected();
 		// 		var _childs = [];  //装载当前树节点的父节点下的所有子元素
 		// 		var chks = [];  //装载当前树节点的父节点下的所有checkbox
@@ -62,7 +105,7 @@
 		// 			}
 		// 		}
 
-		// 		if(child.parentNode.id!="eTree") checkParents(_p);
+		// 		checkParents(_p);
 		// 	};
 
 		// 	//创建树
@@ -119,63 +162,24 @@
 		// 				li.appendChild(chk);
 
 		// 				chk.onclick = function() {
-		// 					var selected = obj.getSelected();
-		// 					var __childs = [];  //装载当前树节点下的所有子元素
-		// 					var chks = [];
-
-		// 					if(!this.checked) {
-		// 						if(Array===selected.constructor) {
-		// 							for(var i=0; len=selected.length,i<len; ) {
-		// 								if(selected[i].id==data.id)
-		// 									selected.splice(i, 1);
-		// 								else i++
-		// 							}
-		// 						} else {
-		// 							if(data.id==selected.id) obj.cleanSelected();
-		// 						}
-		// 					} else {
+		// 					if(this.checked) {
 		// 						var d = {};
 		// 						for(var key in data) {
-		// 							if("children"!=key) d[key] = data[key];
-		// 						}
-		// 						selected.push(d);
-		// 					}
-
-		// 					//获取当前树节点下的所有子元素
-		// 					getChilds(__childs, this.parentNode);
-
-		// 					//获取当前树节点下的所有checkbox
-		// 					for(var i=0, len = __childs.length; i<len; i++) {
-		// 						if(__childs[i].nodeType==1 && __childs[i].type=="checkbox") chks.push(__childs[i]);
-		// 					}
-
-		// 					//遍历当前树节点下的所有checkbox；
-		// 					//如果当前树节点为选中状态，那么当前树节点下的所有checkbox标为选中状态；
-		// 					//如果当前树节点为未选中状态，那么去掉当前树节点下的所有checkbox的选中状态；
-		// 					for(var i=1; len=chks.length,i<len; i++) {
-		// 						var id = chks[i].getAttribute("did");
-		// 						if(this.checked) {
-		// 							if(!chks[i].checked) {
-		// 								chks[i].checked = true;
-		// 								for(var j=0, len=opts.__list.length; j<len; j++) {
-		// 									if(id==opts.__list[j].id) {
-		// 										selected.push(opts.__list[j]);
-		// 									}
-		// 								}
+		// 							if("children"!=key) {
+		// 								d[key] = data[key];
 		// 							}
-		// 						} else {
-		// 							if(chks[i].checked) {
-		// 								chks[i].checked = false;
-		// 								for(var j=0, len=obj.__selected.length; j<len; j++) {
-		// 									if(id==obj.__selected[j].id) {
-		// 										selected.splice(j, 1);
-		// 										break;
-		// 									}
-		// 								}
+		// 						}
+		// 						_selected.push(d);
+		// 					} else {
+		// 						for(var i=0; i<_selected.length; ) {
+		// 							if(_selected[i].id==data.id) {
+		// 								_selected.splice(i, 1);
+		// 							} else {
+		// 								i++;
 		// 							}
 		// 						}
 		// 					}
-
+		// 					checkChilds(this.parentNode, this.checked);
 		// 					//父元素监控
 		// 					checkParents(this.parentNode);
 		// 				};
@@ -429,7 +433,9 @@
 
 			var self = this;
 			self.opts = opts;
-			makeTree(self);
+			//包裹器
+			var wrap = document.getElementById(opts.id);
+			if(wrap) makeTree(self, wrap);
 		};
 
 		_init.prototype = {
