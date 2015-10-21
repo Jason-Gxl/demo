@@ -3,7 +3,7 @@
 	<title>test</title>
 	<meta charset="utf-8">
 </head>
-<body>
+<body onkeydown="KeyDown(event)">
 </body>
 <script type="text/javascript" src="../extend.js"></script>
 <script type="text/javascript">
@@ -20,6 +20,33 @@
 	var reg = /a/g;
 	console.log(reg);
 
+/** 
+ * 屏蔽按键刷新 
+ */  
+ // function KeyDown(event){  
+ //     var event= event ? event : (window.event ? window.event : null);
+ //     if ((event.altKey)&&((event.keyCode==37)||(event.keyCode==39))){
 
+ //     	event.returnValue=false;  
+ //     }  
+    
+ //     if (event.keyCode==116){
+ //         event.keyCode=0;  
+ //         event.returnValue=false;  
+ //     }  
+    
+ //     if ((event.ctrlKey)&&(event.keyCode==82)){
+ //         event.returnValue=false;  
+ //     }  
+    
+ //     if ((event.shiftKey)&&(event.keyCode==121)){
+ //         event.returnValue=false;  
+ //     }  
+ // } 
+
+window.onbeforeunload = function(e) {
+	var ev = e?e:window.event;
+	ev.returnValue = "如果刷新或离开页面，内容将会丢失。";
+} 
 </script>
 </html>
