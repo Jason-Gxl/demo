@@ -1,0 +1,37 @@
+.codyy_select_wrap {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	color: #fff;
+	box-sizing: border-box;
+	min-height: 25px;
+	height: 25px;
+}
+
+.codyy_select_wrap .cur_selected {
+	border: solid 1px #666;
+	color: #666;
+	text-indent: 5px;
+	background-color: #fff;
+	position: absolute;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	height: 25px;
+	line-height: 25px;
+	background: url(./codyy-select-arrow.png) no-repeat;
+	background-size: 14px;
+	background-position: right;
+	overflow: hidden;
+	padding-right: 15px;
+}
+
+.codyy_select_wrap .codyy_select {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	opacity: 0;
+	filter: alpha(opacity: 0;);
+	height: 25px;
+}

@@ -2,8 +2,58 @@
 <head>
 	<title>test</title>
 	<meta charset="utf-8">
+<style type="text/css">
+.btn-select { 
+	position: relative; 
+	display: inline-block; 
+	width: 150px; 
+	height: 25px; 
+	background-color: #f80; 
+	font: 14px/20px "Microsoft YaHei"; 
+	color: #fff; 
+}
+.btn-select .cur-select { 
+	border: solid 1px #666;
+	color: #666;
+	text-indent: 5px;
+	background-color: #fff;
+	position: absolute;
+	display: inline-block;
+} 
+.btn-select:hover .cur-select { 
+	background-color: #f90; 
+} 
+.btn-select select { 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+	width: 150px; 
+	height: 25px; 
+	opacity: 0; 
+	filter: alpha(opacity: 0;); 
+	font: 14px/20px "Microsoft YaHei"; 
+	color: #f80;
+} 
+.btn-select select option { 
+	text-indent: 10px; 
+} 
+.btn-select select option:hover { 
+	background-color: #f80; 
+	color: #fff; 
+} 
+ </style>
 </head>
 <body>
+<a class="btn-select" id="btn_select"> 
+	<span class="cur-select">请选择</span> 
+	<select> 
+		<option>选项一</option> 
+		<option>选项二</option> 
+		<option>选项三</option>
+		<option>选项四</option> 
+		<option>选项五</option> 
+	</select> 
+</a> 
 </body>
 <script type="text/javascript" src="../extend.js"></script>
 <script type="text/javascript">
@@ -19,34 +69,5 @@
 
 	var reg = /a/g;
 	console.log(reg);
-
-/** 
- * 屏蔽按键刷新 
- */  
- // function KeyDown(event){  
- //     var event= event ? event : (window.event ? window.event : null);
- //     if ((event.altKey)&&((event.keyCode==37)||(event.keyCode==39))){
-
- //     	event.returnValue=false;  
- //     }  
-    
- //     if (event.keyCode==116){
- //         event.keyCode=0;  
- //         event.returnValue=false;  
- //     }  
-    
- //     if ((event.ctrlKey)&&(event.keyCode==82)){
- //         event.returnValue=false;  
- //     }  
-    
- //     if ((event.shiftKey)&&(event.keyCode==121)){
- //         event.returnValue=false;  
- //     }  
- // } 
-
-// window.onbeforeunload = function(e) {
-// 	var ev = e?e:window.event;
-// 	ev.returnValue = "如果刷新或离开页面，内容将会丢失。";
-// } 
 </script>
 </html>

@@ -2,15 +2,18 @@
 <head>
 	<title>test</title>
 	<meta charset="utf-8">
+	<link type="text/css" rel="stylesheet"  href="./select.css"></link>
 </head>
 <body>
-	<codyy-select id="dddddd" list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toem'}]" showParam="name" name="user"></codyy-select>
-	<a href="javascript:void(0);" onclick="add();">click me</a>
+	<div style="width:100px;">
+		<codyy-select id="dddddd" list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toemdsfdsafdsafdsafs'}]" showParam="name" name="user" val="id" placeholder="请选择" id="dddddd"></codyy-select>
+	</div>
+	<a href="javascript:void(0);" style="margin-top:50px;" onclick="add();">click me</a>
 </body>
-<script type="text/javascript" src="./select.js"></script>
+<script type="text/javascript" src="./select2.js"></script>
 <script type="text/javascript">
 function add() {
-	document.getElementById("dddddd").setAttribute("class", "aa");
+	console.log(document.getElementById("dddddd").value);
 }
 </script>
 </html>
