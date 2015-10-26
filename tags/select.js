@@ -1,6 +1,16 @@
 (function(win) {
 	var doc = win.document;
 	var allEl = [];
+	var objs = [];
+
+	// document监控器
+	var docWatch = function() {
+		if("complete"!=doc.readyState) return ;
+		getAllEl();
+		for(var i=0, len=allEl.length; i<len; i++) {
+			CE(allEl[i]);
+		}
+	};
 
 	var getAllEl = function() {
 		var _els = doc.all || doc.getElementsByTagName("*");
@@ -11,76 +21,100 @@
 		}
 	};
 
-	var docWatcher = function() {
-		if("complete"!=doc.readyState) return ;
-		getAllEl();
-		for(var i=0, len=allEl.length; i<len; i++) {
-			new CE(allEl[i]);
-		}
-	};
-
 	var CE = function(el) {
-		if("CODYY-SELECT"!=el.tagName) return ;
- 		var el = el || doc;
-		this.el = el;
-		this.dataList = eval(el.getAttribute("list") || []);
-		var _cr = this.getCR();
-		createSelect(this);
-		this.bind();
+		if(!el) return ;
+		switch (el.tagName) {
+			case "CODYY-SELECT":
+				var obj = new CSelect(el);
+				objs.push(obj);
+		}
 	};
 
-	CE.prototype = {
+	var CSelect = function(el) {
+		var self = this;
+		self.element = el;
+		var opts = {};
+		opts.dataList = eval(el.getAttribute("list") || []);
+		el.removeAttribute("list");
+		opts.name = el.getAttribute("name");
+		el.removeAttribute("name");
+		opts.classname = el.className;
+		el.removeAttribute("class");
+		opts._id = el.id;
+		el.removeAttribute("id");
+		opts.showParam = el.getAttribute("showParam");
+		el.removeAttribute("showParam");
+		opts.val = el.getAttribute("val");
+		el.removeAttribute("val");
+		opts.placeholder = el.getAttribute("placeholder");
+		el.removeAttribute("placeholder");
+		opts._value = el.getAttribute("value") || "";
+		el.removeAttribute("value");
+		self.opts = opts;
+		_CSelect(self);
+	};
+
+	CSelect.prototype = {
 		"constructor": this,
-		"getCR": function() {
+		"setOptions": function(dataList, type) {
+			if(!dataList) return;
 			var self = this;
-			var cr = self.el.getBoundingClientRect();
-			return cr;
-		},
-		"bind": function() {
-			// var self = this;
-			// setInterval(function() {
-			// 	var datas = eval(self.el.getAttribute("list") || []);
-			// 	if(datas!=self.dataList) {
-			// 		self.dataList = datas;
-			// 		createSelect(self);
-			// 	}
-			// }, 1000);
+			var select = self.select;
+			var opts = self.opts;
+			if("NEW"==type) select.innerHTML = "";
+			var option = doc.createElement("OPTION");
+			option.setAttribute("value", "");
+			option.appendChild(doc.createTextNode(opts.placeholder || "请选择"));
+			select.appendChild(option);
+			for(var i=0,len=dataList.length; i<len; i++) {
+				var option = doc.createElement("OPTION");
+				option.setAttribute("value", dataList[i][opts.val]);
+				option.appendChild(doc.createTextNode(dataList[i][opts.showParam]));
+				select.appendChild(option);
+			}
 		}
 	};
 
-	var createSelect = function(obj) {
-		var el = obj.el;
-		dataList = obj.dataList;
-		el.innerHTML = "";
-		var wrap = document.createElement("DIV");
-		wrap.style.position = "relative";
-		var input = document.createElement("INPUT");
-		var hide = document.createElement("hidden");
-		input.type = "text";
-		if(el.getAttribute("name")) hide.setAttribute("name", el.getAttribute("name"));
-		input.className = el.className;
-		var _i = document.createElement("I");
-		var slWrap = document.createElement("DIV");
-		var ul = document.createElement("UL");
-		for(var i=0,len=dataList.length; i<len; i++) {
-			var li = document.createElement("LI");
-			li.appendChild(document.createTextNode(dataList[i][el.getAttribute("showParam")]));
-			(function(d, input) {
-
-			})(dataList[i], input);
-			ul.appendChild(li);
-		}
-		wrap.appendChild(hide);
-		wrap.appendChild(input);
-		wrap.appendChild(_i);
-		wrap.appendChild(slWrap);
-		slWrap.appendChild(ul);
+	var _CSelect = function(obj) {
+		var el = obj.element;
+		var opts = obj.opts;
+		var wrap = doc.createElement("DIV");
+		wrap.className = "codyy_select_wrap";
 		el.appendChild(wrap);
+		var input = doc.createElement("INPUT");
+		input.className = opts.classname + " cur_selected ";
+		if(opts._value.replace(/(^\s*)|(\s*$)/g, "")) {
+			for(var i=0,len=opts.dataList.length; i<len; i++) {
+				if(opts.dataList[i][opts.val]==opts._value) {
+					input.value = opts.dataList[i][opts.showParam];
+					break;
+				}
+			}
+		} else {
+			input.value = opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择";
+		}
+		wrap.appendChild(input);
+		var select = doc.createElement("select");
+		select.id = opts._id;
+		select.className = opts.classname + " codyy_select ";
+		select.setAttribute("name", opts.name);
+		if(opts._value) select.value = opts._value;
+		select.onchange = function() {
+			if(!this.value) {
+				input.value = opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择";
+				return ;
+			}
+			for(var i=0,len=opts.dataList.length; i<len; i++) {
+				if(opts.dataList[i][opts.val]==this.value) {
+					input.value = opts.dataList[i][opts.showParam];
+					break;
+				}
+			}
+		};
+		wrap.appendChild(select);
+		obj.select = select;
+		obj.setOptions(opts.dataList, "NEW");
 	};
 
-	var select = function(d, input) {
-
-	};
-
-	doc.onreadystatechange = docWatcher;
+	doc.onreadystatechange = docWatch;
 })(window)

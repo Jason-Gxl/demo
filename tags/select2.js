@@ -81,19 +81,19 @@
 		var wrap = doc.createElement("DIV");
 		wrap.className = "codyy_select_wrap";
 		el.appendChild(wrap);
-		var span = doc.createElement("SPAN");
-		span.className = "cur_selected"
+		var input = doc.createElement("INPUT");
+		input.className = "cur_selected"
 		if(opts._value.replace(/(^\s*)|(\s*$)/g, "")) {
 			for(var i=0,len=opts.dataList.length; i<len; i++) {
 				if(opts.dataList[i][opts.val]==opts._value) {
-					span.appendChild(doc.createTextNode(opts.dataList[i][opts.showParam]));
+					input.value = opts.dataList[i][opts.showParam];
 					break;
 				}
 			}
 		} else {
-			span.appendChild(doc.createTextNode(opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择"));
+			input.value = opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择";
 		}
-		wrap.appendChild(span);
+		wrap.appendChild(input);
 		var select = doc.createElement("select");
 		select.id = opts._id;
 		select.className = "codyy_select";
@@ -101,12 +101,12 @@
 		if(opts._value) select.value = opts._value;
 		select.onchange = function() {
 			if(!this.value) {
-				span.innerHTML = opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择";
+				input.value = opts.placeholder.replace(/(^\s*)|(\s*$)/g, "") || "请选择";
 				return ;
 			}
 			for(var i=0,len=opts.dataList.length; i<len; i++) {
 				if(opts.dataList[i][opts.val]==this.value) {
-					span.innerHTML = opts.dataList[i][opts.showParam];
+					input.value = opts.dataList[i][opts.showParam];
 					break;
 				}
 			}

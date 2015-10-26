@@ -15,7 +15,6 @@
 	background-color: #fff;
 	position: absolute;
 	display: inline-block;
-	width: 100%;
 	box-sizing: border-box;
 	height: 25px;
 	line-height: 25px;
@@ -30,7 +29,6 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
 	opacity: 0;
 	filter: alpha(opacity: 0;);
 	height: 25px;

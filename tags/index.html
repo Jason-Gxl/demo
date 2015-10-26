@@ -3,14 +3,21 @@
 	<title>test</title>
 	<meta charset="utf-8">
 	<link type="text/css" rel="stylesheet"  href="./select.css"></link>
+	<style type="text/css">
+		.kkk {
+			width: 500px;
+		}
+	</style>
 </head>
 <body>
-	<div style="width:100px;">
-		<codyy-select id="dddddd" list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toemdsfdsafdsafdsafs'}]" showParam="name" name="user" val="id" placeholder="请选择" id="dddddd"></codyy-select>
+	<div>
+		<codyy-select list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toemdsfdsafdsafdsafs'}]" 
+		showParam="name" name="user" val="id" placeholder="请选择" id="dddddd" class="kkk">
+		</codyy-select>
 	</div>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="add();">click me</a>
 </body>
-<script type="text/javascript" src="./select2.js"></script>
+<script type="text/javascript" src="./select.js"></script>
 <script type="text/javascript">
 function add() {
 	console.log(document.getElementById("dddddd").value);
