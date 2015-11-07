@@ -3,9 +3,10 @@
 	<title>test</title>
 	<meta charset="utf-8">
 	<link type="text/css" rel="stylesheet"  href="./select.css"></link>
+	<link type="text/css" rel="stylesheet"  href="./progress.css"></link>
 	<style type="text/css">
 		.kkk {
-			width: 500px;  
+			width: 500px;
 		}
 	</style>
 </head>
@@ -15,11 +16,14 @@
 		showParam="name" name="user" val="id" placeholder="请选择" id="dddddd" class="kkk">
 		</codyy-select>
 
-		<codyy-progress startDrag="" duringDrag="" stopDrag="" stopPlay=""></codyy-progress>
+		<div style="width:500px; height:60px; margin-top:100px;">
+			<codyy-progress startDrag="" duringDrag="" stopDrag="" stopPlay="" pause="pause" stop="" shutVoice="" openVoice="" time="5" voice="10" totalTime="100" voiceTotal="100"></codyy-progress>
+		</div>
 	</div>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="add();">click me</a>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="show();">show me</a>
 </body>
+<script type="text/javascript" src="../jquery-1.11.3.js"></script>
 <script type="text/javascript" src="./select.js"></script>
 <script type="text/javascript">
 function add() {
@@ -31,6 +35,10 @@ function add() {
 function show() {
 	var val = getCookie("id");
 	console.log(val);
+}
+
+function pause() {
+	console.log(1);
 }
 </script>
 </html>
