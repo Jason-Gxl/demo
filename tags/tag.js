@@ -89,48 +89,86 @@
 		return str.replace(/(^\s*)|(\s*$)/g, "");
 	};
 
+	var events = {
+		"add": function(el, ev, fn, flag) {
+			if(win.addEventListener) {
+				el.addEventListener(ev, fn, flag||false);
+			} else {
+				el.attachEvent("on"+ev, fn);
+			}
+		},
+		"remove": function(el, ev, fn, flag) {
+			if(win.addEventListener) {
+				el.removeEventListener(ev, fn, flag||false);
+			} else {
+				el.detachEvent("on"+ev, fn);
+			}
+		}
+	};
+
 	var dragEvent = function(el, type, pos, callBacks) {
 		this._el = el;
 		this._callBacks = callBacks;
 		this.type = type;
 		this.pos = pos;
-		this.move = 0;
+		this.moveParam = 0;
+		this.init();
 	};
-
-
 
 	dragEvent.prototype = {
 		"constructor": this,
 		"init": function() {
 			var self = this;
-			var self.leftBalance = 0;
-			var self.topBalance = 0;
-			self._el.onmousedown = self.start();
+			self.leftBalance = 0;
+			self.topBalance = 0;
+			self._start = function() {
+				self.start();
+			};
+			self._stop = function() {
+				self.stop();
+			};
+			events.add(self._el, "mousedown", self._start);
 		},
 		"start": function() {
 			var e = arguments[0] || win.event;
 			var self = this;
-			self.move = 1;
+			self.moveParam = 1;
 			var elRect = EF.getRect(self._el);
 			var mousePos = {
 				"top": e.clientY,
 				"left": e.clientX
-			},
+			};
 			self.leftBalance = mousePos.left - elRect.left;
 			self.topBalance = mousePos.top - elRect.top;
-			self._callBacks["start"].call(self);
-			doc.onmousemove = self.move();
+			if(self._callBacks["start"]) self._callBacks["start"].call(self);
+			self._moveEventLin = function() {
+				self.move();
+			};
+			events.add(doc, "mousemove", self._moveEventLin);
 		},
 		"move": function() {
 			var e = arguments[0] || win.event;
 			var self = this;
+			var dist = 0;
 			if(self.move) {
 				if("H"==self.type) {
-					self._el.style.left = Math.max(self.pos.start, Math.min(e.clientX, self.pos.end)) + "px";
+					dist = Math.max(0, Math.min(e.clientX-self.pos.start, self.pos.end));
+					self._el.style.left = dist + "px";
 				} else {
-					self._el.style.top = Math.max(self.pos.start, Math.min(e.clientY, self.pos.end)) + "px";
+					dist = Math.max(0, Math.min(e.clientY-self.pos.start, self.pos.end));
+					self._el.style.top = dist + "px";
 				}
 			}
+			var percent = dist/self.pos.end;
+			if(self._callBacks["move"]) self._callBacks["move"].call(self, dist, percent);
+			events.add(doc, "mouseup", self._stop);
+		},
+		"stop": function() {
+			var e = arguments[0] || win.event;
+			var self = this;
+			self.moveParam = 0;
+			if(self._callBacks["stop"]) self._callBacks["stop"].call(self);
+			events.remove(doc, "mousemove", self._moveEventLin);
 		}
 	};
 
@@ -323,6 +361,35 @@
 			EF.append(proWrap, audioWrap);
 
 			EF.append(self._el, proWrap);
+
+			var proBarWrapRect = EF.getRect(proBarWrap);
+			var proBtnRound = {
+				"start": proBarWrapRect.left,
+				"end": proBarWrapRect.width - proBtn.offsetWidth
+			};
+			new dragEvent(proBtn, "H", proBtnRound, {
+				"start": self._fn["start"],
+				"move": function(dist, percent) {
+					proBar.style.width = dist + "px";
+					if(self._fn["move"]) self._fn["move"].call(self);
+				},
+				"stop": self._fn["stop"]
+			});
+
+			var audioBarWrapRect = EF.getRect(audioBarWrap);
+			var audioBtnRound = {
+				"start": audioBarWrapRect.left,
+				"end": audioBarWrapRect.width - audioBtn.offsetWidth
+			};
+
+			new dragEvent(audioBtn, "H", audioBtnRound, {
+				"start": function() {},
+				"move": function(dist, percent) {
+					audioBar.style.width = dist + "px";
+				},
+				"stop": function() {}
+			});
+
 			self._pmd = proBarWrap.offsetWidth - proBtn.offsetWidth;
 			self._vmd = audioBarWrap.offsetWidth - audioBtn.offsetWidth;
 			self.proBar = proBar;

@@ -3,6 +3,10 @@
     height: 100%;
     box-sizing: border-box;
     position: relative;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 }
 
 .progress_wrap .progress_bkg {
