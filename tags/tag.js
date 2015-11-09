@@ -1,7 +1,13 @@
 (function(win) {
 	var doc = win.document;
 	var objs = [];
-	win.ELES = objs;
+	win.$$ = function(id) {
+		for(var i=0,len=objs.length; i<len; i++) {
+			if(objs[i].id==id) {
+				return objs[i];
+			}
+		}
+	};
 
 	// document监控器
 	var docWatch = function() {
@@ -111,7 +117,6 @@
 		this._callBacks = callBacks;
 		this.type = type;
 		this.pos = pos;
-		this.moveParam = 0;
 		this.init();
 	};
 
@@ -119,56 +124,55 @@
 		"constructor": this,
 		"init": function() {
 			var self = this;
-			self.leftBalance = 0;
-			self.topBalance = 0;
+			self.balance = 0;
 			self._start = function() {
-				self.start();
+				self.start(arguments[0]);
+			};
+			self._move = function() {
+				self.move(arguments[0]);
 			};
 			self._stop = function() {
-				self.stop();
+				self.stop(arguments[0]);
 			};
 			events.add(self._el, "mousedown", self._start);
 		},
 		"start": function() {
-			var e = arguments[0] || win.event;
 			var self = this;
-			self.moveParam = 1;
+			var e = arguments[0] || win.event;
 			var elRect = EF.getRect(self._el);
 			var mousePos = {
 				"top": e.clientY,
 				"left": e.clientX
 			};
-			self.leftBalance = mousePos.left - elRect.left;
-			self.topBalance = mousePos.top - elRect.top;
-			if(self._callBacks["start"]) self._callBacks["start"].call(self);
-			self._moveEventLin = function() {
-				self.move();
-			};
-			events.add(doc, "mousemove", self._moveEventLin);
-		},
-		"move": function() {
-			var e = arguments[0] || win.event;
-			var self = this;
-			var dist = 0;
-			if(self.move) {
-				if("H"==self.type) {
-					dist = Math.max(0, Math.min(e.clientX-self.pos.start, self.pos.end));
-					self._el.style.left = dist + "px";
-				} else {
-					dist = Math.max(0, Math.min(e.clientY-self.pos.start, self.pos.end));
-					self._el.style.top = dist + "px";
-				}
+			if("H"==self.type) {
+				self.balance = mousePos.left - elRect.left;
+			} else {
+				self.balance = mousePos.top - elRect.top;
 			}
-			var percent = dist/self.pos.end;
-			if(self._callBacks["move"]) self._callBacks["move"].call(self, dist, percent);
+			self._callBacks["start"].call(self);
+			events.add(doc, "mousemove", self._move);
 			events.add(doc, "mouseup", self._stop);
 		},
-		"stop": function() {
-			var e = arguments[0] || win.event;
+		"move": function() {
 			var self = this;
-			self.moveParam = 0;
-			if(self._callBacks["stop"]) self._callBacks["stop"].call(self);
-			events.remove(doc, "mousemove", self._moveEventLin);
+			var e = arguments[0] || win.event;
+			var dist = 0;
+			if("H"==self.type) {
+				dist = Math.max(0, Math.min(e.clientX-self.pos.start-self.balance, self.pos.end));
+				self._el.style.left = dist + "px";
+			} else {
+				dist = Math.max(0, Math.min(e.clientY-self.pos.start-self.balance, self.pos.end));
+				self._el.style.top = dist + "px";
+			}
+			var percent = dist/self.pos.end;
+			self._callBacks["move"].call(self, dist, percent);
+		},
+		"stop": function() {
+			var self = this;
+			var e = arguments[0] || win.event;
+			self._callBacks["stop"].call(self);
+			events.remove(doc, "mousemove", self._move);
+			events.remove(doc, "mouseup", self._stop);
 		}
 	};
 
@@ -178,6 +182,7 @@
 	var CSelect = function(el) {
 		var self = this;
 		self.element = el;
+		self.id = el.id;
 		var opts = {};
 		opts.dataList = eval(EF.getAttr(el, "list") || []);
 		EF.reAttr(el, "list");
@@ -267,15 +272,19 @@
 		if(!el) return ;
 		var self = this;
 		self.element = el;
+		self.id = el.id;
 		self.opts = {
 			"_fn": {
-				"startDrag": EF.getAttr(el, "startDrag"),
-				"duringDrag": EF.getAttr(el, "duringDrag"),
-				"stopDrag": EF.getAttr(el, "stopDrag"),
+				"vProStartDrag": EF.getAttr(el, "vProStartDrag"),
+				"vProDraging": EF.getAttr(el, "vProDraging"),
+				"vProStopDrag": EF.getAttr(el, "vProStopDrag"),
 				"pause": EF.getAttr(el, "pause"),
 				"stop": EF.getAttr(el, "stop"),
 				"shutVoice": EF.getAttr(el, "shutVoice"),
-				"openVoice": EF.getAttr(el, "openVoice")
+				"openVoice": EF.getAttr(el, "openVoice"),
+				"aProStartDrag": EF.getAttr(el, "aProStartDrag"),
+				"aProDraging": EF.getAttr(el, "aProDraging"),
+				"aProStopDrag": EF.getAttr(el, "aProStopDrag")
 			},
 			"time": EF.getAttr(el, "time") || 0,
 			"totalTime": EF.getAttr(el, "totalTime") || 0,
@@ -283,23 +292,31 @@
 			"voiceTotal": EF.getAttr(el, "voiceTotal") || 100
 		};
 		var obj = new _CProgress(self);
+
+		self.setVideoProgress = (function() {
+			return function(p) {
+				obj.setVideoProgress(p);
+			};
+		})(obj);
 		obj.build();
 		obj.init();
 		obj.bind();
-		return self;
 	}
 
 	var _CProgress = function(obj) {
 		var self = this;
 		self._el = obj.element;
 		self._fn = {
-			"startDrag": obj.opts._fn.startDrag,
-			"duringDrag": obj.opts._fn.duringDrag,
-			"stopDrag": obj.opts._fn.stopDrag,
+			"vProStartDrag": obj.opts._fn.vProStartDrag,
+			"vProDraging": obj.opts._fn.vProDraging,
+			"vProStopDrag": obj.opts._fn.vProStopDrag,
 			"pause": obj.opts._fn.pause,
 			"stop": obj.opts._fn.stop,
 			"openVoice": obj.opts._fn.openVoice,
-			"shutVoice": obj.opts._fn.shutVoice
+			"shutVoice": obj.opts._fn.shutVoice,
+			"aProStartDrag": obj.opts._fn.aProStartDrag,
+			"aProDraging": obj.opts._fn.aProDraging,
+			"aProStopDrag": obj.opts._fn.aProStopDrag
 		};
 		self.time = obj.opts.time;
 		self.totalTime = obj.opts.totalTime;
@@ -312,6 +329,7 @@
 		"build": function() {
 			var self = this;
 
+			//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝生成控制面板开始＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 			var proWrap = EF.create("DIV");
 			EF.addClass(proWrap, "progress_wrap")
 			var proBkg = EF.create("DIV");
@@ -361,37 +379,78 @@
 			EF.append(proWrap, audioWrap);
 
 			EF.append(self._el, proWrap);
+			//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝生成控制面板结束＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 			var proBarWrapRect = EF.getRect(proBarWrap);
+			self._pmd = proBarWrapRect.width - proBtn.offsetWidth;
 			var proBtnRound = {
 				"start": proBarWrapRect.left,
-				"end": proBarWrapRect.width - proBtn.offsetWidth
+				"end": self._pmd
 			};
 			new dragEvent(proBtn, "H", proBtnRound, {
-				"start": self._fn["start"],
+				"start": function() {
+					try {
+						win[self._fn.vProStartDrag].call(self);
+					} catch(e) {
+						console.log("vProStartDrag外部函数未定义");
+					}
+				},
 				"move": function(dist, percent) {
 					proBar.style.width = dist + "px";
-					if(self._fn["move"]) self._fn["move"].call(self);
+					try {
+						win[self._fn.vProDraging].call(self, self.totalTime*percent);
+					} catch(e) {
+						console.log("vProDraging外部函数未定义");
+					}
 				},
-				"stop": self._fn["stop"]
+				"stop": function() {
+					try {
+						win[self._fn.vProStopDrag].call(self);
+					} catch(e) {
+						console.log("vProStopDrag外部函数未定义");
+					}
+				}
 			});
 
 			var audioBarWrapRect = EF.getRect(audioBarWrap);
+			self._vmd = audioBarWrapRect.width - audioBtn.offsetWidth;
 			var audioBtnRound = {
 				"start": audioBarWrapRect.left,
-				"end": audioBarWrapRect.width - audioBtn.offsetWidth
+				"end": self._vmd
 			};
-
 			new dragEvent(audioBtn, "H", audioBtnRound, {
-				"start": function() {},
+				"start": function() {
+					try {
+						win[self._fn.aProStartDrag].call(self);
+					} catch(e) {
+						console.log("aProStartDrag外部函数未定义");
+					}
+				},
 				"move": function(dist, percent) {
 					audioBar.style.width = dist + "px";
+					try{
+						win[self._fn.aProDraging].call(self, self.voiceTotal*percent);
+					} catch(e) {
+						console.log("aProDraging外部函数未定义");
+					}
+					if(0==dist) {
+						if(-1==self.trumpet.className.indexOf("notrumpet")) {
+							EF.replaceClass(self.trumpet, "trumpet", "notrumpet");
+						}
+						self.v = 0;
+					} else {
+						EF.replaceClass(self.trumpet, "notrumpet", "trumpet");
+					}
 				},
-				"stop": function() {}
+				"stop": function() {
+					try {
+						win[self._fn.aProStopDrag].call(self);
+					} catch(e) {
+						console.log("aProStopDrag外部函数未定义");
+					}
+				}
 			});
-
-			self._pmd = proBarWrap.offsetWidth - proBtn.offsetWidth;
-			self._vmd = audioBarWrap.offsetWidth - audioBtn.offsetWidth;
+			
 			self.proBar = proBar;
 			self.proBtn = proBtn;
 			self.audioBtn = audioBtn;
@@ -399,8 +458,6 @@
 			self.pause = pause;
 			self.stop = stop;
 			self.trumpet = trumpet;
-			self.audioBar = audioBar;
-			self.audioBtn = audioBtn;
 		},
 		"init": function() {
 			var self = this;
@@ -420,7 +477,7 @@
 			var self = this;
 			self.pause.onclick = function() {
 				try {
-					window[self._fn.pause].call(self);
+					win[self._fn.pause].call(self);
 				} catch (e) {
 					console.log("pause外部函数未定义");
 				}
@@ -428,7 +485,7 @@
 
 			self.stop.onclick = function() {
 				try {
-					window[self._fn.stop].call(self);
+					win[self._fn.stop].call(self);
 				} catch (e) {
 					console.log("stop外部函数未定义");
 				}
@@ -440,7 +497,7 @@
 					self.audioBar.style.width = 0;
 					self.audioBtn.style.left = 0;
 					try {
-						window[self._fn.shutVoice].call(this);
+						win[self._fn.shutVoice].call(this);
 					} catch (e) {
 						console.log("shutVoice外部函数未定义");
 					}
@@ -452,13 +509,19 @@
 					self.audioBtn.style.left = vmd + "px";
 					self.audioBar.style.width = vmd + "px";
 					try {
-						window[self._fn.openVoice].call(this);
+						win[self._fn.openVoice].call(this);
 					} catch (e) {
 						console.log("openVoice外部函数未定义");
 					}
 					self.v = 1;
 				}
 			};
+		},
+		"setVideoProgress": function(p) {
+			var self = this;
+			var dist = Math.round(self._pmd * (p/self.totalTime));
+			self.proBar.style.width = dist + "px";
+			self.proBtn.style.left = dist + "px";
 		}
 	};
 	/*＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝创建播放器进度条＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝*/

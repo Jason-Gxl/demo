@@ -17,19 +17,33 @@
 		</codyy-select>
 
 		<div style="width:500px; height:60px; margin-top:100px;">
-			<codyy-progress startDrag="" duringDrag="" stopDrag="" stopPlay="" pause="pause" stop="" shutVoice="" openVoice="" time="5" voice="10" totalTime="100" voiceTotal="100"></codyy-progress>
+			<codyy-progress
+				id="dddddddd"
+				time="20" 
+				totalTime="100" 
+				voice="70" 
+				voiceTotal="100"
+				vProStartDrag="vProStartDrag" 
+				vProDraging="vProDraging" 
+				vProStopDrag="vProStopDrag" 
+				pause="pause" 
+				stop="stop" 
+				shutVoice="shutVoice" 
+				openVoice="openVoice"
+				aProStartDrag="aProStartDrag"
+				aProDraging="aProDraging"
+				aProStopDrag="aProStopDrag">
+			</codyy-progress>
 		</div>
 	</div>
-	<a href="javascript:void(0);" style="margin-top:50px;" onclick="add();">click me</a>
+	<a href="javascript:void(0);" style="margin-top:50px;" onclick="play();">click me</a>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="show();">show me</a>
 </body>
 <script type="text/javascript" src="../jquery-1.11.3.js"></script>
 <script type="text/javascript" src="./tag.js"></script>
 <script type="text/javascript">
-function add() {
-	console.log(document.getElementById("dddddd").value);
-
-	setCookie("userId", "abc", 1);
+function play() {
+	$$("dddddddd").setVideoProgress(100);
 }
 
 function show() {
@@ -38,7 +52,43 @@ function show() {
 }
 
 function pause() {
-	console.log(1);
+	console.log("pause...");
+}
+
+function stop() {
+	console.log("stop...");
+}
+
+function vProStartDrag() {
+	console.log("vProStartDrag...");
+}
+
+function vProDraging(p) {
+	console.log(p);
+}
+
+function vProStopDrag() {
+	console.log("vProStopDrag...");
+}
+
+function shutVoice() {
+	console.log("shutVoice...");
+}
+
+function openVoice() {
+	console.log("openVoice...");
+}
+
+function aProStartDrag() {
+	console.log("aProStartDrag...");
+}
+
+function aProDraging(p) {
+	console.log(p);
+}
+
+function aProStopDrag() {
+	console.log("aProStopDrag...");
 }
 </script>
 </html>
