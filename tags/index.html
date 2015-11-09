@@ -8,15 +8,26 @@
 		.kkk {
 			width: 500px;
 		}
+
+		ul {
+		    list-style: none;
+    		padding: 0;
+    		margin: 0;
+		}
+		ul li {
+			width: 500px;
+			height: 60px;
+		}
 	</style>
 </head>
 <body>
-	<div>
-		<codyy-select list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toemdsfdsafdsafdsafs'}]" 
-		showParam="name" name="user" val="id" placeholder="请选择" id="dddddd" class="kkk">
-		</codyy-select>
-
-		<div style="width:500px; height:60px; margin-top:100px;">
+	<ul>
+		<li>
+			<codyy-select list="[{'id':1, 'name':'Jason'}, {'id':2,'name':'Toemdsfdsafdsafdsafs'}]" 
+			showParam="name" name="user" val="id" placeholder="请选择" id="dddddd" class="kkk">
+			</codyy-select>
+		</li>
+		<li>
 			<codyy-progress
 				id="dddddddd"
 				time="20" 
@@ -34,8 +45,8 @@
 				aProDraging="aProDraging"
 				aProStopDrag="aProStopDrag">
 			</codyy-progress>
-		</div>
-	</div>
+		</li>
+	</ul>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="play();">click me</a>
 	<a href="javascript:void(0);" style="margin-top:50px;" onclick="show();">show me</a>
 </body>
