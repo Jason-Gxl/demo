@@ -49,11 +49,11 @@
 			return doc.createElement(tagName);
 		},
 		"addClass": function(el, classname) {
-			el.className = trim(el.className) + " " + trim(classname);
+			el.className = trim(trim(el.className) + " " + trim(classname));
 		},
 		"removeClass": function(el, classname) {
-			var oldClassList = el.className.split(/\s*/) || [];
-			var removeClassList = classname.split(/\s*/) || [];
+			var oldClassList = el.className.split(/\s+/) || [];
+			var removeClassList = classname.split(/\s+/) || [];
 			for(var i=0; i<oldClassList.length; ) {
 				var count = 0;
 				var oldClass = oldClassList[i];
@@ -87,7 +87,10 @@
 			parent.appendChild(child);
 		},
 		"getRect": function(el) {
-			return el.getBoundingClientRect();
+			var top = document.documentElement.clientTop;
+			var left = document.documentElement.clientLeft;
+			var rect = el.getBoundingClientRect();
+			return {"top":rect.top-top, "left":rect.left-left, "width":rect.width, "height":rect.height};
 		}
 	};
 
@@ -298,6 +301,12 @@
 				obj.setVideoProgress(p);
 			};
 		})(obj);
+
+		self.setTotalTime = (function() {
+			return function(tt) {
+				obj.setTotalTime(tt);
+			}
+		})(obj);
 		obj.build();
 		obj.init();
 		obj.bind();
@@ -331,7 +340,7 @@
 
 			//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝生成控制面板开始＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 			var proWrap = EF.create("DIV");
-			EF.addClass(proWrap, "progress_wrap")
+			EF.addClass(proWrap, "progress_wrap progress_wrap_hide");
 			var proBkg = EF.create("DIV");
 			EF.addClass(proBkg, "progress_bkg");
 			EF.append(proWrap, proBkg);
@@ -450,6 +459,19 @@
 					}
 				}
 			});
+
+			events.add(self._el, "mouseover", function(e) {
+				if(self.showT) {
+					clearTimeout(self.showT);
+				}
+				EF.removeClass(proWrap, "progress_wrap_hide");
+			});
+
+			events.add(self._el, "mouseout", function(e) {
+				self.showT = setTimeout(function() {
+					EF.addClass(proWrap, "progress_wrap_hide");
+				}, 2000);
+			});
 			
 			self.proBar = proBar;
 			self.proBtn = proBtn;
@@ -519,9 +541,14 @@
 		},
 		"setVideoProgress": function(p) {
 			var self = this;
+			self.time = p;
 			var dist = Math.round(self._pmd * (p/self.totalTime));
 			self.proBar.style.width = dist + "px";
 			self.proBtn.style.left = dist + "px";
+		},
+		"setTotalTime": function(tt) {
+			this.totalTime = tt;
+			this.init();
 		}
 	};
 	/*＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝创建播放器进度条＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝*/

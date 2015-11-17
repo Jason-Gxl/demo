@@ -31,7 +31,7 @@
 			<codyy-progress
 				id="dddddddd"
 				time="20" 
-				totalTime="100" 
+				totalTime="0" 
 				voice="70" 
 				voiceTotal="100"
 				vProStartDrag="vProStartDrag" 
@@ -100,6 +100,10 @@ function aProDraging(p) {
 
 function aProStopDrag() {
 	console.log("aProStopDrag...");
+}
+
+function show() {
+	$$("dddddddd").setTotalTime(100);
 }
 </script>
 </html>
