@@ -84,13 +84,13 @@
 			return el.getAttribute(attrName);
 		},
 		"append": function(parent, child) {
-			parent.appendChild(child);
+			if(parent && 1==parent.nodeType && child) parent.appendChild(child);
 		},
 		"getRect": function(el) {
 			var top = document.documentElement.clientTop;
 			var left = document.documentElement.clientLeft;
 			var rect = el.getBoundingClientRect();
-			return {"top":rect.top-top, "left":rect.left-left, "width":rect.width, "height":rect.height};
+			return {"top":rect.top-top, "left":rect.left-left, "width":rect.width||el.offsetWidth, "height":rect.height||el.offsetHeight};
 		}
 	};
 
@@ -232,8 +232,9 @@
 		var el = obj.element;
 		var opts = obj.opts;
 		var wrap = EF.create("DIV");
+		el.parentNode.replaceChild(wrap, el);
+		el = wrap;
 		EF.addClass(wrap, "codyy_select_wrap");
-		EF.append(el, wrap);
 		var input = EF.create("INPUT");
 		EF.addClass(input, opts.classname + " cur_selected");
 		if(trim(opts._value)) {
@@ -339,6 +340,11 @@
 			var self = this;
 
 			//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝生成控制面板开始＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+			var odiv = EF.create("DIV");
+			odiv.className = "original_wrap";
+			self._el.parentNode.replaceChild(odiv, self._el);
+			self._el = odiv;
+
 			var proWrap = EF.create("DIV");
 			EF.addClass(proWrap, "progress_wrap progress_wrap_hide");
 			var proBkg = EF.create("DIV");
@@ -388,6 +394,7 @@
 			EF.append(proWrap, audioWrap);
 
 			EF.append(self._el, proWrap);
+			
 			//＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝生成控制面板结束＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 			var proBarWrapRect = EF.getRect(proBarWrap);
