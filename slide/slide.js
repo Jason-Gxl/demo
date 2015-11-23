@@ -157,11 +157,17 @@
 							if(ind==self.imgIndex) {
 								self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
 							}
+							if(ind<self.imgIndex) {
+								self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+							}
 						}
 					} else {
 						config.images.splice(img, 1);
 						if(img==self.imgIndex) {
 							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+						}
+						if(img<self.imgIndex) {
+							self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
 						}
 					}
 				}
@@ -174,10 +180,16 @@
 							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
 						}
 					}
+					if(ind<self.imgIndex) {
+						self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+					}
 				} else {
 					config.images.splice(images, 1);
 					if(images==self.imgIndex) {
 						self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+					}
+					if(images<self.imgIndex) {
+						self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
 					}
 				}
 			}
