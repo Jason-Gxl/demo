@@ -1,7 +1,9 @@
 .slide_wrap {
-    width: 100%;
-    height: 100%;
     position: relative;
+    user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .slide_wrap .slide_bgk {
@@ -26,6 +28,12 @@
 
 .slide_wrap .slide_img {
 	position: absolute;
+}
+
+.slide_wrap .count_wrap {
+    position: absolute;
+    bottom: 5;
+    left: 5;
 }
 
 .slide_wrap .slide_right_arrow {

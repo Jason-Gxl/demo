@@ -2,7 +2,7 @@
 	var slide = function(config) {
 		if(!config.id) return ;
 		config.ele = document.getElementById(config.id);
-		config.rect = ELE.getRect(config.ele);
+		// config.rect = ELE.getRect(config.ele);
 		config.images = config.images || [];
 		this.config = config;
 		var slideObj = new _slide(config);
@@ -13,15 +13,7 @@
 	slide.prototype = {
 		"construtor": this,
 		"addImage": function(images) {
-			var self = this;
-			var config = self.config
-			if(Object.prototype.toString.call(images)=="[object Array]") {
-				for(var len=images.length,i=0; i<len; i++) {
-					config.images.push(images[i]);
-				}
-			} else {
-				config.images.push(images);
-			}
+			this.slideObj.addImage(images);
 		},
 		"delImage": function(images) {
 			this.slideObj.delImage(images);
@@ -66,17 +58,37 @@
 			var img = document.createElement("IMG");
 			img.className = "slide_img";
 			self.img = img;
+			var countWrap = document.createElement("SPAN");
+			countWrap.className = "count_wrap"
+			var indWrap = document.createElement("SPAN");
+			indWrap.innerHTML = 1;
+			self.indWrap = indWrap;
+			var totalWrap = document.createElement("SPAN");
+			totalWrap.innerHTML = config.images.length;
+			countWrap.appendChild(indWrap);
+			self.totalWrap = totalWrap;
+			if(config.images.length==0) {
+				countWrap.className = "hide_arrow";
+			}
+			countWrap.appendChild(document.createTextNode("/"));
+			countWrap.appendChild(totalWrap);
 			var rightArrow = document.createElement("SPAN");
 			rightArrow.className = "slide_right_arrow hide_arrow"
 			wrap.appendChild(bgk);
 			wrap.appendChild(leftArrow);
 			wrap.appendChild(img);
+			wrap.appendChild(countWrap);
 			wrap.appendChild(rightArrow);
 			ele.appendChild(wrap);
 
 			if(config.images.length>0) {
 				img.src = (config.basePath||"") + config.images[0];
 				self.imgIndex = 0;
+				setTimeout(function() {
+					wrap.style.width = img.offsetWidth + "px";
+					wrap.style.height = img.offsetHeight + "px";
+					config.rect = ELE.getRect(wrap);
+				}, 3);
 			}
 
 			ELE.addEvent(wrap, "mouseout", function() {
@@ -124,6 +136,12 @@
 					self.imgIndex = self.imgIndex+1>config.images.length-1?0:self.imgIndex+1;
 				}
 				img.src = (config.basePath||"") + config.images[self.imgIndex];
+				indWrap.innerHTML = self.imgIndex + 1;
+				setTimeout(function() {
+					wrap.style.width = img.offsetWidth + "px";
+					wrap.style.height = img.offsetHeight + "px";
+					config.rect = ELE.getRect(wrap);
+				}, 3);
 			});
 		},
 		"delImage": function(images) {
@@ -163,6 +181,19 @@
 					}
 				}
 			}
+			self.totalWrap.innerHTML = config.images.length;
+		},
+		"addImage": function(images) {
+			var self = this;
+			var config = self.config
+			if(Object.prototype.toString.call(images)=="[object Array]") {
+				for(var len=images.length,i=0; i<len; i++) {
+					config.images.push(images[i]);
+				}
+			} else {
+				config.images.push(images);
+			}
+			self.totalWrap.innerHTML = config.images.length;
 		}
 	};
 
