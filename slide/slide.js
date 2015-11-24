@@ -89,7 +89,7 @@
 					wrap.style.width = img.offsetWidth + "px";
 					wrap.style.height = img.offsetHeight + "px";
 					config.rect = ELE.getRect(wrap);
-				}, 3);
+				}, 5);
 			}
 
 			ELE.addEvent(wrap, "mouseout", function() {
@@ -160,16 +160,20 @@
 								self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
 							}
 							if(ind<self.imgIndex) {
-								self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+								self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
+								self.imgIndex--;
 							}
 						}
 					} else {
-						config.images.splice(img, 1);
-						if(img==self.imgIndex) {
-							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
-						}
-						if(img<self.imgIndex) {
-							self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+						if(img>=0 && config.images.length>0) {
+							config.images.splice(img, 1);
+							if(img==self.imgIndex) {
+								self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+							}
+							if(img<self.imgIndex) {
+								self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
+								self.imgIndex--;
+							}
 						}
 					}
 				}
@@ -181,17 +185,21 @@
 						if(ind==self.imgIndex) {
 							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
 						}
-					}
-					if(ind<self.imgIndex) {
-						self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+						if(ind<self.imgIndex) {
+							self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
+							self.imgIndex--;
+						}
 					}
 				} else {
-					config.images.splice(images, 1);
-					if(images==self.imgIndex) {
-						self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
-					}
-					if(images<self.imgIndex) {
-						self.indWrap.innerHTML = self.indWrap.innerHTML - 1;
+					if(images>=0 && config.images.length>0) {
+						config.images.splice(images, 1);
+						if(images==self.imgIndex) {
+							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+						}
+						if(images<self.imgIndex) {
+							self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
+							self.imgIndex--;
+						}
 					}
 				}
 			}
