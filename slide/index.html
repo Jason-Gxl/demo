@@ -21,7 +21,10 @@
 var dddd = slide.init({
 	"id": "slide",
 	"basePath": "./",
-	"images": ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg"]
+	"images": ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg"],
+	"presentShow": function(present) {
+		console.log(present);
+	}
 });
 
 function add() {

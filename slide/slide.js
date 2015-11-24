@@ -83,6 +83,7 @@
 
 			if(config.images.length>0) {
 				img.src = (config.basePath||"") + config.images[0];
+				config.presentShow.call(self, config.images[0]);
 				self.imgIndex = 0;
 				setTimeout(function() {
 					wrap.style.width = img.offsetWidth + "px";
@@ -136,6 +137,7 @@
 					self.imgIndex = self.imgIndex+1>config.images.length-1?0:self.imgIndex+1;
 				}
 				img.src = (config.basePath||"") + config.images[self.imgIndex];
+				config.presentShow.call(self, config.images[self.imgIndex]);
 				indWrap.innerHTML = self.imgIndex + 1;
 				setTimeout(function() {
 					wrap.style.width = img.offsetWidth + "px";
