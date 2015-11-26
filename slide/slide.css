@@ -1,5 +1,7 @@
 .slide_wrap {
     position: relative;
+    height: 100%;
+    width: 100%;
     user-select: none;
     -o-user-select: none;
     -moz-user-select: none;
@@ -32,8 +34,8 @@
 
 .slide_wrap .count_wrap {
     position: absolute;
-    bottom: 5;
-    left: 5;
+    bottom: 5px;
+    left: 5px;
 }
 
 .slide_wrap .slide_right_arrow {

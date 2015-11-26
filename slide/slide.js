@@ -2,7 +2,6 @@
 	var slide = function(config) {
 		if(!config.id) return ;
 		config.ele = document.getElementById(config.id);
-		// config.rect = ELE.getRect(config.ele);
 		config.images = config.images || [];
 		this.config = config;
 		var slideObj = new _slide(config);
@@ -19,20 +18,29 @@
 			this.slideObj.delImage(images);
 		},
 		"getImageCount": function() {
-			return this.images.length;
+			return this.slideObj.config.images.length;
 		},
 		"getImages": function() {
-			return this.images;
+			return this.slideObj.config.images;
 		},
 		"getImageByIndex": function(i) {
 			if(isNaN(i)) return ;
 			var img = "";
 			try {
-				img = this.images[i];
+				img = this.slideObj.config.images[i];
 			} catch(e) {
 				return "脚标太大";
 			}
 			return img;
+		},
+		"getCurrentImage": function() {
+			return this.slideObj.getCurrentImage();
+		},
+		"getPreImage": function() {
+			return this.slideObj.getPreImage();
+		},
+		"getNextImage": function() {
+			return this.slideObj.getNextImage();
 		}
 	};
 
@@ -80,15 +88,21 @@
 			wrap.appendChild(countWrap);
 			wrap.appendChild(rightArrow);
 			ele.appendChild(wrap);
+			config.rect = ELE.getRect(wrap);
 
 			if(config.images.length>0) {
 				img.src = (config.basePath||"") + config.images[0];
 				config.presentShow.call(self, config.images[0]);
 				self.imgIndex = 0;
 				setTimeout(function() {
-					wrap.style.width = img.offsetWidth + "px";
-					wrap.style.height = img.offsetHeight + "px";
-					config.rect = ELE.getRect(wrap);
+					var imgRatio = img.offsetWidth/img.offsetHeight;
+					if(imgRatio<config.ratio) {
+						img.height = self.eleHeight;
+						img.style.left = (self.eleWidth-img.offsetWidth)/2 + "px";
+					} else {
+						img.width = self.eleWidth;
+						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
+					}
 				}, 5);
 			}
 
@@ -136,14 +150,22 @@
 				} else {
 					self.imgIndex = self.imgIndex+1>config.images.length-1?0:self.imgIndex+1;
 				}
+				img.removeAttribute("style");
+				img.removeAttribute("width");
+				img.removeAttribute("height");
 				img.src = (config.basePath||"") + config.images[self.imgIndex];
 				config.presentShow.call(self, config.images[self.imgIndex]);
 				indWrap.innerHTML = self.imgIndex + 1;
 				setTimeout(function() {
-					wrap.style.width = img.offsetWidth + "px";
-					wrap.style.height = img.offsetHeight + "px";
-					config.rect = ELE.getRect(wrap);
-				}, 3);
+					var imgRatio = img.offsetWidth/img.offsetHeight;
+					if(imgRatio<config.ratio) {
+						img.height = self.eleHeight;
+						img.style.left = (self.eleWidth-img.offsetWidth)/2 + "px";
+					} else {
+						img.width = self.eleWidth;
+						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
+					}
+				}, 5);
 			});
 		},
 		"delImage": function(images) {
@@ -216,6 +238,15 @@
 				config.images.push(images);
 			}
 			self.totalWrap.innerHTML = config.images.length;
+		},
+		"getCurrentImage": function() {
+			return this.config.images[this.imgIndex];
+		},
+		"getPreImage": function() {
+			return this.config.images[this.imgIndex>0?this.imgIndex-1:this.config.images.length-1];
+		},
+		"getNextImage": function() {
+			return this.config.images[this.imgIndex==this.config.images.length-1?0:this.imgIndex+1];
 		}
 	};
 
