@@ -27,9 +27,11 @@
 			if(isNaN(i)) return ;
 			var img = "";
 			try {
-				img = this.slideObj.config.images[i];
+				if(i<0) throw "脚标太小";
+				if(i>=this.slideObj.config.images.length) throw "脚标太大"
+				img = this.slideObj.config.images[i] || "";
 			} catch(e) {
-				return "脚标太大";
+				return e;
 			}
 			return img;
 		},

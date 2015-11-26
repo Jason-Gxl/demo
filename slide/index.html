@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="slide"></div>
-
+<br />
 <a href="javascript:void(0);" onclick="add()">增加一张图片</a>
 <a href="javascript:void(0);" onclick="reduce()">删除－张图片</a>
 <a href="javascript:void(0);" onclick="getImageCount()">获取图片数量</a>
@@ -24,45 +24,45 @@
 </body>
 <script type="text/javascript" src="./slide.js"></script>
 <script type="text/javascript">
-var dddd = slide.init({
+var slideObj = slide.init({
 	"id": "slide",
 	"basePath": "./",
 	"images": ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg"],
 	"presentShow": function(present) {
-		console.log(present);
+		alert(present);
 	}
 });
 
 function add() {
-	dddd.addImage("photo6.jpg");
+	slideObj.addImage("photo6.jpg");
 };
 
 function reduce() {
-	dddd.delImage("photo1.jpg");
+	slideObj.delImage("photo1.jpg");
 }
 
 function getImageCount() {
-	console.log(dddd.getImageCount());
+	alert(slideObj.getImageCount());
 }
 
 function getImages() {
-	console.log(dddd.getImages());
+	alert(slideObj.getImages());
 }
 
 function getImageByIndex() {
-	console.log(dddd.getImageByIndex(2));
+	alert(slideObj.getImageByIndex(8));
 }
 
 function getCurrentImage() {
-	console.log(dddd.getCurrentImage());
+	alert(slideObj.getCurrentImage());
 }
 
 function getPreImage() {
-	console.log(dddd.getPreImage());
+	alert(slideObj.getPreImage());
 }
 
 function getNextImage() {
-	console.log(dddd.getNextImage());
+	alert(slideObj.getNextImage());
 }
 </script>
 </html>
