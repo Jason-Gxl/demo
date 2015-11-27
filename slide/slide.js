@@ -105,7 +105,7 @@
 						img.width = self.eleWidth;
 						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
 					}
-				}, 5);
+				}, 10);
 			}
 
 			ELE.addEvent(wrap, "mouseout", function() {
@@ -167,7 +167,7 @@
 						img.width = self.eleWidth;
 						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
 					}
-				}, 5);
+				}, 10);
 			});
 		},
 		"delImage": function(images) {
@@ -181,7 +181,20 @@
 						if(ind!=-1) {
 							config.images.splice(ind, 1);
 							if(ind==self.imgIndex) {
-								self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+								self.imgIndex = self.imgIndex>=config.images.length?0:self.imgIndex;
+								self.img.src = config.images[self.imgIndex];
+								self.indWrap.innerHTML = self.imgIndex + 1;
+
+								setTimeout(function() {
+									var imgRatio = self.img.offsetWidth/self.img.offsetHeight;
+									if(imgRatio<config.ratio) {
+										self.img.height = self.eleHeight;
+										self.img.style.left = (self.eleWidth-self.img.offsetWidth)/2 + "px";
+									} else {
+										self.img.width = self.eleWidth;
+										self.img.style.top = (self.eleHeight-self.img.offsetHeight)/2 + "px";
+									}
+								}, 10);
 							}
 							if(ind<self.imgIndex) {
 								self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
@@ -192,7 +205,20 @@
 						if(img>=0 && config.images.length>0) {
 							config.images.splice(img, 1);
 							if(img==self.imgIndex) {
-								self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+								self.imgIndex = self.imgIndex>=config.images.length?0:self.imgIndex;
+								self.img.src = config.images[self.imgIndex];
+								self.indWrap.innerHTML = self.imgIndex + 1;
+
+								setTimeout(function() {
+									var imgRatio = self.img.offsetWidth/self.img.offsetHeight;
+									if(imgRatio<config.ratio) {
+										self.img.height = self.eleHeight;
+										self.img.style.left = (self.eleWidth-self.img.offsetWidth)/2 + "px";
+									} else {
+										self.img.width = self.eleWidth;
+										self.img.style.top = (self.eleHeight-self.img.offsetHeight)/2 + "px";
+									}
+								}, 10);
 							}
 							if(img<self.imgIndex) {
 								self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
@@ -207,7 +233,20 @@
 					if(ind!=-1) {
 						config.images.splice(ind, 1);
 						if(ind==self.imgIndex) {
-							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+							self.imgIndex = self.imgIndex>=config.images.length?0:self.imgIndex;
+							self.img.src = config.images[self.imgIndex];
+							self.indWrap.innerHTML = self.imgIndex + 1;
+
+							setTimeout(function() {
+								var imgRatio = self.img.offsetWidth/self.img.offsetHeight;
+								if(imgRatio<config.ratio) {
+									self.img.height = self.eleHeight;
+									self.img.style.left = (self.eleWidth-self.img.offsetWidth)/2 + "px";
+								} else {
+									self.img.width = self.eleWidth;
+									self.img.style.top = (self.eleHeight-self.img.offsetHeight)/2 + "px";
+								}
+							}, 10);
 						}
 						if(ind<self.imgIndex) {
 							self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;
@@ -218,7 +257,20 @@
 					if(images>=0 && config.images.length>0) {
 						config.images.splice(images, 1);
 						if(images==self.imgIndex) {
-							self.img.src = config.images[self.imgIndex>=config.images.length?0:self.imgIndex];
+							self.imgIndex = self.imgIndex>=config.images.length?0:self.imgIndex;
+							self.img.src = config.images[self.imgIndex];
+							self.indWrap.innerHTML = self.imgIndex + 1;
+
+							setTimeout(function() {
+								var imgRatio = self.img.offsetWidth/self.img.offsetHeight;
+								if(imgRatio<config.ratio) {
+									self.img.height = self.eleHeight;
+									self.img.style.left = (self.eleWidth-self.img.offsetWidth)/2 + "px";
+								} else {
+									self.img.width = self.eleWidth;
+									self.img.style.top = (self.eleHeight-self.img.offsetHeight)/2 + "px";
+								}
+							}, 10);
 						}
 						if(images<self.imgIndex) {
 							self.indWrap.innerHTML = self.indWrap.innerHTML-1?self.indWrap.innerHTML-1:1;

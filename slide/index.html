@@ -29,7 +29,7 @@ var slideObj = slide.init({
 	"basePath": "./",
 	"images": ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg"],
 	"presentShow": function(present) {
-		alert(present);
+		console.log(present);
 	}
 });
 
@@ -38,31 +38,31 @@ function add() {
 };
 
 function reduce() {
-	slideObj.delImage("photo1.jpg");
+	slideObj.delImage("photo5.jpg");
 }
 
 function getImageCount() {
-	alert(slideObj.getImageCount());
+	console.log(slideObj.getImageCount());
 }
 
 function getImages() {
-	alert(slideObj.getImages());
+	console.log(slideObj.getImages());
 }
 
 function getImageByIndex() {
-	alert(slideObj.getImageByIndex(8));
+	console.log(slideObj.getImageByIndex(8));
 }
 
 function getCurrentImage() {
-	alert(slideObj.getCurrentImage());
+	console.log(slideObj.getCurrentImage());
 }
 
 function getPreImage() {
-	alert(slideObj.getPreImage());
+	console.log(slideObj.getPreImage());
 }
 
 function getNextImage() {
-	alert(slideObj.getNextImage());
+	console.log(slideObj.getNextImage());
 }
 </script>
 </html>
