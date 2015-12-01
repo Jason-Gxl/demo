@@ -445,7 +445,8 @@
 				"move": function(dist, percent) {
 					audioBar.style.width = dist + "px";
 					try{
-						win[self._fn.aProDraging].call(self, self.voiceTotal*percent);
+						self.voice = self.voiceTotal*percent;
+						win[self._fn.aProDraging].call(self, self.voice);
 					} catch(e) {
 						console.log("aProDraging外部函数未定义");
 					}
@@ -526,7 +527,7 @@
 					self.audioBar.style.width = 0;
 					self.audioBtn.style.left = 0;
 					try {
-						win[self._fn.shutVoice].call(this);
+						win[self._fn.shutVoice].call(this, 0);
 					} catch (e) {
 						console.log("shutVoice外部函数未定义");
 					}
@@ -538,7 +539,7 @@
 					self.audioBtn.style.left = vmd + "px";
 					self.audioBar.style.width = vmd + "px";
 					try {
-						win[self._fn.openVoice].call(this);
+						win[self._fn.openVoice].call(this, self.voice);
 					} catch (e) {
 						console.log("openVoice外部函数未定义");
 					}

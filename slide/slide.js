@@ -65,9 +65,15 @@
 			bgk.className = "slide_bgk";
 			var leftArrow = document.createElement("SPAN");
 			leftArrow.className = "slide_left_arrow hide_arrow";
+			var preImg = document.createElement("IMG");
+			preImg.className = "pre_img";
+			self.preImg = preImg;
 			var img = document.createElement("IMG");
 			img.className = "slide_img";
 			self.img = img;
+			var nextImg = document.createElement("IMG");
+			nextImg.className = "next_img";
+			self.nextImg = nextImg;
 			var countWrap = document.createElement("SPAN");
 			countWrap.className = "count_wrap"
 			var indWrap = document.createElement("SPAN");
@@ -86,7 +92,9 @@
 			rightArrow.className = "slide_right_arrow hide_arrow"
 			wrap.appendChild(bgk);
 			wrap.appendChild(leftArrow);
+			wrap.appendChild(preImg);
 			wrap.appendChild(img);
+			wrap.appendChild(nextImg);
 			wrap.appendChild(countWrap);
 			wrap.appendChild(rightArrow);
 			ele.appendChild(wrap);
@@ -105,7 +113,8 @@
 						img.width = self.eleWidth;
 						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
 					}
-				}, 10);
+				}, 50);
+				self.dealOthers();
 			}
 
 			ELE.addEvent(wrap, "mouseout", function() {
@@ -142,6 +151,7 @@
 
 			ELE.addEvent(wrap, "click", function() {
 				if(config.images.length==0) return ;
+				var key = "pre";
 				var ev = arguments[0] || win.event;
 				var mouseOrignal = {
 					"top": ev.clientY,
@@ -150,24 +160,27 @@
 				if(mouseOrignal.left<=config.rect.left+config.rect.width/2) {
 					self.imgIndex = self.imgIndex-1>=0?self.imgIndex-1:config.images.length-1;
 				} else {
+					key = "next";
 					self.imgIndex = self.imgIndex+1>config.images.length-1?0:self.imgIndex+1;
 				}
 				img.removeAttribute("style");
 				img.removeAttribute("width");
 				img.removeAttribute("height");
 				img.src = (config.basePath||"") + config.images[self.imgIndex];
+				if("pre"==key) {
+					config.preImgOpt.width?img.width = config.preImgOpt.width:"";
+					config.preImgOpt.height?img.height = config.preImgOpt.height:"";
+					img.style.top = config.preImgOpt.top + "px";
+					img.style.left = config.preImgOpt.left + "px";
+				} else {
+					config.nextImgOpt.width?img.width = config.nextImgOpt.width:"";
+					config.nextImgOpt.height?img.height = config.nextImgOpt.height:"";
+					img.style.top = config.nextImgOpt.top + "px";
+					img.style.left = config.nextImgOpt.left + "px";
+				}
 				config.presentShow.call(self, config.images[self.imgIndex]);
 				indWrap.innerHTML = self.imgIndex + 1;
-				setTimeout(function() {
-					var imgRatio = img.offsetWidth/img.offsetHeight;
-					if(imgRatio<config.ratio) {
-						img.height = self.eleHeight;
-						img.style.left = (self.eleWidth-img.offsetWidth)/2 + "px";
-					} else {
-						img.width = self.eleWidth;
-						img.style.top = (self.eleHeight-img.offsetHeight)/2 + "px";
-					}
-				}, 10);
+				self.dealOthers();
 			});
 		},
 		"delImage": function(images) {
@@ -280,6 +293,7 @@
 				}
 			}
 			self.totalWrap.innerHTML = config.images.length;
+			self.dealOthers();
 		},
 		"addImage": function(images) {
 			var self = this;
@@ -292,6 +306,7 @@
 				config.images.push(images);
 			}
 			self.totalWrap.innerHTML = config.images.length;
+			self.dealOthers();
 		},
 		"getCurrentImage": function() {
 			return this.config.images[this.imgIndex];
@@ -301,6 +316,48 @@
 		},
 		"getNextImage": function() {
 			return this.config.images[this.imgIndex==this.config.images.length-1?0:this.imgIndex+1];
+		},
+		"dealOthers": function() {
+			var self = this;
+			var config = self.config;
+			self.preImg.removeAttribute("width");
+			self.preImg.removeAttribute("height");
+			self.nextImg.removeAttribute("width");
+			self.nextImg.removeAttribute("height");
+			self.preImg.src = (config.basePath||"") + config.images[self.imgIndex-1<0?config.images.length-1:self.imgIndex-1];
+			self.nextImg.src = (config.basePath||"") + config.images[self.imgIndex+1>=config.images.length?0:self.imgIndex+1];
+
+			setTimeout(function() {
+				var imgRatio = self.preImg.offsetWidth/self.preImg.offsetHeight;
+				config.preImgOpt = {};
+				if(imgRatio<config.ratio) {
+					self.preImg.height = self.eleHeight;
+					config.preImgOpt.height = self.eleHeight;
+					config.preImgOpt.left = (self.eleWidth-self.preImg.offsetWidth)/2;
+					config.preImgOpt.top = 0;
+				} else {
+					self.preImg.width = self.eleWidth;
+					config.preImgOpt.width = self.eleWidth;
+					config.preImgOpt.top = (self.eleHeight-self.preImg.offsetHeight)/2;
+					config.preImgOpt.left = 0;
+				}
+			}, 100);
+
+			setTimeout(function() {
+				var imgRatio = self.nextImg.offsetWidth/self.nextImg.offsetHeight;
+				config.nextImgOpt = {};
+				if(imgRatio<config.ratio) {
+					self.nextImg.height = self.eleHeight;
+					config.nextImgOpt.height = self.eleHeight;
+					config.nextImgOpt.left = (self.eleWidth-self.nextImg.offsetWidth)/2;
+					config.nextImgOpt.top = 0;
+				} else {
+					self.nextImg.width = self.eleWidth;
+					config.nextImgOpt.width = self.eleWidth;
+					config.nextImgOpt.top = (self.eleHeight-self.nextImg.offsetHeight)/2;
+					config.nextImgOpt.left = 0;
+				}
+			}, 100);
 		}
 	};
 

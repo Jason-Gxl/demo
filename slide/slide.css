@@ -6,6 +6,7 @@
     -o-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    overflow: hidden;
 }
 
 .slide_wrap .slide_bgk {
@@ -27,9 +28,18 @@
     background-size: contain;
     background-position: center;
 }
+.slide_wrap .pre_img {
+    position: absolute;
+    visibility: hidden;
+}
 
 .slide_wrap .slide_img {
 	position: absolute;
+}
+
+.slide_wrap .next_img {
+    position: absolute;
+    visibility: hidden;
 }
 
 .slide_wrap .count_wrap {
