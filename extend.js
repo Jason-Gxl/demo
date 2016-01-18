@@ -16,7 +16,6 @@ var UA = (function() {
 })();
 
 (function(win){
-
 	//入口
 	win.$$ = function(obj) {
 		return _$$(obj);
@@ -29,52 +28,63 @@ var UA = (function() {
 			return new _$(obj);
 		}
 
+		obj = obj.trim();
+		if(!isDOM(obj) && obj.length>0) {
+			var eles = [];
+			var elList = document.querySelectorAll(obj);
+			if(null==elList) return null;
+			if(1==elList.length) return new _$(elList[0]);
+			if(1<elList.length) return new _$(elList);
+		}
+
+		return ;
+
 		//id选择器
-		if(!isDOM(obj) && obj.trim().startWith("#")) {
-			return new _$(_$id(obj.trim().substring(1, obj.length)));
-		}
+		// if(!isDOM(obj) && obj.trim().startWith("#")) {
+		// 	return new _$(_$id(obj.trim().substring(1, obj.length)));
+		// }
 
-		//class选择器
-		if(!isDOM(obj) && obj.trim().startWith("\\.")) {
-			var eles = [];
-			var elList = _$class(obj.trim().substring(1, obj.length));
+		// //class选择器
+		// if(!isDOM(obj) && obj.trim().startWith("\\.")) {
+		// 	var eles = [];
+		// 	var elList = _$class(obj.trim().substring(1, obj.length));
 
-			for(var i=0,len=elList.length; i<len; i++) {
-				eles.push(elList[i]);
-			}
+		// 	for(var i=0,len=elList.length; i<len; i++) {
+		// 		eles.push(elList[i]);
+		// 	}
 
-			return eles.length>0?new _$(eles):eles;
-		}
+		// 	return eles.length>0?new _$(eles):eles;
+		// }
 
-		//标签名选择器
-		if(!isDOM(obj) && !obj.trim().startWith("\\[") && !obj.trim().endWith("\\]")) {
-			var eles = [];
+		// //标签名选择器
+		// if(!isDOM(obj) && !obj.trim().startWith("\\[") && !obj.trim().endWith("\\]")) {
+		// 	var eles = [];
 
-			var elList = _$tagName(obj.trim());
+		// 	var elList = _$tagName(obj.trim());
 
-			if(0==elList.length) {
-				elList = _$name(obj.trim());
-			}
+		// 	if(0==elList.length) {
+		// 		elList = _$name(obj.trim());
+		// 	}
 
-			for(var i=0, len=elList.length; i<len; i++) {
-				eles.push(elList[i]);
-			}
+		// 	for(var i=0, len=elList.length; i<len; i++) {
+		// 		eles.push(elList[i]);
+		// 	}
 
-			return eles.length>0?new _$(eles):eles;
-		}
+		// 	return eles.length>0?new _$(eles):eles;
+		// }
 
-		if(!isDOM(obj) && obj.trim().startWith("\\[") && obj.trim().endWith("\\]")) {
-			var eles = [];
-			var subObj = obj.substring(1, obj.length-1);
-			var subObjArr = subObj.split(/=/);
-			var elList = _$attr(subObjArr[0], subObjArr[1]);
+		// if(!isDOM(obj) && obj.trim().startWith("\\[") && obj.trim().endWith("\\]")) {
+		// 	var eles = [];
+		// 	var subObj = obj.substring(1, obj.length-1);
+		// 	var subObjArr = subObj.split(/=/);
+		// 	var elList = _$attr(subObjArr[0], subObjArr[1]);
 
-			for(var i=0, len=elList.length; i<len; i++) {
-				eles.push(elList[i]);
-			}
+		// 	for(var i=0, len=elList.length; i<len; i++) {
+		// 		eles.push(elList[i]);
+		// 	}
 
-			return eles.length>0?new _$(eles):eles;
-		}
+		// 	return eles.length>0?new _$(eles):eles;
+		// }
 	};
 
 	var _$ = function() {
@@ -556,125 +566,125 @@ var UA = (function() {
 	};
 
 	//id选择器
-	var _$id = function(_id) {
-		return _id ? document.getElementById(_id):null;
-	}
+	// var _$id = function(_id) {
+	// 	return _id ? document.getElementById(_id):null;
+	// }
 
 	//class选择器
-	var _$class = function(_class) {
-		var eles = [];
+	// var _$class = function(_class) {
+	// 	var eles = [];
 		
-		if(!_class) {
-			return eles;
-		}
+	// 	if(!_class) {
+	// 		return eles;
+	// 	}
 		
-		var _p = arguments[1] || document;
+	// 	var _p = arguments[1] || document;
 
-		if(document.getElementsByClassName) {
-			eles = _p.getElementsByClassName(_class);
-		} else {
-			var nodes = [];
+	// 	if(document.getElementsByClassName) {
+	// 		eles = _p.getElementsByClassName(_class);
+	// 	} else {
+	// 		var nodes = [];
 
-			if(arguments[1] && _p.hasChildNodes()) {
-				nodes = _p.children || _p.childNodes;
-			} else {
-				nodes = _p.getElementsByTagName("*") || _p.all;
-			}
+	// 		if(arguments[1] && _p.hasChildNodes()) {
+	// 			nodes = _p.children || _p.childNodes;
+	// 		} else {
+	// 			nodes = _p.getElementsByTagName("*") || _p.all;
+	// 		}
 
-			for(var i in nodes) {
-				var classNameStr = nodes[i].className || "";
-				classNameStr = classNameStr.trim();
-				var classNames = classNameStr.split("/\s+/");
+	// 		for(var i in nodes) {
+	// 			var classNameStr = nodes[i].className || "";
+	// 			classNameStr = classNameStr.trim();
+	// 			var classNames = classNameStr.split("/\s+/");
 
-				if(classNames.has(_class)) {
-					eles.push(nodes[i]);
-				}
+	// 			if(classNames.has(_class)) {
+	// 				eles.push(nodes[i]);
+	// 			}
 
-			}
-		}
+	// 		}
+	// 	}
 		
-		return eles;
-	};
+	// 	return eles;
+	// };
 
 	//控件名称选择器，例如：input
-	var _$tagName = function(_tagName) {
-		var eles = [];
+	// var _$tagName = function(_tagName) {
+	// 	var eles = [];
 		
-		if(!_tagName) {
-			return eles;
-		}
+	// 	if(!_tagName) {
+	// 		return eles;
+	// 	}
 		
-		var _p = arguments[1] || document;
-		eles = _p.getElementsByTagName(_tagName);
-		return eles;
-	};
+	// 	var _p = arguments[1] || document;
+	// 	eles = _p.getElementsByTagName(_tagName);
+	// 	return eles;
+	// };
 
 	//name属性选择器
-	var _$name = function(_name) {
-		var eles = [];
+	// var _$name = function(_name) {
+	// 	var eles = [];
 		
-		if(!_name) {
-			return eles;
-		}
+	// 	if(!_name) {
+	// 		return eles;
+	// 	}
 		
-		var _p = arguments[1] || document;
+	// 	var _p = arguments[1] || document;
 		
-		var _getChild = function(_p) {
-			if(_p.hasChildNodes()) {
-				var nodes = _p.children || _p.childNodes;
+	// 	var _getChild = function(_p) {
+	// 		if(_p.hasChildNodes()) {
+	// 			var nodes = _p.children || _p.childNodes;
 
-				for(var i=0, len=nodes.length; i<len; i++) {
-					if(nodes[i].nodeType==1 && (nodes[i].name || "")==_name) {
-						eles.push(nodes[i]);
-					}
+	// 			for(var i=0, len=nodes.length; i<len; i++) {
+	// 				if(nodes[i].nodeType==1 && (nodes[i].name || "")==_name) {
+	// 					eles.push(nodes[i]);
+	// 				}
 
-					_getChild(nodes[i]);
-				}
+	// 				_getChild(nodes[i]);
+	// 			}
 
-			}
-		};
+	// 		}
+	// 	};
 
-		if(arguments[1]) {
-			_getChild(_p);
-		} else {
-			eles = _p.getElementsByName(_name)
-		}
+	// 	if(arguments[1]) {
+	// 		_getChild(_p);
+	// 	} else {
+	// 		eles = _p.getElementsByName(_name)
+	// 	}
 		
-		return eles;
-	};
+	// 	return eles;
+	// };
 
 	//任意属性选择器
-	var _$attr = function(attrName, attrValue) {
-		var eles = [];
+	// var _$attr = function(attrName, attrValue) {
+	// 	var eles = [];
 		
-		if(!attrName || !attrValue) {
-			return eles;
-		}
+	// 	if(!attrName || !attrValue) {
+	// 		return eles;
+	// 	}
 		
-		var _p = arguments[2] || document;
+	// 	var _p = arguments[2] || document;
 
-		var _getChild = function(_p) {
-			if(_p.hasChildNodes()) {
-				var nodes = _p.children || _p.childNodes;
+	// 	var _getChild = function(_p) {
+	// 		if(_p.hasChildNodes()) {
+	// 			var nodes = _p.children || _p.childNodes;
 
-				for(var i=0, len=nodes.length; i<len; i++) {
-					var attrVal = nodes[i].getAttribute(attrName);
-					var attrVals = (attrVal || "").split(/\s+/);
+	// 			for(var i=0, len=nodes.length; i<len; i++) {
+	// 				var attrVal = nodes[i].getAttribute(attrName);
+	// 				var attrVals = (attrVal || "").split(/\s+/);
 
-					if(nodes[i].nodeType==1 && attrVals.has(attrValue)) {
-						eles.push(nodes[i]);
-					}
+	// 				if(nodes[i].nodeType==1 && attrVals.has(attrValue)) {
+	// 					eles.push(nodes[i]);
+	// 				}
 
-					_getChild(nodes[i]);
-				}
+	// 				_getChild(nodes[i]);
+	// 			}
 				
-			}
-		};
+	// 		}
+	// 	};
 
-		_getChild(_p);
+	// 	_getChild(_p);
 		
-		return eles;
-	};
+	// 	return eles;
+	// };
 
 	//深拷贝，将oldVal中的数据拷贝到newVal中
 	win.$dcopy = function(newVal, oldVal) {
@@ -765,6 +775,24 @@ var UA = (function() {
 			y:ev.clientY + document.body.scrollTop - document.body.clientTop
 		}; 
 	};
+
+	win.$ajax = function(opt) {
+		var parmas = "";
+		var xhr = new XMLHttpRequest();
+		xhr.open(opt.type, opt.url, opt.async||true);
+		xhr.onreadystatechange = function() {
+			if(4==xhr.readyState && 200==xhr.status) {
+				var data = eval('('+xhr.responseText+')');
+				opt.success.call(this, data);
+			} else if(4==xhr.readyState && xhr.status!=200) {
+				opt.error.call(this);
+			}
+		};
+		for(var key in opt.data) {
+			parmas += ",key="+opt.data[key];
+		}
+		xhr.send(parmas);
+	}
 
 })(window);
 
