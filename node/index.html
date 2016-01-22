@@ -5,38 +5,24 @@
 </head>
 <body>
 <div id="try"></div>
+<iframe width="500" height="500" frameborder="0" class="main_iframe" id="main_iframe" src="javascript:void((function() {document.open();document.write('&quot;&lt;!DOCTYPE html&gt;&quot;');document.close();})())"></iframe>
 </body>
 <script type="text/javascript" src="../extend.js"></script>
 <script type="text/javascript">
-var xhr = new XMLHttpRequest();
-xhr.open("post", "http://127.0.0.1:8888/file/getData", true);
-xhr.onreadystatechange = function() {
-	if(4==xhr.readyState && 200==xhr.status) {
-		var data = eval('('+xhr.responseText+')');
-		var names = "";
-		var len = data.users.length;
-		while(len--) {
-			names += data.users[len].name;
-			if(len>0) names += ";";
-		}
-		$$("#try").html(names);
-	}
-}
-xhr.send("url=E:/demo/node/demo.txt");
-
-/*$$.ajax({
-	type: "post",
-	url: "http://127.0.0.1:8888/file/getData",
-	data: {url: "E:/demo/node/demo.txt"},
-	success: function(data) {
-		var names = "";
-		var len = data.users.length;
-		while(len--) {
-			names += data.users[len].name;
-			if(len>0) names += ";";
-		}
-		$$("#try").html(names);
-	}
-});*/
+// var xhr = new XMLHttpRequest();
+// xhr.open("post", "http://127.0.0.1:8888/file/getData", true);
+// xhr.onreadystatechange = function() {
+// 	if(4==xhr.readyState && 200==xhr.status) {
+// 		var data = eval('('+xhr.responseText+')');
+// 		var names = "";
+// 		var len = data.users.length;
+// 		while(len--) {
+// 			names += data.users[len].name;
+// 			if(len>0) names += ";";
+// 		}
+// 		$$("#try").html(names);
+// 	}
+// }
+// xhr.send("url=E:/demo/node/demo.txt");
 </script>
 </html>
