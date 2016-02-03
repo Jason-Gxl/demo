@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>promise</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" src="./promise.js"></script>
+<script type="text/javascript">
+var promise1 = Promise.init();
+
+function test1() {
+	var a = "res1";
+	setTimeout(function() {
+		promise1.solve(a);
+	}, 0);
+	return promise1;
+}
+
+var callback1 = function(res) {
+	res += "res2";
+	promise1.solve(res);
+};
+
+var callback2 = function(res) {
+	console.log(res + "res3");
+};
+
+test1().then(callback1).then(callback2);
+
+var promise2 = Promise.init();
+
+function test2() {
+	var a = "1";
+	setTimeout(function() {
+		promise2.solve(a);
+	}, 0);
+	return promise2;
+}
+
+var callback3 = function(res) {
+	res += "2";
+	promise2.solve(res);
+};
+
+var callback4 = function(res) {
+	console.log(res + "3");
+};
+
+test2().then(callback3).then(callback4);
+</script>
+</html>

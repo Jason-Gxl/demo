@@ -1,0 +1,365 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<script>
+/*	
+	操作类型(type)
+	0 ACTION_TYPE_MANUAL_DIRECTOR_CONTROL,导播开关
+	1 ACTION_TYPE_CHOOSE_CAMERA, 选择相机
+	2 ACTION_TYPE_CONTROL_CAMERA_PTZ, 控制相机 上下左右 拉近拉远 变近变远
+	3 ACTION_TYPE_CALL_CAMERA_PRESET 控制预置位
+	操作的对象(camera)
+	0 CAM_CH_TEACHER,教师跟踪
+	1 CAM_CH_STUDENT,学生跟踪
+	2 CAM_CH_VGA,VGA信息
+	3 CAM_CH_TEACHER_FULLSCENE,老师全景
+	4 CAM_CH_TEACHER_BLACKBOARD,老师黑板
+	5 CAM_CH_STUDENT_FULLSCENE,学生全景
+    6 CAM_CH_NUM
+	具体操作(action)
+	0 ACTION_CAM_MANUAL_DIRECTOR_ENABLE, 开
+	1 ACTION_CAM_MANUAL_DIRECTOR_DISABLE, 关
+	2~12需要我去侦测重复Event，去除
+	2 ACTION_CAM_PTZ_DIR_UP, 向上
+	3 ACTION_CAM_PTZ_DIR_DOWN, 向下
+	4 ACTION_CAM_PTZ_DIR_LEFT, 向左
+	5 ACTION_CAM_PTZ_DIR_RIGHT, 向右
+	6 ACTION_CAM_PTZ_DIR_STOP, 停(为了上下左右)
+	
+	7 ACTION_CAM_PTZ_FAR, 拉远
+	8 ACTION_CAM_PTZ_NEAR, 拉近
+	9 ACTION_CAM_PTZ_FAR_NEAR_STOP, 停(为了拉近拉远)
+	10 ACTION_CAM_PTZ_TELE, 焦距变近
+	11 ACTION_CAM_PTZ_WIDE, 焦距变远
+	12 ACTION_CAM_PTZ_TELE_WIDE_STOP, 停(变近变远)
+	
+    13 ACTION_CAM_PRESET_FULLSCENE, 全景			----------->0
+    14 ACTION_CAM_PRESET_MAIN1, 主预置位1			----------->1
+    15 ACTION_CAM_PRESET_MAIN2, 主预置位2			----------->2
+    16 ACTION_CAM_PRESET_MAIN3, 主预置位3			----------->3
+    17 ACTION_CAM_PRESET_MINOR1, 辅预置位1			----------->4
+	18 ACTION_CAM_PRESET_MINOR2, 辅预置位2			----------->5
+    19 ACTION_CAM_PRESET_BLACKBOARD1, 黑板预置位1	----------->6
+    20 ACTION_CAM_PRESET_BLACKBOARD2, 黑板预置位2	----------->7
+    21 ACTION_CAM_PRESET_BLACKBOARD3, 黑板预置位3	----------->8
+	22 ACTION_NONE
+*/
+var slotControl = (function () {
+	var plugin;
+	var lasrPiz = '';
+	var lastDirect = '';
+	var controlTab = {
+		0: 'manual',
+		1: 'auto',
+		23: 'automanual'
+	};
+	var directTab = ['up', 'down', 'left', 'right'];
+	var pizTab = ['far', 'near', 'minNearFar', 'out', 'in', 'minInOut'];
+	return {
+		r: function (type, camera, action) {
+			console.log('ControlInfoFromRemotesense',type, camera, action);
+			if ($('#masker').length > 0) return;
+			var recordState = director.recordState || director.module.recordState;
+			switch (true) {
+				case type == 0 && (action == 0 || action == 1 || action == 23):
+					if (window.JAVA_V && (JAVA_V == 5 || JAVA_V == 3)) {
+						$('.directorMode-box a[data-mode="' + controlTab[action] + '"]').click();
+					} else {
+						controlTab['23'] = 'autoManual';
+						$('.daobo-btn[data-mode="' + controlTab[action] + '"]').click();
+					}
+					break;
+				case type == 1:
+					$('.video-bar .video-bar-item-title').each(function (index) {
+						if (camera == 0 && this.innerHTML == "教师跟踪") {
+							this.click();
+						} else if (camera == 1 && this.innerHTML == "教师全景") {
+							this.click();
+						} else if (camera == 2 && this.innerHTML == "学生跟踪") {
+							this.click();
+						} else if (camera == 3 && this.innerHTML == "学生全景") {
+							this.click();
+						} else if (camera == 4 && this.innerHTML == "教师板书") {
+							this.click();
+						} else if (camera == 5 && (this.innerHTML == "VGA" || this.innerHTML == "vga")) {
+							this.click();
+						}
+					})
+					//$('.video-bar-item:eq(' + camera + ') .video-bar-item-title').click();
+					break;
+				case type == 2 && action>=2 && action <= 6:
+					if (action == 6) {
+						if (lastDirect) {
+							$('.direct-key .' + lastDirect).mouseup();
+							lastDirect = "";
+						}
+					} else {
+						var direct = directTab[action-2];
+						if (lastDirect) {
+							if (direct != lastDirect) {
+								$('.direct-key .' + lastDirect).mouseup();
+								$('.direct-key .' + direct).mousedown();
+								lastDirect = direct;
+							}
+						} else {
+							$('.direct-key .' + direct).mousedown();
+							lastDirect = direct;
+						}
+					}
+					break;
+				case type == 2 && action>=7 && action <= 12:
+					director.videoMove(pizTab[action-7]);
+					//director.videoMove2(pizTab[action-7]);
+					break;
+				case type == 3:
+					if (window.JAVA_V &&  (JAVA_V == 5 || JAVA_V == 3)) {
+						if (action >=0 && action <= 8) {
+							$('.camera-control-box .type1:eq(' + action + ')').click();
+						} else if (action >=13 && action <= 21) {
+							$('.camera-control-box .type1:eq(' + (action-13) + ')').click();
+						}
+					} else {
+						if (action >=0 && action <= 8) {
+							$('.camera-preset-box .type1:eq(' + action + ')').click();
+						} else if (action >=13 && action <= 21) {
+							$('.camera-preset-box .type1:eq(' + (action-13) + ')').click();
+						}
+					}
+					break;
+				case type == 4 && camera == 0: 
+					if (recordState.state != 'on') {
+						recordState.next();
+					}
+					break;
+				case type == 4 && camera == 1:
+					if (recordState.state == 'on') {
+						recordState.next();
+					}
+					break;
+				case type == 4 && camera == 2:
+					if (recordState.state != 'stop') {
+						recordState.stop();
+					}
+					break;
+				case type == 5:
+					if (director.isRecord()) {
+						Win.alert({
+							width: 260,
+							html: '录制状态不能修改录制模式。'
+						});
+						return;
+					}
+					$('#recordMode').jsSelect('_click', camera);
+					break;
+				case type == 6:
+					$('.picmode-bar .box:eq(' + camera + ')').click();
+					break;
+				case type == 7:
+					var _data = director.getData();
+					if(5==camera && 22==action) camera = -1;
+					_data.sceneData.sceneSelectIndex = camera;
+					$('#sceneSelect').jsSelect('val', camera);
+					if(-1!=camera) {
+						$('.scene-box .turnOn-btn').addClass('selected');
+						$('#sceneSelect').jsSelect('disable2');
+					} else {
+						$('.scene-box .turnOn-btn').removeClass('selected');
+						$('#sceneSelect').removeClass('disable2');
+					}
+					remote.call('sceneStyle', camera);
+					break;	
+				case type == 8:
+					$('.video-bar .video-bar-item-title').each(function (index) {
+						var $control;
+						if (camera == 0 && this.innerHTML == "教师跟踪") {
+							if (window.JAVA_V &&  (JAVA_V == 5 || JAVA_V == 3)) {
+								$control = $(this).parents('.video-bar-item').find('.video-bar-control');
+							} else {
+								$control = $(this).parents('.video-bar-item').find('.video-bar-record');
+							}
+						} else if (camera == 1 && this.innerHTML == "学生跟踪") {
+							if (window.JAVA_V &&  (JAVA_V == 5 || JAVA_V == 3)) {
+								$control = $(this).parents('.video-bar-item').find('.video-bar-control');
+							} else {
+								$control = $(this).parents('.video-bar-item').find('.video-bar-record');
+							}
+						}
+						if ($control && !$control.hasClass('ing')) {
+							$control.click();
+						}
+					})
+					break;
+				case type == 9:
+					if (window.JAVA_V &&  (JAVA_V == 5 || JAVA_V == 3)) {
+						if (camera == 0) {
+							COCO.callOne(MAIN_SPEAK, "C_SetMode.vgaLock");
+						} else {
+							COCO.callOne(MAIN_SPEAK, "C_SetMode.vgaUnLock");
+						}
+					} else {
+						if (camera == 0) {
+							COCO.callOne(MAIN_SPEAK, "lessonMode.vgaLock");
+						} else {
+							COCO.callOne(MAIN_SPEAK, "lessonMode.vgaUnLock");
+						}
+					}
+					
+					break;
+			}
+		},
+		init: function () {
+			var self = this;
+			window.slotPluginLoaded = function () {
+				plugin = $id('slotPlugin');
+				events.addEvent(plugin, 'ControlInfoFromRemotesense', function (type, camera, action) {
+					self.r(type, camera, action);
+					var number = self.getLight(type, camera, action);
+					self.setDirectorMode(number);
+				});
+			}
+			$(function () {
+				slotControl.check();
+			})
+		},
+		setDirectorMode: function(number) {
+			plugin.setDirectorMode(number);
+		},
+		getLight: function(type, camera, action) {
+			var number = 0;
+			switch(true) {
+				case 0==type && 0==camera && 0==action://手动
+				number = 35;
+				break;
+				case 0==type && 0==camera && 1==action://自动
+				number = 34;
+				break;
+				case 0==type && 0==camera && 23==action://半自动
+				number = 36;
+				break;
+				case 1==type && 0==camera && 22==action://教师跟踪
+				number = 42;
+				break;
+				case 1==type && 1==camera && 22==action://老师全景
+				number = 43;
+				break;
+				case 1==type && 2==camera && 22==action://学生跟踪
+				number = 44;
+				break;
+				case 1==type && 3==camera && 22==action://学生全景
+				number = 45;
+				break;
+				case 1==type && 4==camera && 22==action://教师板书
+				number = 46;
+				break;
+				case 1==type && 5==camera && 22==action://vga
+				number = 47;
+				break;
+				case 9==type && 0==camera && 22==action://锁定
+				number = 48;
+				break;
+				case 9==type && 1==camera && 22==action://解锁
+				number = 49;
+				break;
+				case 6==type && 0==camera && 22==action://单画面
+				number = 22;
+				break;
+				case 6==type && 1==camera && 22==action://画中画
+				number = 23;
+				break;
+				case 6==type && 2==camera && 22==action://画外画
+				number = 24;
+				break;
+				case 6==type && 3==camera && 22==action://对话
+				number = 25;
+				break;
+				case 7==type && 0==camera && 22==action://左上
+				number = 29;
+				break;
+				case 7==type && 1==camera && 22==action://右上
+				number = 31;
+				break;
+				case 7==type && 2==camera && 22==action://左下
+				number = 30;
+				break;
+				case 7==type && 3==camera && 22==action://右下
+				number = 32;
+				break;
+				case 7==type && 4==camera && 22==action://淡入淡出
+				number = 50;
+				break;
+				case 7==type && 5==camera && 22==action://关闭特效
+				number = 33;
+				break;
+				case 4==type && 0==camera && 22==action://开始录制
+				number = 19;
+				break;
+				case 4==type && 1==camera && 22==action://暂停录制
+				number = 20;
+				break;
+				case 4==type && 2==camera && 22==action://停止录制
+				number = 21;
+				break;
+				case 5==type && 0==camera && 22==action://电影模式
+				number = 28;
+				break;
+				case 5==type && 1==camera && 22==action://资源模式
+				number = 26;
+				break;
+				case 5==type && 2==camera && 22==action://电影+资源
+				number = 27;
+				break;
+				case 8==type && 0==camera && 22==action://选择老师画面
+				number = 39;
+				break;
+				case 8==type && 1==camera && 22==action://选择学生画面
+				number = 40;
+				break;
+				case 8==type && 2==camera && 22==action://选择板书画面
+				number = 41;
+				break;
+				case 3==type && 13==action://预置位1
+				number = 8;
+				break;
+				case 3==type && 14==action://预置位2
+				number = 9;
+				break;
+				case 3==type && 15==action://预置位3
+				number = 10;
+				break;
+				case 3==type && 16==action://预置位4
+				number = 12;
+				break;
+				case 3==type && 17==action://预置位5
+				number = 13;
+				break;
+				case 3==type && 18==action://预置位6
+				number = 14;
+				break;
+				case 3==type && 19==action://预置位7
+				number = 16;
+				break;
+				case 3==type && 20==action://预置位8
+				number = 17;
+				break;
+				case 3==type && 21==action://预置位9
+				number = 18;
+				break;
+			}
+			return number;
+		},
+		check: function () {
+			plugin = $id('slotPlugin');
+			if (!plugin || !plugin.version) {
+				Win.open({
+					html: "未安装硬件导播台插件，点击<a href='${root}/plugin/CodyyRemoteDirector.exe' target='_blank'>下载</a>安装。",
+					width: 380
+				});
+				return false;
+			}
+			return true;
+		}		
+	}
+})();
+slotControl.init();
+</script>
+<object id="slotPlugin" type="application/x-codyyremotedirector" style="display:block;height:0;">
+	<param name="onload" value="slotPluginLoaded" />
+</object>
