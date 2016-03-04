@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>    
+<html>   
+<head>   
+<title>Title</title>  
+<style type="text/css">
+    body{
+    position: absolute;
+    margin:0px;
+    left:0px;
+    top:0px;
+    }
+</style>
+<script type="text/javascript"> 
+var ctx;  
+var mycanvas;
+var dtx;
+var xy = new Array();  //用来保存鼠标轨迹坐标
+//var tts;
+var x ; //鼠标X坐标
+var y ;//鼠标Y坐标
+
+window.onload=function(){
+dtx = document.getElementById("drawCanvas").getContext("2d");
+mycanvas = document.getElementById("myCanvas");
+ctx = mycanvas.getContext("2d");
+ctx.lineWidth = 1; //线宽
+dtx.lineWidth = 1;
+//ctx.lineCap = "round"; //线头样式
+//tts = document.getElementById("tts");  //方便调试
+mycanvas.onmousedown = startmove;   //监听mycanvas的鼠标按下事件
+document.documentElement.onmouseup = stopmove;  //监听鼠标移动事件
+}
+
+
+//绘画函数
+function drowPad(e)
+{
+   ctx.save();
+   ctx.beginPath();
+   ctx.moveTo(x,y);
+   ctx.lineTo(e.clientX-2,e.clientY-2); //cilentX获得的坐标是相对文档的坐标，我设置了mycanvas的边框为2像素，所以要减去2
+   ctx.stroke();
+   x = e.clientX-2;
+   y = e.clientY-2;
+   ctx.restore();
+   xy.push([x,y]);//把坐标添加到数组
+   //tts.innerHTML = x+","+y;
+}
+
+//开始绘制的入口
+function startmove(e)
+{
+    x = e.clientX-2; //获得鼠标按下的第一点的坐标
+    y = e.clientY-2;
+    xy.push([x,y]);//添加到数组
+    mycanvas.onmousemove = drowPad;//监听mycanvas的鼠标移动事件
+    
+}
+
+//鼠标按键被放开时执行
+function stopmove(e)
+{
+    mycanvas.onmousemove = null; //取消mycanvas鼠标移动监听事件
+    xy.push([0.1,0]);//把特定的值增加到数组，用于标记此次绘画结束，恢复绘画时用到
+}
+
+
+
+//根据数组记录的鼠标轨迹重新恢复画出的图形
+function drowDTX()
+{
+dtx.clearRect(0,0,400,300); //先清空mycanvas，避免累计绘制产生重叠
+ dtx.save();
+    
+    for(var a = 0; a < xy.length; a++)
+    {
+       
+        if(xy[a+1][0] == 0.1) //根据数组特定标记判断是否是此次绘画的结束点
+        {
+            a+=2;
+            continue;
+        }
+        if(xy[a][0] == 0.1)  //根据数组特定标记判断是否是此次绘画的结束点
+        {
+            a++;
+            continue;
+        }
+        dtx.beginPath();
+        dtx.moveTo(xy[a][0],xy[a][1]);
+        dtx.lineTo(xy[a+1][0],xy[a+1][1]);
+        dtx.stroke();
+    }
+    dtx.restore();
+//tts.innerHTML = xy.length; 
+}
+
+
+</script>   
+</head>   
+<body  onselectstart = "return false;">   
+<canvas  style="border: 2px solid #000000"  id="myCanvas" width="400" height="300">浏览器不支持canvas标签</canvas>
+<canvas  style="border: 2px solid #000000"  id="drawCanvas" width="400" height="300">浏览器不支持canvas标签</canvas>
+
+<p id="tts"></p>
+<input type="button" value="重画" onclick="drowDTX()">
+</body>   
+</html> 
