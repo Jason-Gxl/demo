@@ -2,11 +2,43 @@
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	margin-left: 15px;
 	text-align: left;
 }
 
+#eTree li {
+	line-height: 25px;
+}
+
 #eTree li a {
+	text-decoration: none;
+	color: #444;
+	padding: 2px 5px;
+}
+
+#eTree li a.selected {
+	background: #CCCCCC;
+    border: solid 1px #7D7D7D;
+}
+
+#eTree .level-1 {
+	margin-left: 20px;
+}
+
+#eTree .level-2 {
+	margin-left: 40px;
+}
+
+#eTree li a.arrow {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	background-size: 100%;
+}
+
+#eTree li a.arrow-down {
+	background: url(./arrow.png);
+}
+/*#eTree li a {
 	display: inline-block;
 	padding: 0 5px;
 	margin: 2px 0 2px 5px;
@@ -66,4 +98,4 @@
 	top: 2px;
 	margin-right: 2px;
 	margin-left: 10px;
-}
+}*/

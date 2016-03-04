@@ -16,10 +16,11 @@
 	var et = eTree.init({
 		"id": "easyTree",	//页面中元素ID，树生成在这个元素里，禁止使用"eTree"
 		"data": treeData,	//生成树的数据
-		"showParam": "name",	//树节点要显示的字段名称
-		"selected": [{"id":1}],	//设置被选中
-		"checkbox": true,	//设为多选	
-		"isPid": false,	//当数据为[{"name":"Jason", "id":1}, {"name":"Tom", "id":2, "pId":1}]格式时，将isPid设为true
+		// "showParam": "name",	//树节点要显示的字段名称，默认为"name"
+		"selected": [{"id":1}],	//设置选中数据
+		"checkbox": false,	//设为多选，默认为false
+		// "isPid": false,	//当数据为[{"name":"Jason", "id":1}, {"name":"Tom", "id":2, "pId":1}]格式时，将isPid设为true
+		"key": "id",	//数据键
 		"select": function(d) {	//选中树节点时触发，只为checkbox为false时有效
 			console.log(d);
 		}
