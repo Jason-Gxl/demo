@@ -1,0 +1,84 @@
+/**
+ * 导航栏js
+ * @author Jason
+ * @module nav
+ * @namespace painter.controler
+ */
+(function($, global){
+    "use strict";
+    
+    /**
+     * 导航类
+     * @class Nav
+     * @static 
+     */
+    var Nav = {
+       /**
+        * 初始化
+        * @method init 
+        */
+       init:function(){
+           this.bindEvent();
+       },
+       
+       /**
+        * 帮顶事件
+        * @event bindEvent 
+        */
+       bindEvent:function(){          
+           var $document = $(document);
+           //绑定导出按钮事件
+           $document.delegate("#nav-file-export", "click", function(e){
+                var currentCanvasDom = global.painter.canvas.currentCanvasContainer.getCanvas().getCanvas(),
+                    $imgView = $("#save-image").get(0);                                 
+                $imgView.src = currentCanvasDom.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            });
+            
+            //绑定保存按钮事件
+            $document.delegate("#nav-file-save", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.save();
+                $.fn.TorangeNotice({type:'success', content:'保存成功'});//弹出提示
+                window.console.log("触发保存事件");
+            });
+            
+            //绑定撤销按钮事件
+            $document.delegate("#nav-edit-undo", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.undo();//撤销上一部
+            });
+            
+            //绑定清空按钮事件
+            $document.delegate("#nav-edit-clear", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.clear(); 
+            });
+            
+            //绑定清空底片按钮事件
+            $document.delegate("#nav-edit-clear-negative", "click", function(e){
+                var negativeCanvas = global.painter.canvas.negativeCanvasContainer.getCanvas();
+                negativeCanvas.clear();
+            });
+            
+            //绑定倒置按钮事件
+            $document.delegate("#nav-edit-convert", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.convert();
+            });
+            //绑定水平按钮事件
+            $document.delegate("#nav-edit-flipx", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.flipX();
+            });
+            //绑定垂直翻转按钮事件
+            $document.delegate("#nav-edit-flipy", "click", function(e){
+                var currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas();
+                currentCanvas.flipY();
+            });                        
+       }
+    };
+    
+    $(document).ready(function(){
+       Nav.init();//初始化导航栏 
+    });
+}(jQuery, window));

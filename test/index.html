@@ -52,6 +52,97 @@
 <script type="text/javascript" src="../extend.js"></script>
 <script type="text/javascript" src="../jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
+var Animal,
+	Cat,
+	Dog,
+	Shape,
+	Rectangle;
+
+	Shape = function() {
+		this.x = 0;
+		this.y = 0;
+	};
+
+	Shape.prototype.move = function(x, y) {
+		this.x = x;
+		this.y = y;
+		console.info("Shape move");
+	}
+
+	Rectangle = function() {
+		this.x = 1;
+		this.y = 1;o
+		Shape.call(this);
+	};
+
+	Rectangle.prototype = Object.create(Shape.prototype);
+
+	var rect = new Rectangle();
+
+	// Animal = function() {
+	// 	this.type = "animal";
+	// 	this.feed = "";
+	// 	this.drink = function() {
+	// 		console.log(this.type + " drink");
+	// 	};
+	// };
+
+	// Animal.prototype = {
+	// 	run: function() {
+	// 		console.log(this.type + " run");
+	// 	},
+	// 	eat: function() {
+	// 		console.log(this.type + " eat " + this.feed);
+	// 	}
+	// };
+
+	// Cat = function() {
+	// 	this.type = "cat";
+	// 	this.feed = "fish";
+
+	// 	this.setFeed = function(feed) {
+	// 		this.feed = feed;
+	// 	};
+
+	// 	this.run = function() {
+	// 		console.log(this.type + " run.......");
+	// 	};
+	// };
+
+	// Cat.prototype = new Animal();
+
+	// Dog = function() {
+	// 	this.type = "dog";
+	// 	this.feed = "bone";
+	// };
+
+	// Dog.prototype = new Animal();
+
+	// function obj(o) {
+	// 	var f = function() {};
+	// 	f.prototype = o;
+	// 	return new f();
+	// }
+
+	// function factory(parent, child) {
+	// 	var f = obj(parent.prototype);
+	// 	f.constructor = child;
+	// }
+
+	// var Person = function(name) {
+	// 	this.name = name,
+	// 	this.run = function() {
+	// 		console.log("person run");
+	// 	};
+	// };
+
+	// var Man = function(name, age) {
+	// 	Person.call(this, name);
+	// 	this.age = age;
+	// };
+
+	// factory(Person, Man);
+
 // function linkDownload(alink) {
 // 	var str = "列1,列2,列3\n1,2,3";
 // 	str = encodeURIComponent(str);
@@ -65,49 +156,49 @@
 // 	alink.href = csvUrl;
 // }
 
-	var maxsize = 2*1024*1024;//2M
-	var errMsg = "上传的附件文件不能超过2M！！！";
-	var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过2M，建议使用IE、FireFox、Chrome浏览器。";
-	var browserCfg = {};
-	var ua = window.navigator.userAgent;
-	if (ua.indexOf("MSIE")>=1){
-		browserCfg.ie = true;
-	}else if(ua.indexOf("Firefox")>=1){
-		browserCfg.firefox = true;
-	}else if(ua.indexOf("Chrome")>=1){
-		browserCfg.chrome = true;
-	}
-	function checkfile(){
-		try{
-		 	var obj_file = document.getElementById("fileuploade");
-		 	if(obj_file.value==""){
-		 		alert("请先选择上传文件");
-		 		return;
-		 	}
-		 	var filesize = 0;
-		 	if(browserCfg.firefox || browserCfg.chrome ){
-		 		filesize = obj_file.files[0].size;
-		 	}else if(browserCfg.ie){
-		 		var obj_img = document.getElementById('tempimg');
-		 		obj_img.dynsrc=obj_file.value;
-		 		filesize = obj_img.fileSize;
-		 	}else{
-		 		alert(tipMsg);
-		   		return;
-		 	}
-		 	if(filesize==-1){
-		 		alert(tipMsg);
-		 		return;
-		 	}else if(filesize>maxsize){
-		 		alert(errMsg);
-		 		return;
-			}else{
-				alert("文件大小符合要求");
-		 		return;
-			}
-		}catch(e){
-			alert(e);
-		}
-	}
+	// var maxsize = 2*1024*1024;//2M
+	// var errMsg = "上传的附件文件不能超过2M！！！";
+	// var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过2M，建议使用IE、FireFox、Chrome浏览器。";
+	// var browserCfg = {};
+	// var ua = window.navigator.userAgent;
+	// if (ua.indexOf("MSIE")>=1){
+	// 	browserCfg.ie = true;
+	// }else if(ua.indexOf("Firefox")>=1){
+	// 	browserCfg.firefox = true;
+	// }else if(ua.indexOf("Chrome")>=1){
+	// 	browserCfg.chrome = true;
+	// }
+	// function checkfile(){
+	// 	try{
+	// 	 	var obj_file = document.getElementById("fileuploade");
+	// 	 	if(obj_file.value==""){
+	// 	 		alert("请先选择上传文件");
+	// 	 		return;
+	// 	 	}
+	// 	 	var filesize = 0;
+	// 	 	if(browserCfg.firefox || browserCfg.chrome ){
+	// 	 		filesize = obj_file.files[0].size;
+	// 	 	}else if(browserCfg.ie){
+	// 	 		var obj_img = document.getElementById('tempimg');
+	// 	 		obj_img.dynsrc=obj_file.value;
+	// 	 		filesize = obj_img.fileSize;
+	// 	 	}else{
+	// 	 		alert(tipMsg);
+	// 	   		return;
+	// 	 	}
+	// 	 	if(filesize==-1){
+	// 	 		alert(tipMsg);
+	// 	 		return;
+	// 	 	}else if(filesize>maxsize){
+	// 	 		alert(errMsg);
+	// 	 		return;
+	// 		}else{
+	// 			alert("文件大小符合要求");
+	// 	 		return;
+	// 		}
+	// 	}catch(e){
+	// 		alert(e);
+	// 	}
+	// }
 </script>
 </html>
