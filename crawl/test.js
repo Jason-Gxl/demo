@@ -30,4 +30,6 @@ var req = https.request(options, function(res) {
 	});
 });
 
+console.log(req);
+
 req.end();
