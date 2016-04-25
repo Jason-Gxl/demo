@@ -7,16 +7,14 @@
 		Remove this if you use the .htaccess -->
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
+		<title>Painter</title>
 		<meta name="description" content="绘图  html5 canvas" />
-
-		<meta name="author" content="Jason" />
+		<meta name="author" content="yan" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<title>Painter</title>
-
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
-		<link rel="shortcut icon" type="images/x-icon" href="images/Painter.gif" />
+		<link rel="shortcut icon" href="images/Painter.gif" />
 		
 		<!-- bootstrap css -->
 		<link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css" />
@@ -36,8 +34,8 @@
 		<!-- color css -->
 		<link rel='stylesheet' href='plugins/spectrum/spectrum.css' />
 		
-		<!-- 添加百度统计 
-		<script src="js/baidu.js"></script> -->
+		<!-- 添加百度统计 -->
+		<script src="js/baidu.js"></script>
 	</head>
 
 	<body>
@@ -86,15 +84,15 @@
 						<li class="dropdown file">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">文件 <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<!-- <li>
+								<li>
 									<a href="#"><b class="icon-plus-sign"></b> 新建<i>Ctrl+N</i></a>
-								</li> -->
+								</li>
 								<li>
 									<a href="#"><b class="icon-folder-open"></b> 打开<i>Ctrl+O</i></a>
 								</li>
-								<!-- <li>
+								<li>
 									<a id="nav-file-negative"  data-toggle="modal" href="#negative-modal"><b class="icon-share-alt"></b> 导入底片<i></i></a>
-								</li> -->
+								</li>
 								<li>
 									<a id="nav-file-image"  data-toggle="modal" href="#image-modal"><b class="icon-share-alt"></b> 插入图片<i></i></a>
 								</li>
@@ -115,10 +113,10 @@
 								<li>
 									<a id="nav-edit-clear" href="#"><b class="icon-trash"></b> 清空<i>Ctrl+D</i></a>
 								</li>
-								<!-- <li>
+								<li>
 									<a id="nav-edit-clear-negative" href="#"><b class="icon-trash"></b> 清空底片<i></i></a>
-								</li> -->
-								<!-- <li>
+								</li>
+								<li>
 									<a id="nav-edit-convert" href="#"><b class="icon-random"></b> 倒置<i>Ctrl+R</i></a>
 								</li>
 								<li>
@@ -126,15 +124,40 @@
 								</li>
 								<li>
 									<a id="nav-edit-flipy" href="#"><b class="icon-resize-vertical"></b> 垂直翻转<i>Ctrl+V</i></a>
-								</li> -->
+								</li>
 							</ul>
 						</li><!-- end .edit -->																		
+						<li class="dropdown help">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">帮助 <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a target="_blank" href="https://github.com/yanhaijing/Painter/issues"><b class="icon-info-sign"></b> 报告问题</a>
+								</li>
+								<li>
+									<a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=Djg_Ojg9Njc7Pk5-fyBtYWM" style="text-decoration:none;"><b class="icon-envelope"></b> 联系作者</a>
+								</li>								
+							</ul>
+						</li><!-- end .help -->
+						<li class="dropdown social">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">社交 <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li id="nav-share-qq">
+									<a class="qcShareQQDiv" href="#" target="_blank"><b class="icon-share"></b> 分享到QQ</a>
+								</li>
+								<li id="nav-share-qzone">
+									<a version="1.0" class="qzOpenerDiv" href="#" target="_blank"><b class="icon-share"></b> QQ空间</a>
+								</li>
+								<li id="nav-share-weibo">
+                                    <a class="weibo" href="http://weibo.com/yanhaijing1234/profile" target="_blank"><b class="icon-weibo"></b> 我的微博</a>
+                                </li>																
+							</ul>
+						</li><!-- end .share -->
 					</ul><!-- end .nav -->
 				</div><!-- end .navbar-inner -->
 			</nav>			
 			<div class="row-fluid main-wrap">
 				<div class="span12 canvas-wrap">
-					<!-- <canvas width="1000" height="400" id="canvas-background" class="canvas-paint canvas-background"></canvas> -->
+					<canvas width="1000" height="400" id="canvas-background" class="canvas-paint canvas-background"></canvas>
 					<canvas width="1000" height="400" class="canvas-paint canvas-negative"></canvas>
 					<canvas width="1000" height="400" class="canvas-paint canvas-layer"></canvas>
 					<canvas width="1000" height="400" class="canvas-paint canvas-buffer"></canvas>
@@ -368,7 +391,7 @@
 				  <div class="modal-body">
 				    <form>
 				    	<fieldset>
-				    		<legend>导入底片</legend>
+				    		<legend>导入图片</legend>
 				    		<label><input id="negative-modal-file" type="file" accept="image/*" /></label>				    		
 				    	</fieldset>
 				    	<fieldset>
@@ -433,13 +456,12 @@
 			<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="myModalLabel">图片预览</h3>
+			    <h3 id="myModalLabel">保存图片-右键-图片另存为</h3>
 			  </div>
 			  <div class="modal-body">
 			    <p><img id="save-image" src="images/Painter.gif" style="outline: 1px solid #ff0"></p>
 			  </div>
 			  <div class="modal-footer">
-			  	<button class="btn" data-dismiss="modal" aria-hidden="true">下载</button>
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>			    
 			  </div>
 			</div>

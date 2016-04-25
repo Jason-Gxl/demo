@@ -1,6 +1,6 @@
 /**
  * 画布控制器
- * @author Jason
+ * @author yan
  * @module canvas
  * @namespace painter.controler
  */
@@ -30,7 +30,7 @@
         pointList:Object.create(global.painter.model.PointList),
         
         /**
-         * 获取所有点 
+         * 设置开始点 
          * @method getPointList
          * @return {Object} 坐标点列表对象
          */
@@ -39,7 +39,7 @@
         },
         
         /*
-         * 获取鼠标状态
+         * 检查鼠标状态
          * @method getClickStatus
          * @return {Bollean} 当前鼠标点击状态
          */
@@ -63,7 +63,9 @@
          * @method init
          */
         init:function(){
-            var negativeCanvasDom = $('.canvas-negative').get(0),
+            var
+            
+                negativeCanvasDom = $('.canvas-negative').get(0),
                 negativeCanvas = new global.painter.model.CanvasModel(),
                 negativeCanvasContainer = Object.create(global.painter.model.CanvasContainerModel),
                 
@@ -79,44 +81,45 @@
                 mouseCanvas = new global.painter.model.CanvasModel(),
                 mouseCanvasContainer = Object.create(global.painter.model.CanvasContainerModel);
             
-                //初始化当前缓冲画布
-                negativeCanvas.init(negativeCanvasDom, "negativeCanvas");
-                negativeCanvasContainer.init(negativeCanvas);
-                global.painter = global.painter || {};
-                global.painter.canvas = global.painter.canvas || {};
-                global.painter.canvas.negativeCanvasContainer = negativeCanvasContainer;
+            //初始化当前缓冲画布
+            negativeCanvas.init(negativeCanvasDom, "negativeCanvas");
+            negativeCanvasContainer.init(negativeCanvas);
+            global.painter = global.painter || {};
+            global.painter.canvas = global.painter.canvas || {};
+            global.painter.canvas.negativeCanvasContainer = negativeCanvasContainer;
                 
-                //初始化当前画布
-                currentCanvas.init(currentCanvasDom, "currentCanvas");
-                currentCanvas.autoSave(60000);//1分钟自动保存一次
-                currentCanvasContainer.init(currentCanvas);
-                global.painter = global.painter || {};
-                global.painter.canvas = global.painter.canvas || {};
-                global.painter.canvas.currentCanvasContainer = currentCanvasContainer;
+            //初始化当前画布
+            currentCanvas.init(currentCanvasDom, "currentCanvas");
+            currentCanvas.autoSave(60000);//1分钟自动保存一次
+            currentCanvasContainer.init(currentCanvas);
+            global.painter = global.painter || {};
+            global.painter.canvas = global.painter.canvas || {};
+            global.painter.canvas.currentCanvasContainer = currentCanvasContainer;
             
-                //初始化当前缓冲画布
-                bufferCanvas.init(bufferCanvasDom, "bufferCanvas");
-                bufferCanvasContainer.init(bufferCanvas);
-                global.painter = global.painter || {};
-                global.painter.canvas = global.painter.canvas || {};
-                global.painter.canvas.bufferCanvasContainer = bufferCanvasContainer;
+            //初始化当前缓冲画布
+            bufferCanvas.init(bufferCanvasDom, "bufferCanvas");
+            bufferCanvasContainer.init(bufferCanvas);
+            global.painter = global.painter || {};
+            global.painter.canvas = global.painter.canvas || {};
+            global.painter.canvas.bufferCanvasContainer = bufferCanvasContainer;
             
-                //初始化鼠标画布
-                mouseCanvas.init(mouseCanvasDom, "mouseCanvas");
-                mouseCanvasContainer.init(mouseCanvas);
-                global.painter = global.painter || {};
-                global.painter.canvas = global.painter.canvas || {};
-                global.painter.canvas.mouseCanvasContainer = mouseCanvasContainer;
+            //初始化鼠标画布
+            mouseCanvas.init(mouseCanvasDom, "mouseCanvas");
+            mouseCanvasContainer.init(mouseCanvas);
+            global.painter = global.painter || {};
+            global.painter.canvas = global.painter.canvas || {};
+            global.painter.canvas.mouseCanvasContainer = mouseCanvasContainer;
             
-            this.bindEvent();//绑定事件
+            this.bindEvent();//版定事件
         },
         
         /**
-         * 绑定事件
+         * 帮顶事件
          * @method bindEvent
          */
         bindEvent:function(){
-            var $document = $(document),
+            var
+                $document = $(document),
                 mouseCanvas = global.painter.canvas.mouseCanvasContainer.getCanvas(),
                 bufferCanvas = global.painter.canvas.bufferCanvasContainer.getCanvas(),
                 currentCanvas = global.painter.canvas.currentCanvasContainer.getCanvas(),
@@ -129,7 +132,8 @@
                
             //绑定鼠标画布图层鼠标移动事件
             $document.delegate('#canvas-mouse', 'mousemove', function(e){
-                var point = null,
+                var
+                    point = null,
                     pointList = null,
                     index = "",
                     shape = null,
@@ -155,6 +159,7 @@
                     mouseCanvas.clear();
                     mouseCanvas.paint(mouseShape); 
                     
+                    
                     //鼠标按下绘制图形操作
                     if(status){     
                         index = currentTool.getName();
@@ -173,7 +178,8 @@
             
             //绑定鼠标按下事件
             $document.delegate('#canvas-mouse', 'mousedown', function(e){
-                var point = {
+                var
+                    point = {
                         x:e.pageX - offsetLeft,
                         y:e.pageY - offsetTop
                     },
@@ -182,14 +188,15 @@
                     shape = null,
                     option = null;
                 
-                that.getPointList().init();//初始化坐标列表
+                that.getPointList().init();//初始化坐标列表    
                 that.getPointList().add(point);//添加鼠标坐标
                 that.setClickStatus(true);                                
             });
             
             //绑定鼠标弹起事件
             $document.delegate('#canvas-mouse', 'mouseup', function(e){
-                var point = {
+                var
+                    point = {
                         x:e.pageX - offsetLeft,
                         y:e.pageY - offsetTop
                     },

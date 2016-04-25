@@ -1,6 +1,6 @@
 /**
  * 画布对象
- * @author Jason
+ * @author yan
  * @module canvasModel
  * @namespace painter.model
  */

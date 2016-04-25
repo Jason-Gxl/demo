@@ -1,12 +1,13 @@
 /**
  * 鼠标形状js
- * @author Jason
+ * @author yan
  * @module mouse
  * @namespace painter.model.mouseModel
  */
 (function($, global){
     "use strict";
-    var Mouse,
+    var
+        Mouse,
         Cross,
         Pen,
         Eraser,
@@ -52,7 +53,8 @@
          * @param {Array} points 点
          */
         this.init = function(option, points){
-            var index = 'CircleStroke';
+            var 
+                index = 'CircleStroke';
             //设置参数
             this.setOption({
                 lineWidth:1,
@@ -82,8 +84,7 @@
      * @class Mouse.prototype
      * @static
      */
-    Mouse.prototype = {    
-        constructor: Mouse,
+    Mouse.prototype = {        
         /**
          * 获取名字
          * @method getName
@@ -101,7 +102,7 @@
          */
         setOption:function(option){
             //检查入口参数是否是对象
-            if("[object Object]"==Object.prototype.toString.call(option)){
+            if(typeof option === 'object'){
                 $.extend(true, this.option, option);
                 return this.getOption();
             } 
@@ -159,7 +160,8 @@
          * @method setImage 
          */
         setImage:function(){
-            var $mouseCanvas = $('#canvas-mouse'),
+            var
+                $mouseCanvas = $('#canvas-mouse'),
                 name = this.getName();
             
             $mouseCanvas.attr("data-mouse", name);
@@ -189,7 +191,8 @@
          * @param {Array} points 点
          */
         this.init = function(option, points){
-            var index = this.getName();
+            var 
+                index = this.getName();
             //设置参数
             this.setOption({
                 length:10,
@@ -274,7 +277,8 @@
          * @param {Array} points 点
          */
         this.init = function(option, points){
-            var index = "CircleStroke";
+            var 
+                index = "CircleStroke";
             //设置参数
             this.setOption({
                 strokeStyle:'#000',

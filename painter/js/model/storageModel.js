@@ -1,6 +1,6 @@
 /**
  * 本地存储类
- * @author Jason
+ * @author yan
  * @module storageModel
  * @main storageModel
  * @namespace painter.model
@@ -21,7 +21,7 @@
          * @type Object
          * @default null
          */
-        this.storage = null;
+        this.storage = null;    
     };
     
     /**
@@ -30,19 +30,16 @@
     * @static
     */    
     StorageModel.prototype = {
-        constructor: StorageModel,
         /**
          * 初始化
          * @method init 
          */
         init:function(){
             function getLocalStorage(){
-                var result = false,
-                    toString = Object.prototype.toString;
-
-                if("[object Storage]"==toString.call(global.localStorage)){
-                    result = global.localStorage;
-                }else if("[object Storage]"==toString.call(global.globalStorage)){
+                var result = false;
+                if(typeof global.localStorage === 'object'){
+                    result = localStorage;
+                }else if(typeof global.globalStorage === 'object'){
                     result = global.globalStorage;
                 }
                 
@@ -69,13 +66,12 @@
          * @return {Bollean} 存储是否成功
          */
         save:function(key, value){
-            var storage = this.storage,
+            var
+                storage = this.storage,
                 list = false;
-
             if(storage !== false){
                 list = storage.setItem(key, value);
             }
-
             return list;
         },
         
@@ -86,9 +82,9 @@
          * @return {Bollean|String} 获取成功返回兼职，失败返回false
          */
         load:function(key){
-            var storage = this.storage,
+            var
+                storage = this.storage,
                 result = false;
-
             if(storage !== false){                
                 result = storage.getItem(key);
             }

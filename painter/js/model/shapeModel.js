@@ -1,13 +1,14 @@
 /**
- * @author Jason
+ * @author yan
  * @module shapeModel
  * @namespace painter.model.shapeModel
  */
 
 (function($, global){
     "use strict";
-    //图形类所有图形的超级父类
-    var Shape = null,
+    var
+        //图形类所有图形的超级父类
+        Shape = null,
         //填充+轮廓类图形父类
         FillStroke,
         Line = null,
@@ -77,7 +78,6 @@
 	     init:function(option){
 	         this.initOption(option);
 	     },
-
         /**
          * 获取名称
          * @method getName
@@ -96,7 +96,6 @@
 			this.option = {};//初始化为空
             this.setOption(option);
         },
-
         /**
          * 设置工具参数对象
          * @method setOption
@@ -151,14 +150,15 @@
          * @default FillStroke
          */
 	    this.name = "FillStroke";
-
+	    
 	    /**
 	     * 设置填充轮廓类图形的属性
 	     * @method setAttributes
 	     * @param {Object} context 设置的上下文
 	     */
 	    this.setAttributes = function(context){
-	        var option = this.getOption();
+	        var 
+               option = this.getOption();
                
            //设置直线属性
             context.strokeStyle = option.strokeStyle;
@@ -203,12 +203,14 @@
 	     * @param {Object} context 绘图上下文 
 	     */
 	    this.paint = function(context){
-	        var option = this.getOption();
+	        var 
+	           option = this.getOption();
 	        
-	        context.save();//保存上下文
+	        context.save();//保存上下文信
 	        
 	        //设置直线属性
             this.setAttributes(context);
+	        
 	        
 	        //描述直线
 	        context.beginPath();
@@ -251,11 +253,12 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                list = option.list,
-                start = list[0],
-                len = list.length,
-                i = 0;
+            var 
+               option = this.getOption(),
+               list = option.list,
+               start = list[0],
+               len = list.length,
+               i = 0;
             
             context.save();//保存上下文信息            
             
@@ -305,7 +308,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
             
             context.save();//保存上下文信息            
             
@@ -348,7 +352,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
             
             context.save();//保存上下文信息            
             
@@ -407,7 +412,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                width = option.width,
@@ -457,7 +463,8 @@
          * @param {Object} context 设置的上下文
          */
         this.setAttributes = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
                
            //设置直线属性
             context.strokeStyle = option.strokeStyle;
@@ -500,11 +507,12 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                list = option.list,
-                start = list[0],
-                len = list.length,
-                i = 0;
+            var 
+               option = this.getOption(),
+               list = option.list,
+               start = list[0],
+               len = list.length,
+               i = 0;
             
             context.save();//保存上下文信息            
             
@@ -552,11 +560,12 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                list = option.list,
-                start = list[0],
-                len = list.length,
-                i = 0;
+            var 
+               option = this.getOption(),
+               list = option.list,
+               start = list[0],
+               len = list.length,
+               i = 0;
             
             context.save();//保存上下文信息            
             
@@ -605,7 +614,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
             
             context.save();//保存上下文信息            
             
@@ -647,7 +657,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
             
             context.save();//保存上下文信息            
             
@@ -692,7 +703,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                width = option.width,
@@ -741,11 +753,12 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                list = option.list,
-                start = list[0],
-                len = list.length,
-                i = 0;
+            var 
+               option = this.getOption(),
+               list = option.list,
+               start = list[0],
+               len = list.length,
+               i = 0;
             
             context.save();//保存上下文信息            
             
@@ -801,40 +814,42 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                allowance = option.allowance,
-                color = option.fillStyle,
-                start = color.indexOf("(") + 1,
-                temp = color.slice(start, -1),
-                temps = temp.split(","),
-                colorObj = {
+            var 
+               option = this.getOption(),
+               allowance = option.allowance,
+               color = option.fillStyle,
+               start = color.indexOf("(") + 1,
+               temp = color.slice(start, -1),
+               temps = temp.split(","),
+               colorObj = {
                    r:parseInt(temps[0], 10),
                    g:parseInt(temps[1], 10),
                    b:parseInt(temps[2], 10),
                    a:Math.ceil((temps[3]||1) * 255)
-                },             
-                x = option.x,
-                y = option.y,               
-                width = option.width,
-                height = option.height,
-                imageData = context.getImageData(0, 0, width, height),
-                datas = imageData.data,
-                index = (width * y + x) * 4,
-                r = datas[index],
-                g = datas[index + 1],
-                b = datas[index + 2],
-                a = datas[index + 3] / 255,
-                sourceColor = "rgba(".concat(r, ",", g, ",", b, ",", a, ")"),
-                sourceColorObj = {
+               },             
+               x = option.x,
+               y = option.y,               
+               width = option.width,
+               height = option.height,
+               imageData = context.getImageData(0, 0, width, height),
+               datas = imageData.data,
+               index = (width * y + x) * 4,
+               r = datas[index],
+               g = datas[index + 1],
+               b = datas[index + 2],
+               a = datas[index + 3] / 255,
+               sourceColor = "rgba(".concat(r, ",", g, ",", b, ",", a, ")"),
+               sourceColorObj = {
                    r:r,
                    g:g,
                    b:b,
                    a:a
-                },
-                stacks = [{x:x, y:y}];
+               },
+               stacks = [{x:x, y:y}];
             
             function flood(stacks, allowance, width, height, datas, sourceColor, sourceColorObj, desColor, desColorObj){
-                var index = (width * y + x) * 4,
+                var
+                    index = (width * y + x) * 4,
                     r = datas[index],
                     g = datas[index + 1],
                     b = datas[index + 2],
@@ -936,14 +951,15 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-            var option = this.getOption(),
-                $color = $('#tool-wrap .tool .color').eq(0),
-                datas = context.getImageData(option.x, option.y, 1,1).data,
-                r = datas[0],
-                g = datas[1],
-                b = datas[2],
-                a = datas[3] / 255,
-                color = "rgba(".concat(r, ",", g, ",", b, ",", a, ")");
+            var 
+               option = this.getOption(),
+               $color = $('#tool-wrap .tool .color').eq(0),
+               datas = context.getImageData(option.x, option.y, 1,1).data,
+               r = datas[0],
+               g = datas[1],
+               b = datas[2],
+               a = datas[3] / 255,
+               color = "rgba(".concat(r, ",", g, ",", b, ",", a, ")");
                
             $color.spectrum("set", color);
         };
@@ -986,7 +1002,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                len = option.length,
@@ -1055,7 +1072,8 @@
          * @param {Object} context 设置的上下文
          */
         this.setAttributes = function(context){
-            var option = this.getOption();
+            var 
+               option = this.getOption();
                
            //设置直线属性
             context.shadowOffsetX = option.shadowOffsetX;
@@ -1076,7 +1094,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                text = option.text;
@@ -1122,7 +1141,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                text = option.text;
@@ -1167,7 +1187,8 @@
          * @param {Object} context 绘图上下文 
          */
         this.paint = function(context){
-           var option = this.getOption(),
+           var 
+               option = this.getOption(),
                x = option.x,
                y = option.y,
                src = option.src,

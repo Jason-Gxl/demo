@@ -1,0 +1,38 @@
+<html>
+<head>
+	<title>Video Test 10: RTSP Streaming</title>
+	<script> 
+		function rotateMe() { 
+			i = 0; 
+			int = setInterval( function () { 
+				video.style.WebkitTransform = 'rotate(' + (i++ %360) + 'deg)'; 
+				video.style.MozTransform = 'rotate(' + (i++ %360) + 'deg)'; 
+				video.style.OTransform = 'rotate(' + (i++ %360) + 'deg)'; }, 
+				50); 
+		} 
+		function resetRotation() { 
+			video.style.WebkitTransform = 'rotate(0)'; 
+			video.style.MozTransform = 'rotate(0)'; 
+			video.style.OTransform = 'rotate(0)'; 
+		} 
+	</script>
+</head>
+<body>
+	<div style="text-align: center;">
+		<video id="v1" width=320 height=240 controls onmouseover="this.play()" src="file:///F:/123.mp4"></video>
+	</div>
+	<script> 
+	var video = document.getElementsByTagName('video')[0]; 
+	</script>
+	<div style="text-align: center;">
+		<button onClick="video.play()"> &#x25B6 </button>
+		<button onClick="video.pause()"> &#x25FC </button>
+		<button onclick="video.volume += 0.25">Volume Up</button>
+		<button onclick="video.volume -= 0.25">Volume Down</button>
+		<button onclick="video.muted = true">Mute</button>
+		<button onclick="video.muted = false">Unmute</button>
+		<button onclick="rotateMe()"> Start Rotation</button>
+		<button onclick="int=window.clearInterval(int);resetRotation()"> Stop Rotation</button>
+	</div>
+</body>
+</html>

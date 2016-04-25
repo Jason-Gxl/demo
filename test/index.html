@@ -1,204 +1,607 @@
 <html>
 <head>
-	<title>test</title>
 	<meta charset="utf-8">
-<style type="text/css">
-.btn-select { 
-	position: relative; 
-	display: inline-block; 
-	width: 150px; 
-	height: 25px; 
-	background-color: #f80; 
-	font: 14px/20px "Microsoft YaHei"; 
-	color: #fff; 
-}
-.btn-select .cur-select { 
-	border: solid 1px #666;
-	color: #666;
-	text-indent: 5px;
-	background-color: #fff;
-	position: absolute;
-	display: inline-block;
-} 
-.btn-select:hover .cur-select { 
-	background-color: #f90; 
-} 
-.btn-select select { 
-	position: absolute; 
-	top: 0; 
-	left: 0; 
-	width: 150px; 
-	height: 25px; 
-	opacity: 0; 
-	filter: alpha(opacity: 0;); 
-	font: 14px/20px "Microsoft YaHei"; 
-	color: #f80;
-} 
-.btn-select select option { 
-	text-indent: 10px; 
-} 
-.btn-select select option:hover { 
-	background-color: #f80; 
-	color: #fff; 
-} 
- </style>
+	<title></title>
+	<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	canvas {
+		margin: 0 auto;
+		border: solid 1px #444;
+		display: block;
+	}
+	</style>
 </head>
-<body>
-	<!-- <a href="javascript:void(0);return false;" onclick="linkDownload(this)" download="download.csv">download</a> -->
-	<img id="tempimg" dynsrc="" src="" style="display:none" />
-	<input type="file" name="file" id="fileuploade" size="40" />
-	<input type="button" name ="check" value="checkfilesize" onclick="checkfile()"/>
+<body onload="draw();">
+<canvas id="tutorial" width="150" height="150"></canvas>
+
+<canvas id="tutorial1" width="150" height="150"></canvas>
+
+<canvas id="tutorial2" width="150" height="150"></canvas>
+
+<canvas id="tutorial3" width="150" height="150"></canvas>
+
+<canvas id="tutorial4" width="150" height="150"></canvas>
+
+<canvas id="tutorial5" width="150" height="150"></canvas>
+
+<canvas id="tutorial6" width="150" height="150"></canvas>
+
+<canvas id="tutorial7" width="150" height="150"></canvas>
+
+<canvas id="tutorial8" width="150" height="150"></canvas>
+
+<canvas id="tutorial9" width="150" height="150"></canvas>
+
+<canvas id="tutorial10" width="150" height="150"></canvas>
+
+<canvas id="tutorial11" width="150" height="150"></canvas>
+
+<canvas id="tutorial12" width="150" height="150"></canvas>
+
+<canvas id="tutorial13" width="150" height="150"></canvas>
+
+<canvas id="tutorial14" width="150" height="150"></canvas>
+
+<canvas id="tutorial15" width="150" height="150"></canvas>
+
+<canvas id="tutorial16" width="150" height="150"></canvas>
+
+<canvas id="tutorial17" width="150" height="150"></canvas>
+
+<canvas id="tutorial18" width="150" height="150"></canvas>
+
+<canvas id="tutorial19" width="150" height="150"></canvas>
+
+<canvas id="tutorial20" width="300" height="300"></canvas>
+
+<canvas id="tutorial21" width="150" height="150"></canvas>
+
+<canvas id="tutorial22" width="300" height="300"></canvas>
+
+<canvas id="tutorial23" width="300" height="300"></canvas>
+
+<canvas id="tutorial24" width="300" height="300"></canvas>
 </body>
-<script type="text/javascript" src="../extend.js"></script>
-<script type="text/javascript" src="../jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-var Animal,
-	Cat,
-	Dog,
-	Shape,
-	Rectangle;
+function draw() {
+	var canvas = document.getElementById("tutorial");
 
-	Shape = function() {
-		this.x = 0;
-		this.y = 0;
-	};
-
-	Shape.prototype.move = function(x, y) {
-		this.x = x;
-		this.y = y;
-		console.info("Shape move");
+	if(canvas.getContext) {
+		var ctx = canvas.getContext("2d");
+		ctx.fillStyle = "rgb(200, 0, 0)";
+		ctx.fillRect(10, 10, 55, 50);
+		ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+		ctx.fillRect(30, 30, 55, 50);
 	}
 
-	Rectangle = function() {
-		this.x = 1;
-		this.y = 1;o
-		Shape.call(this);
-	};
+	var canvas1 = document.getElementById("tutorial1");
+	if(canvas1.getContext) {
+		var ctx = canvas1.getContext("2d");
+		ctx.fillRect(25, 25, 100, 100);
+		ctx.clearRect(45, 45, 60, 60);
+		ctx.strokeRect(50, 50, 50, 50);
+	}
 
-	Rectangle.prototype = Object.create(Shape.prototype);
+	var canvas2 = document.getElementById("tutorial2");
+	if(canvas2.getContext) {
+		var ctx = canvas2.getContext("2d");
+		ctx.beginPath();
+		ctx.moveTo(75, 50);
+		ctx.lineTo(100, 75);
+		ctx.lineTo(100, 25);
+		ctx.fill();
+	}
 
-	var rect = new Rectangle();
+	var canvas3 = document.getElementById("tutorial3");
+	if(canvas3.getContext) {
+		var ctx = canvas3.getContext("2d");
+		ctx.beginPath();
+		ctx.arc(75, 75, 50, 0, Math.PI*2, true);
+		ctx.moveTo(110, 75);
+		ctx.arc(75, 75, 35, 0, Math.PI, false);
+		ctx.moveTo(65, 65);
+		ctx.arc(60, 65, 5, 0, Math.PI*2, true);
+		ctx.moveTo(95, 65);
+		ctx.arc(90, 65, 5, 0, Math.PI*2, true);
+		ctx.stroke();
+	}
 
-	// Animal = function() {
-	// 	this.type = "animal";
-	// 	this.feed = "";
-	// 	this.drink = function() {
-	// 		console.log(this.type + " drink");
-	// 	};
-	// };
+	var canvas4 = document.getElementById("tutorial4");
+	if(canvas4.getContext) {
+		var ctx = canvas4.getContext("2d");
+		ctx.beginPath();
+		ctx.moveTo(25, 25);
+		ctx.lineTo(105, 25);
+		ctx.lineTo(25, 105);
+		ctx.fill();
 
-	// Animal.prototype = {
-	// 	run: function() {
-	// 		console.log(this.type + " run");
-	// 	},
-	// 	eat: function() {
-	// 		console.log(this.type + " eat " + this.feed);
-	// 	}
-	// };
+		ctx.beginPath();
+		ctx.moveTo(125, 125);
+		ctx.lineTo(125, 45);
+		ctx.lineTo(45, 125);
+		ctx.closePath();
+		ctx.stroke();
+	}
 
-	// Cat = function() {
-	// 	this.type = "cat";
-	// 	this.feed = "fish";
+	var canvas5 = document.getElementById("tutorial5");
+	if(canvas5.getContext) {
+		var ctx = canvas5.getContext("2d");
+		for(var i=0;i<4; i++) {
+			for(var j=0;j<3;j++) {
+				ctx.beginPath();
+				var x = 20 + j*50;
+				var y = 20 + i*35;
+				var radius = 10;
+				var startAngle = 0;
+				var endAngle = Math.PI+(Math.PI*j)/2;
+				var anticlokwise = i%2===0?false:true;
+				ctx.arc(x, y, radius, startAngle, endAngle, anticlokwise);
+				if(i>1) {
+					ctx.fill();
+				} else {
+					ctx.stroke();
+				}
+			}
+		}
+	}
 
-	// 	this.setFeed = function(feed) {
-	// 		this.feed = feed;
-	// 	};
+	var canvas6 = document.getElementById("tutorial6");
+	if(canvas6.getContext) {
+		var ctx = canvas6.getContext("2d");
+		ctx.beginPath();
+		ctx.moveTo(75, 25);
+		ctx.quadraticCurveTo(25, 25, 25, 62.5);
+		ctx.quadraticCurveTo(25, 100, 50, 100);
+		ctx.quadraticCurveTo(50,120,30,125);
+		ctx.quadraticCurveTo(60,120,65,100);
+		ctx.quadraticCurveTo(125,100,125,62.5);
+		ctx.quadraticCurveTo(125,25,75,25);
+		ctx.stroke();
+	}
 
-	// 	this.run = function() {
-	// 		console.log(this.type + " run.......");
-	// 	};
-	// };
+	var canvas7 = document.getElementById("tutorial7");
+	if(canvas7.getContext) {
+		var ctx = canvas7.getContext("2d");
+		ctx.fillStyle = "red";
+		ctx.beginPath();
+		ctx.moveTo(75, 40);	
+		ctx.bezierCurveTo(75,37,70,25,50,25);
+		ctx.bezierCurveTo(20,25,20,62.5,20,62.5);
+		ctx.bezierCurveTo(20,80,40,102,75,120);
+		ctx.bezierCurveTo(110,102,130,80,130,62.5);
+		ctx.bezierCurveTo(130,62.5,130,25,100,25);
+    	ctx.bezierCurveTo(85,25,75,37,75,40);
+		ctx.fill();
+	}
 
-	// Cat.prototype = new Animal();
+	var canvas8 = document.getElementById("tutorial8");
+	if(canvas8.getContext) {
+		var ctx = canvas8.getContext("2d");
+		roundRect(ctx, 12, 12, 150, 150, 15);
+		roundRect(ctx, 19, 19, 150, 150, 9);
+		roundRect(ctx, 53, 53, 49, 33, 10);
+		roundRect(ctx, 53, 119, 49, 16, 6);
+		roundRect(ctx, 135, 53, 49, 33, 10);
+		roundRect(ctx, 135, 119, 25, 49, 10);
 
-	// Dog = function() {
-	// 	this.type = "dog";
-	// 	this.feed = "bone";
-	// };
+		ctx.beginPath();
+		ctx.arc(37, 37, 13, Math.PI/7, -Math.PI/7, false);
+		ctx.lineTo(31, 37);
+		ctx.fill();
 
-	// Dog.prototype = new Animal();
+		for(var i=0; i<8; i++) {
+			ctx.fillRect(51+i*16, 35, 4, 4);
+		}
 
-	// function obj(o) {
-	// 	var f = function() {};
-	// 	f.prototype = o;
-	// 	return new f();
-	// }
+		for(var i=0; i<8; i++) {
+			ctx.fillRect(115, 51+i*16, 4, 4);
+		}
 
-	// function factory(parent, child) {
-	// 	var f = obj(parent.prototype);
-	// 	f.constructor = child;
-	// }
+		for(var i=0; i<8; i++) {
+			ctx.fillRect(51+i*16, 99, 4, 4);
+		}
 
-	// var Person = function(name) {
-	// 	this.name = name,
-	// 	this.run = function() {
-	// 		console.log("person run");
-	// 	};
-	// };
+		ctx.beginPath();
+		ctx.moveTo(83, 116);
+		ctx.lineTo(83, 102);
+		ctx.bezierCurveTo(83, 94, 89, 88, 97, 88);
+		ctx.bezierCurveTo(105, 88, 111, 94, 111, 102);
+		ctx.lineTo(111, 116);
+		ctx.lineTo(106.333,111.333);
+		ctx.lineTo(101.666,116);
+	    ctx.lineTo(97,111.333);
+	    ctx.lineTo(92.333,116);
+	    ctx.lineTo(87.666,111.333);
+	    ctx.lineTo(83,116);
+		ctx.fill();
 
-	// var Man = function(name, age) {
-	// 	Person.call(this, name);
-	// 	this.age = age;
-	// };
+		ctx.fillStyle = "white";
+		ctx.beginPath();
+		ctx.moveTo(91,96);
+	    ctx.bezierCurveTo(88,96,87,99,87,101);
+	    ctx.bezierCurveTo(87,103,88,106,91,106);
+	    ctx.bezierCurveTo(94,106,95,103,95,101);
+	    ctx.bezierCurveTo(95,99,94,96,91,96);
+	    ctx.moveTo(103,96);
+	    ctx.bezierCurveTo(100,96,99,99,99,101);
+	    ctx.bezierCurveTo(99,103,100,106,103,106);
+	    ctx.bezierCurveTo(106,106,107,103,107,101);
+	    ctx.bezierCurveTo(107,99,106,96,103,96);
+	    ctx.fill();
 
-	// factory(Person, Man);
+	    ctx.fillStyle = "black";
+	    ctx.beginPath();
+	    ctx.arc(101,102,2,0,Math.PI*2,true);
+	    ctx.fill();
 
-// function linkDownload(alink) {
-// 	var str = "列1,列2,列3\n1,2,3";
-// 	str = encodeURIComponent(str);
-// 	alink.href = "data:text/csv;utf-8,\ufeff"+str;
-// }
-// function linkDownload(alink) {
-// 	var data = [1,,2];
-// 	data = "\ufeff"+data;
-// 	var blob = new Blob([data], {type:"text/csv"});
-// 	var csvUrl = URL.createObjectURL(blob);
-// 	alink.href = csvUrl;
-// }
+	    ctx.beginPath();
+	    ctx.arc(89,102,2,0,Math.PI*2,true);
+	    ctx.fill();
+	}
 
-	// var maxsize = 2*1024*1024;//2M
-	// var errMsg = "上传的附件文件不能超过2M！！！";
-	// var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过2M，建议使用IE、FireFox、Chrome浏览器。";
-	// var browserCfg = {};
-	// var ua = window.navigator.userAgent;
-	// if (ua.indexOf("MSIE")>=1){
-	// 	browserCfg.ie = true;
-	// }else if(ua.indexOf("Firefox")>=1){
-	// 	browserCfg.firefox = true;
-	// }else if(ua.indexOf("Chrome")>=1){
-	// 	browserCfg.chrome = true;
-	// }
-	// function checkfile(){
-	// 	try{
-	// 	 	var obj_file = document.getElementById("fileuploade");
-	// 	 	if(obj_file.value==""){
-	// 	 		alert("请先选择上传文件");
-	// 	 		return;
-	// 	 	}
-	// 	 	var filesize = 0;
-	// 	 	if(browserCfg.firefox || browserCfg.chrome ){
-	// 	 		filesize = obj_file.files[0].size;
-	// 	 	}else if(browserCfg.ie){
-	// 	 		var obj_img = document.getElementById('tempimg');
-	// 	 		obj_img.dynsrc=obj_file.value;
-	// 	 		filesize = obj_img.fileSize;
-	// 	 	}else{
-	// 	 		alert(tipMsg);
-	// 	   		return;
-	// 	 	}
-	// 	 	if(filesize==-1){
-	// 	 		alert(tipMsg);
-	// 	 		return;
-	// 	 	}else if(filesize>maxsize){
-	// 	 		alert(errMsg);
-	// 	 		return;
-	// 		}else{
-	// 			alert("文件大小符合要求");
-	// 	 		return;
-	// 		}
-	// 	}catch(e){
-	// 		alert(e);
-	// 	}
-	// }
+	function roundRect(ctx, x, y, width, height, radius) {
+		ctx.beginPath();
+		ctx.moveTo(x, y+radius);
+		ctx.lineTo(x, y+height-radius);
+		ctx.quadraticCurveTo(x, y+height, x+radius, y+height);
+		ctx.lineTo(x+width-radius,y+height);
+		ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+		ctx.lineTo(x+width,y+radius);
+		ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+		ctx.lineTo(x+radius,y);
+		ctx.quadraticCurveTo(x,y,x,y+radius);
+		ctx.stroke();
+	}
+
+	var canvas9 = document.getElementById("tutorial9");
+	if(canvas9.getContext) {
+		var ctx = canvas9.getContext("2d");
+		var rectangle = new Path2D();
+		rectangle.rect(10, 10, 50, 50);
+
+		var circle = new Path2D();
+		circle.moveTo(125, 35);
+		circle.arc(100, 35, 25, 0, 2*Math.PI);
+
+		ctx.stroke(rectangle);
+		ctx.fill(circle);
+	}
+
+	var canvas10 = document.getElementById("tutorial10");
+	if(canvas10.getContext) {
+		var ctx = canvas10.getContext("2d");
+		for(var i=0; i<6; i++) {
+			for(var j=0; j<6; j++) {
+				ctx.fillStyle = "rgb(" + Math.floor(255-42.5*i) + ", " + Math.floor(255-42.5*j) + ", 0)";
+				ctx.beginPath();
+				ctx.fillRect(25*j, 25*i, 25, 25);
+			}
+		}
+	}
+
+	var canvas11 = document.getElementById("tutorial11");
+	if(canvas11.getContext) {
+		var ctx = canvas11.getContext("2d");
+		for(var i=0; i<6; i++) {
+			for(var j=0; j<6; j++) {
+				ctx.strokeStyle = "rgb(0 ," + Math.floor(255-42.5*i) + ", " + Math.floor(255-42.5*j) + ")";
+				ctx.beginPath();
+				ctx.arc(25*j+12.5, 25*i+12.5, 10, 0, 2*Math.PI, true);
+				ctx.stroke();
+			}
+		}
+	}
+
+	var canvas12 = document.getElementById("tutorial12");
+	if(canvas12.getContext) {
+		var ctx = canvas12.getContext("2d");
+		ctx.fillStyle = "#FD0";
+		ctx.fillRect(0, 0, 75, 75);
+		ctx.fillStyle = "#6C0";
+		ctx.fillRect(75, 0, 75, 75);
+		ctx.fillStyle = "#09F";
+		ctx.fillRect(0, 75, 75, 75);
+		ctx.fillStyle = "#F30";
+		ctx.fillRect(75, 75, 75, 75);
+
+		ctx.fillStyle = "#FFF";
+		ctx.globalAlpha = 0.2;
+
+		for(var i=0; i<8; i++) {
+			ctx.beginPath();
+			ctx.arc(75, 75, 75-i*8, 0, 2*Math.PI, true);
+			ctx.fill();
+		}
+	}
+
+	var canvas13 = document.getElementById("tutorial13");
+	if(canvas13.getContext) {
+		var ctx = canvas13.getContext("2d");
+		ctx.fillStyle = "rgb(255,221,0)";
+		ctx.fillRect(0, 0, 150, 37.5);
+		ctx.fillStyle = "rgb(120, 204, 0)";
+		ctx.fillRect(0, 37.5, 150, 37.5);
+		ctx.fillStyle = "rgb(0, 153, 255)";
+		ctx.fillRect(0, 75, 150, 37.5);
+		ctx.fillStyle = "rgb(255, 51, 0)";
+		ctx.fillRect(0, 112.5, 150, 37.5);
+
+		for(var i=0; i<4; i++) {
+			for(var j=0; j<10; j++) {
+				ctx.fillStyle = "rgba(255, 255, 255, " + (j+1)/10 + ")";
+				ctx.fillRect(5+j*14, 5+i*37.5, 14, 27.5);
+			}
+		}
+	}
+
+	var canvas14 = document.getElementById("tutorial14");
+	if(canvas14.getContext) {
+		var ctx = canvas14.getContext("2d");
+
+		var lingrad = ctx.createLinearGradient(0, 0, 0, 150);
+		lingrad.addColorStop(0, "#00ABEB");
+		lingrad.addColorStop(0.5, "#fff");
+		lingrad.addColorStop(0.5, "#26C000");
+		lingrad.addColorStop(1, "#fff");
+
+		var lingrad2 = ctx.createLinearGradient(0, 50, 0, 95);
+		lingrad2.addColorStop(0.5, "#000");
+		lingrad2.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+		ctx.fillStyle = lingrad;
+		ctx.strokeStyle = lingrad2;
+		ctx.fillRect(10, 10, 130, 130);
+		ctx.strokeRect(50, 50, 50, 50);
+	}
+
+	var canvas15 = document.getElementById("tutorial15");
+	if(canvas15.getContext) {
+		var ctx = canvas15.getContext("2d");
+		var radgrad = ctx.createRadialGradient(45, 45, 20, 52, 50, 30);
+		radgrad.addColorStop(0, "#A7D30C");
+		radgrad.addColorStop(0.9, "#019F62");
+		radgrad.addColorStop(1, "rgba(1,159,98, 0)");
+
+		var radgrad1 = ctx.createRadialGradient(105, 105, 20, 112, 120, 50);
+		radgrad1.addColorStop(0, "#FF5F98");
+		radgrad1.addColorStop(0.75, "#FF0188");
+		radgrad1.addColorStop(1, "rgba(255,1,136,0)");
+
+		var radgrad2 = ctx.createRadialGradient(95, 15, 15, 102, 20, 40);
+		radgrad2.addColorStop(0, '#00C9FF');
+	  	radgrad2.addColorStop(0.8, '#00B5E2');
+	  	radgrad2.addColorStop(1, 'rgba(0,201,255,0)');
+
+	  	var radgrad3 = ctx.createRadialGradient(0, 150, 50, 0, 140, 90);
+	  	radgrad3.addColorStop(0, "#F4F201");
+	  	radgrad3.addColorStop(0.8, "#E4C700");
+	  	radgrad3.addColorStop(1, "rgba(228,199,0,0)");
+
+	  	ctx.fillStyle = radgrad3;
+		ctx.fillRect(0, 0, 150, 150);
+		ctx.fillStyle = radgrad2;
+		ctx.fillRect(0, 0, 150, 150);
+		ctx.fillStyle = radgrad1;
+		ctx.fillRect(0, 0, 150, 150);
+		ctx.fillStyle = radgrad;
+		ctx.fillRect(0, 0, 150, 150);
+	}
+
+	var canvas16 = document.getElementById("tutorial16");
+	if(canvas16.getContext) {
+		var ctx = canvas16.getContext("2d");
+		var img = new Image();
+		img.src = "./IMG_0419.JPG";
+		(function(_ctx) {
+			img.onload = function() {
+				var pattern = _ctx.createPattern(img, "repeat");
+				_ctx.fillStyle = pattern;
+				_ctx.fillRect(0, 0, 150, 150);
+			};
+		})(ctx);
+	}
+
+	var canvas17 = document.getElementById("tutorial17");
+	if(canvas17.getContext) {
+		var ctx = canvas17.getContext("2d");
+		ctx.shadowOffsetX = 2;
+		ctx.shadowOffsetY = 2;
+		ctx.shadowBlur = 2;
+		ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+
+		ctx.font = "20px Times New Roman";
+		ctx.fillStyle = "black";
+		ctx.textBaseline = "hanging";
+		ctx.strokeText("Holle World！", 5, 20);
+
+		var text = ctx.measureText("a");
+		console.log(text.width);
+	}
+
+	var canvas18 = document.getElementById("tutorial18");
+	if(canvas18.getContext) {
+		var ctx = canvas18.getContext("2d");
+		ctx.beginPath();
+		ctx.arc(50, 50, 30, 0, 2*Math.PI, true);
+		ctx.arc(50, 50, 15, 0, 2*Math.PI, true);
+		ctx.fill("evenodd");
+	}
+
+	var canvas19 = document.getElementById("tutorial19");
+	if(canvas19.getContext) {
+		var ctx = canvas19.getContext("2d");
+		ctx.fillRect(0, 0, 150, 150);
+		ctx.save();
+
+		ctx.fillStyle = "#09F";
+		ctx.fillRect(15,15,120,120);
+		ctx.save();
+
+		ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+		ctx.fillRect(30,30,90,90);
+		ctx.restore();
+
+		ctx.fillRect(45, 45, 60, 60);
+		ctx.restore();
+
+		ctx.fillRect(60, 60, 30, 30);
+	}
+
+	var canvas20 = document.getElementById("tutorial20");
+	if(canvas20.getContext) {
+		var ctx = canvas20.getContext("2d");
+		ctx.fillRect(0, 0, 300, 300);
+
+		for(var i=0; i<3; i++) {
+			for(var j=0; j<3; j++) {
+				ctx.save();
+				ctx.strokeStyle = "#9CFF00";
+				ctx.translate(50+j*100, 50+i*100);
+				drawSpirograph(ctx, 20*(j+2)/(j+1), -8*(i+3)/(i+1), 10);
+				ctx.restore();
+			}
+		}
+	}
+
+	function drawSpirograph(ctx, R, r, O) {
+		var x1 = R - O;
+		var y1 = 0;
+		var i = 1;
+		ctx.beginPath();
+		ctx.moveTo(x1, y1);
+		do {
+			if(i>2000) break;
+			var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72))
+		    var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72))
+		    ctx.lineTo(x2,y2);
+		    x1 = x2;
+		    y1 = y2;
+		    i++;
+		} while (x2 != R-O && y2 != 0);
+		ctx.stroke();
+	}
+
+	var canvas21 = document.getElementById("tutorial21");
+	if(canvas21.getContext) {
+		var ctx = canvas21.getContext("2d");
+		ctx.translate(75, 75);
+		for(var i=1; i<6; i++) {
+			ctx.save();
+			ctx.fillStyle = "rgb(" + (51*i) + ", " + (255-51*i) + ", 255)";
+			for(var j=0; j<6*i; j++) {
+				ctx.rotate(Math.PI*2/(6*i));
+				ctx.beginPath();
+				ctx.arc(0, i*12.5, 5, 0, Math.PI*2, true);
+				ctx.fill();
+			}
+		}
+		ctx.restore();
+	}
+
+	var canvas22 = document.getElementById("tutorial22");
+	if(canvas22.getContext) {
+		var ctx = canvas22.getContext("2d");
+		ctx.strokeStyle = "#fc0";
+		ctx.lineWidth = 1.5;
+		ctx.fillRect(0, 0, 300, 300);
+
+		ctx.save();
+		ctx.translate(50, 50);
+		drawSpirograph(ctx, 22, 6, 5);
+
+		ctx.translate(100, 0);
+		ctx.scale(0.75, 0.75);
+		drawSpirograph(ctx, 22, 6, 5);
+
+		ctx.translate(133.333, 0);
+		ctx.scale(0.75, 0.75);
+		drawSpirograph(ctx, 22, 6, 5);
+		ctx.restore();
+
+		ctx.strokeStyle = "#0cf";
+		ctx.save();
+  		ctx.translate(50, 150);
+  		ctx.scale(1, 0.75);
+  		drawSpirograph(ctx, 22, 6, 5);
+
+  		ctx.translate(100, 0);
+  		ctx.scale(1, 0.75);
+  		drawSpirograph(ctx, 22, 6, 5);
+
+  		ctx.translate(100, 0);
+  		ctx.scale(1, 0.75);
+  		drawSpirograph(ctx, 22, 6, 5);
+  		ctx.restore();
+
+  		ctx.strokeStyle = "#cf0";
+  		ctx.save();
+  		ctx.translate(50, 250);
+  		ctx.scale(0.75, 1);
+  		drawSpirograph(ctx, 22, 6, 5);
+
+  		ctx.translate(133.333, 0);
+  		ctx.scale(0.75, 1);
+  		drawSpirograph(ctx, 22, 6, 5);
+
+  		ctx.translate(177.777, 0);
+  		ctx.scale(0.75, 1);
+  		drawSpirograph(ctx, 22, 6, 5);
+	}
+
+	var canvas23 = document.getElementById("tutorial23");
+	if(canvas23.getContext) {
+		var ctx = canvas23.getContext("2d");
+		var sin = Math.sin(Math.PI/6);
+		var cos = Math.cos(Math.PI/6);
+		ctx.translate(150, 150);
+		var c = 0;
+		for (var i=0; i <= 12; i++) {
+			c = Math.floor(255 / 12 * i);
+			ctx.fillStyle = "rgb(" + c + "," + c + "," + c + ")";
+			ctx.fillRect(0, 0, 100, 10);
+			ctx.transform(cos, sin, -sin, cos, 0, 0);
+		}
+
+		ctx.setTransform(-1, 0, 0, 1, 100, 100);
+		ctx.fillStyle = "rgba(255, 128, 255, 0.5)";
+		ctx.fillRect(0, 50, 100, 100);
+	}
+
+	var canvas24 = document.getElementById("tutorial24");
+	if(canvas24.getContext) {
+		var ctx = canvas24.getContext("2d");
+		ctx.save();
+		ctx.fillStyle = "#0098FF";
+		ctx.beginPath();
+		ctx.moveTo(10, 10);
+		for(var i=0; i<3; i++) {
+			for(var j=0; j<4; j++) {
+				ctx.fillRect(j*66+35, i*90+40, 30, 30);
+			}
+		}
+		ctx.restore();
+		ctx.fillStyle = "#FA3100";
+		ctx.save();
+		ctx.globalCompositeOperation = "source-over";
+		ctx.beginPath();
+		ctx.arc(60, 65, 18, 0, Math.PI*2, true);
+		ctx.fill();
+
+		ctx.restore();
+		ctx.globalCompositeOperation = "destination-over";
+		ctx.beginPath();
+		ctx.arc(125, 65, 18, 0, Math.PI*2, true);
+		ctx.fill();
+
+		// ctx.restore();
+		// ctx.globalCompositeOperation = "source-in";
+		// ctx.beginPath();
+		// ctx.arc(192, 65, 18, 0, Math.PI*2, true);
+		// ctx.fill();
+	}
+}
 </script>
 </html>

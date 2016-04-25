@@ -1,5 +1,5 @@
 /**
- * @author Jason
+ * @author yan
  * @module pointListModel
  * @namespace painter.model
  */
@@ -51,7 +51,7 @@
         },
         
         /**
-         * 获取所有节点
+         * 获取结束节点
          * @method getList
          * @return {Array} 点列表
          */        
