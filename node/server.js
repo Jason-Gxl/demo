@@ -1,5 +1,4 @@
 (function() {
-(function() {
 	var http = require("http"),
 		querystring = require("querystring");
 	var req = null, res = null;

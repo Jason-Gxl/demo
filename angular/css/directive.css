@@ -1,0 +1,59 @@
+.mutli-select-wrap {
+    width: 100%;
+    height: 100%;
+    min-width: 500px;
+    min-height: 300px;
+    overflow: hidden;
+}
+
+.mutli-select-wrap .mutli-select-box {
+	float: left;
+    width: 45%;
+    height: 100%;
+    min-height: 300px;
+    border: solid 1px #cdcdcd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.mutli-select-wrap .mutli-select-box .mutli-select-ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mutli-select-wrap .mutli-select-box .mutli-select-ul .mutli-select-item {
+	line-height: 30px;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.mutli-select-wrap .mutli-select-box .mutli-select-ul .mutli-select-item:hover {
+	background-color: #ececec;
+}
+
+.mutli-select-wrap .mutli-select-box .mutli-select-ul .mutli-select-item.selected {
+    background-color: #cdcdcd;
+}
+
+.mutli-select-wrap .mutli-select-ctrl-wrap {
+	width: 10%;
+    float: left;
+    height: 100%;
+    min-height: 300px;
+    text-align: center;
+    padding-top: 65px;
+}
+
+.mutli-select-wrap .mutli-select-ctrl-wrap .mutli-select-ctrl-item {
+	display: inline-block;
+    border: solid 1px #cdcdcd;
+    border-radius: 3px;
+    padding: 3px 5px;
+    cursor: default;
+    margin-top: 10px;
+}
+
+.mutli-select-wrap .mutli-select-ctrl-wrap .mutli-select-ctrl-item:hover {
+	background-color: #286090;
+}

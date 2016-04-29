@@ -3,6 +3,7 @@
 <head>
 	<title>Angularjs</title>
 	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./css/directive.css">
 	<style type="text/css">
 		body {
 			margin: 0;
@@ -34,17 +35,23 @@
 	<div class="main-container">
 		<span class="greeting-wrap">Hellow, {{name}}</span>
 		<input type="text" name="name" ng-model="name" class="greeting-input">
+		<div mutli-select ng-model="selectedPersons" data="persons" show-parm="name">
+			<div>
 	</div>
 
 </body>
 <script type="text/javascript" src="./js/angular.min.js"></script>
+<script type="text/javascript" src="./js/directive.js"></script>
 <script type="text/javascript">
 (function(angular, global) {
 	var myCtrl = function($scope) {
 		$scope.name = "Jason";
+
+		$scope.persons = [{name: "Jason", age: 27}, {name: "Tom", age: "30"}];
+
 	};
 
-	var myApp = angular.module("myApp", []);
+	var myApp = angular.module("myApp", ["myDirective"]);
 	myApp.controller("myCtrl", ["$scope", myCtrl]);
 	global.myApp = myApp;
 })(angular, window);
