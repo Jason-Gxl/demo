@@ -1,0 +1,37 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.index-body {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: url(../images/IMG_0401.jpg) no-repeat;
+	background-size: cover;
+}
+
+.mask {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.index-body .content-wrap {
+    width: 380px;
+    border: solid 1px #cdcdcd;
+    border-radius: 5px;
+    height: 200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pd30 {
+	padding: 30px;
+}
+
+.mt20 {
+	margin-top: 20px;
+}
