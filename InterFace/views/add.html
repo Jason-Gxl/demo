@@ -1,0 +1,53 @@
+<%include common\header.html%>
+	<body ng-controller="addController">
+		<form novalidate>
+			<div>
+				<label for="name">名称：</label>
+				<input type="text" name="name" id="name" ng-model="interface.name">
+			</div>
+			<div>
+				<label for="createBy">创建人：</label>
+				<input type="text" name="createBy" id="createBy" ng-model="interface.createBy">
+			</div>
+			<div>
+				<label for="description">描述：</label>
+				<textarea name="description" id="description" ng-model="interface.description"></textarea>
+			</div>
+			<button ng-click="create()">保存</button>
+		</form>
+	</body>
+	<%include common\footer.html%>
+	<script type="text/javascript">
+	angular.element(document).ready(function() {
+		"use strict"
+		var addCtrl = function($scope, addService) {
+			$scope.create = function() {
+				addService.addInterface($scope.interface).then(function(result) {
+
+				});
+			};
+		};
+
+		var interfaceAdd = angular.module("interface.add", []);
+		interfaceAdd.controller("addController", ["$scope", "addService", addCtrl]);
+		interfaceAdd.service("addService", ["$http", "$q", function($http, $q) {
+			var baseUrl = "/home/toAdd";
+			this.addInterface = function(item) {
+				var deferred = $q.defer();
+				$http({
+					method: "POST",
+					url: baseUrl + "/add",
+					data: item
+				}).success(function(result) {
+					deferred.resolve(result);
+				}).error(function() {
+					deferred.reject("There was an error");
+				});
+				return deferred.promise;
+			};
+		}]);
+
+		angular.bootstrap(document, ['interface.add']);
+	});
+	</script>
+</html>

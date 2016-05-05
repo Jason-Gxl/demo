@@ -1,0 +1,98 @@
+<%include common\header.html%>
+	<body ng-controller="homeController">
+		<div>
+			<a href="/home/toAdd">新增接口</a>
+		</div>
+		<table>
+			<thead>
+				<th>
+					<td>名称</td>
+					<td>描述</td>
+					<td>创建人</td>
+					<td>创建时间</td>
+					<td>最后更新时间</td>
+					<td>操作</td>
+				</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="interFace in interFaceList">
+					<td>{{interFace.name}}</td>
+					<td>{{interFace.description}}</td>
+					<td>{{interFace.createBy}}</td>
+					<td>{{interFace.createTime}}</td>
+					<td>{{interFace.updateTime}}</td>
+					<td>
+						<a href="javascript:void(0);" ng-click="deleteItem(interFace)">删除</a>
+						<a href="javascript:void(0);" ng-click="editItem(interFace)">编辑</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+	<%include common\footer.html%>
+	<script type="text/javascript">
+		angular.element(document).ready(function() {
+			"use strict"
+			var homeCtrl = function($scope, homeService) {
+				homeService.getInterfaceList().then(function(data) {
+					$scope.interFaceList = data;
+				});
+
+				$scope.deleteItem = function(item) {
+					homeService.delInterface(item).then(function(data) {
+						console.log(data);
+					});
+				};
+
+				$scope.editItem = function(id) {
+					console.log(id);
+				};
+
+			};
+
+			var interfaceHome = angular.module("interface.home", []);
+			interfaceHome.controller("homeController", ["$scope", "homeService", homeCtrl]);
+			interfaceHome.service("homeService", ["$http", "$q", function($http, $q) {
+				var baseUrl = "/home";
+				this.getInterfaceList = function(options) {
+					var opt = "";
+					for(var key in options) {
+						if(0<opt.length) {
+							opt += "&";
+						} else {
+							opt = "?" + opt;
+						}
+						key += opt;
+					}
+					var deferred = $q.defer();
+					$http({
+						method: "GET",
+						url: baseUrl + "/search" + opt
+					}).success(function(data) {
+						deferred.resolve(data);
+					}).error(function() {
+						deferred.reject("There was an error");
+					});
+					return deferred.promise;
+				};
+
+				this.delInterface = function(data) {
+					if(!data) return ;
+					var deferred = $q.defer();
+					$http({
+						method: "POST",
+						url: baseUrl + "/delete",
+						data: data
+					}).success(function(data) {
+						deferred.resolve(data);
+					}).error(function() {
+						deferred.reject("There was an error");
+					});
+					return deferred.promise;
+				};
+			}]);
+
+			angular.bootstrap(document, ['interface.home']);
+		});
+	</script>
+</html>
