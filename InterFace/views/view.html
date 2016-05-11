@@ -1,0 +1,36 @@
+<%include common\header.html%>
+	<body ng-controller="viewController">
+		<div>
+			<a href="/home">返回</a>
+		</div>
+		<form novalidate>
+			<div>
+				<label for="name">名称：<%= interFace.name %></label>
+			</div>
+			<div>
+				<label for="createBy">创建人：<%= interFace.createBy %></label>
+			</div>
+			<div>
+				<label for="createTime">创建时间：<%= interFace.createTime %></label>
+			</div>
+			<div>
+				<label for="updateTime">修改时间：<%= interFace.updateTime %></label>
+			</div>
+			<div>
+				<label for="description">描述：<%= interFace.description %></label>
+			</div>
+		</form>
+	</body>
+	<%include common\footer.html%>
+	<script type="text/javascript">
+	angular.element(document).ready(function() {
+		"use strict"
+		var viewCtrl = function($scope) {};
+
+		var interfaceAdd = angular.module("interface.view", []);
+		interfaceAdd.controller("viewController", ["$scope", viewCtrl]);
+
+		angular.bootstrap(document, ['interface.view']);
+	});
+	</script>
+</html>

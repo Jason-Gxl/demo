@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+a {
+	text-decoration: none;
+}
+
 .index-body {
 	position: absolute;
 	width: 100%;
@@ -28,10 +32,54 @@ body {
     text-align: center;
 }
 
+.home-body {
+	padding: 0 100px;
+}
+
+.add-content {
+	border: solid 1px #cdcdcd;
+    width: 800px;
+    margin: 50px auto;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: -2px -2px 20px 10px #aaaaaa;
+}
+
+.description-textarea {
+	height: 250px !important;
+}
+
+table th, table td {
+	word-wrap: break-word;
+    word-break: break-all;
+    vertical-align: middle !important;
+}
+
+.pd20 {
+	padding: 20px;
+}
+
 .pd30 {
 	padding: 30px;
 }
 
 .mt20 {
 	margin-top: 20px;
+}
+
+.mt30 {
+	margin-top: 30px;
+}
+
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+.cf {
+	overflow: hidden;
+	content: ".";
 }

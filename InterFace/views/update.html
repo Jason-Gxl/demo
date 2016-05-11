@@ -1,14 +1,14 @@
 <%include common\header.html%>
-	<body ng-controller="addController">
+	<body ng-controller="updateController">
 		<div class="add-content pd20">
 			<div class="cf">
 				<a href="/home" class="btn btn-default fr">返回</a>
 			</div>
-			<form novalidate="novalidate" role="form" name="form" class="mt20 form-horizontal">
+			<form novalidate class="mt20 form-horizontal">
 				<div class="form-group">
 					<label for="name" class="control-label col-sm-2">名称：</label>
 					<div class="col-sm-10">
-						<input class="form-control" type="text" required name="name" id="name" ng-model="interface.name">
+						<input class="form-control" type="text" name="name" id="name" ng-model="interface.name">
 					</div>
 				</div>
 				<div class="form-group">
@@ -23,7 +23,7 @@
 						<textarea class="form-control description-textarea" name="description" id="description" ng-model="interface.description"></textarea>
 					</div>
 				</div>
-				<input type="submit" value="提交" ng-disbaled="!form.$valid" ng-click="create()" class="btn btn-primary mt20"/>
+				<button ng-click="update()" class="btn btn-primary mt20">保存</button>
 			</form>
 		</div>
 	</body>
@@ -31,30 +31,31 @@
 	<script type="text/javascript">
 	angular.element(document).ready(function() {
 		"use strict"
-		var addCtrl = function($scope, addService) {
+		var updateCtrl = function($scope, updateService) {
 			$scope.interface = {};
+			$scope.interface._id = "<%= interFace._id %>";
+			$scope.interface.name = "<%= interFace.name %>";
+			$scope.interface.createBy = "<%= interFace.createBy %>";
+			$scope.interface.description = "<%= interFace.description %>";
 
-			$scope.create = function() {
-				addService.addInterface($scope.interface).then(function(result) {
-					if(result && result._id) {
-						$scope.interface.name = "";
-						$scope.interface.createBy = "";
-						$scope.interface.description = "";
-						alert("新增成功！");
+			$scope.update = function() {
+				updateService.addInterface($scope.interface).then(function(result) {
+					if(result && result.ok) {
+						alert("编辑成功！");
 					}
 				});
 			};
 		};
 
-		var interfaceAdd = angular.module("interface.add", []);
-		interfaceAdd.controller("addController", ["$scope", "addService", addCtrl]);
-		interfaceAdd.service("addService", ["$http", "$q", function($http, $q) {
-			var baseUrl = "/home/toAdd";
+		var interfaceAdd = angular.module("interface.update", []);
+		interfaceAdd.controller("updateController", ["$scope", "updateService", updateCtrl]);
+		interfaceAdd.service("updateService", ["$http", "$q", function($http, $q) {
+			var baseUrl = "/home/toUpdate";
 			this.addInterface = function(item) {
 				var deferred = $q.defer();
 				$http({
 					method: "POST",
-					url: baseUrl + "/add",
+					url: baseUrl + "/update",
 					data: item
 				}).success(function(result) {
 					deferred.resolve(result);
@@ -65,7 +66,7 @@
 			};
 		}]);
 
-		angular.bootstrap(document, ['interface.add']);
+		angular.bootstrap(document, ['interface.update']);
 	});
 	</script>
 </html>

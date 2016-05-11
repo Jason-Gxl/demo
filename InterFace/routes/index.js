@@ -56,14 +56,57 @@ router.get("/home/toAdd", function(req, res, next) {
 });
 
 router.post("/home/toAdd/add", function(req, res, next) {
-	var query = JSON.stringify(req.body);
-	debugger
-	InterFace.save(query, function(err, result) {
+	var query = req.body;
+		query.createTime = new Date();
+	var saveQuery = new InterFace(query);
+	saveQuery.save(function(err, result) {
 		if(err) {
 			console.log("error message", err);
 			return ;
 		} else {
 			res.send(result);
+		}
+	});
+});
+
+router.get("/home/toUpdate", function(req, res, next) {
+	var id = req.query.id;
+	if(!id) return ;
+	var query = {_id: id};
+	InterFace.findOne(query, function(err, result) {
+		if(err) {
+			console.log("error message", err);
+			return ;
+		} else {
+			res.render("update", {title: "接口文档", interFace: result});
+		}
+	});
+});
+
+router.post("/home/toUpdate/update", function(req, res, next) {
+	var query = req.body;
+	if(!query._id) return ;
+	query.updateTime = new Date();
+	InterFace.update(query, function(err, result) {
+		if(err) {
+			console.log("error message", err);
+			return;
+		} else {
+			res.send(result);
+		}
+	}); 
+});
+
+router.get("/home/toView", function(req, res, next) {
+	var id = req.query.id;
+	if(!id) return ;
+	var query = {_id: id};
+	InterFace.findOne(query, function(err, result) {
+		if(err) {
+			console.log("error message", err);
+			return ;
+		} else {
+			res.render("view", {title: "接口文档", interFace: result});
 		}
 	});
 });
