@@ -55,6 +55,11 @@ table th, table td {
     vertical-align: middle !important;
 }
 
+.description-wrap {
+	word-wrap: break-word;
+    word-break: break-all;
+}
+
 .pd20 {
 	padding: 20px;
 }

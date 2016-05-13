@@ -27,14 +27,38 @@ router.get("/home", function(req, res, next) {
 	res.render('home', { title: '接口文档' });
 });
 
-router.get("/home/search", function(req, res, next) {
-	var query = req.query || {};
-	InterFace.find(query, function(err, results) {
+router.post("/home/search", function(req, res, next) {
+	var query = req.body || {},
+		currentPage = query.currentPage || 1,
+		pageSize = query.pageSize || 10,
+		name = query.name || "",
+		type = query.type || 0,
+		createBy = query.createBy || "",
+		createTime = query.createTime || null;
+
+	var queryObj = InterFace.find({});
+	queryObj.skip((currentPage-1)*pageSize);
+	queryObj.limit(pageSize);
+
+	var countQuery = {};
+	if(name) countQuery.name = name;
+	if(type) countQuery.type = type;
+	if(createBy) countQuery.createBy = createBy;
+	if(createTime) countQuery.createTime = createTime;
+
+	InterFace.count(countQuery, function(err, rs) {
 		if(err) {
 			console.log('error message',err);
 			return ;
 		} else {
-			res.send(results);
+			queryObj.exec(function(err, results) {
+				if(err) {
+					console.log('error message',err);
+					return ;
+				} else {
+					res.send({interFace: results, total: rs, currentPage: currentPage, pageSize: pageSize, totalPage: Math.floor(rs/pageSize)+1});
+				}
+			});
 		}
 	});
 });

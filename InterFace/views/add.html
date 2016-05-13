@@ -12,6 +12,17 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="type" class="control-label col-sm-2">类型：</label>
+					<div class="col-sm-10">
+						<select name="type" class="form-control" ng-model="interface.type">
+							<option value="1">前端</option>
+							<option value="2">后端</option>
+							<option value="3">插件</option>
+							<option value="4">移动</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="createBy" class="control-label col-sm-2">创建人：</label>
 					<div class="col-sm-10">
 						<input class="form-control" type="text" name="createBy" id="createBy" ng-model="interface.createBy">
@@ -38,6 +49,7 @@
 				addService.addInterface($scope.interface).then(function(result) {
 					if(result && result._id) {
 						$scope.interface.name = "";
+						$scope.interface.type = 0;
 						$scope.interface.createBy = "";
 						$scope.interface.description = "";
 						alert("新增成功！");

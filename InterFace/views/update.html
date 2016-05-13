@@ -12,6 +12,17 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="type" class="control-label col-sm-2">类型：</label>
+					<div class="col-sm-10">
+						<select name="type" class="form-control" ng-model="interface.type">
+							<option value="1">前端</option>
+							<option value="2">后端</option>
+							<option value="3">插件</option>
+							<option value="4">移动</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="createBy" class="control-label col-sm-2">创建人：</label>
 					<div class="col-sm-10">
 						<input class="form-control" type="text" name="createBy" id="createBy" ng-model="interface.createBy">
@@ -20,10 +31,11 @@
 				<div class="form-group">
 					<label for="description" class="control-label col-sm-2">描述：</label>
 					<div class="col-sm-10">
-						<textarea class="form-control description-textarea" name="description" id="description" ng-model="interface.description"></textarea>
+						<textarea class="form-control description-textarea" name="description" id="description" ng-model="interface.description">
+						</textarea>
 					</div>
 				</div>
-				<button ng-click="update()" class="btn btn-primary mt20">保存</button>
+				<button ng-click="update()" class="btn btn-primary mt20">提交</button>
 			</form>
 		</div>
 	</body>
@@ -35,11 +47,12 @@
 			$scope.interface = {};
 			$scope.interface._id = "<%= interFace._id %>";
 			$scope.interface.name = "<%= interFace.name %>";
+			$scope.interface.type = "<%= interFace.type %>";
 			$scope.interface.createBy = "<%= interFace.createBy %>";
 			$scope.interface.description = "<%= interFace.description %>";
 
 			$scope.update = function() {
-				updateService.addInterface($scope.interface).then(function(result) {
+				updateService.updateInterface($scope.interface).then(function(result) {
 					if(result && result.ok) {
 						alert("编辑成功！");
 					}
@@ -47,11 +60,11 @@
 			};
 		};
 
-		var interfaceAdd = angular.module("interface.update", []);
-		interfaceAdd.controller("updateController", ["$scope", "updateService", updateCtrl]);
-		interfaceAdd.service("updateService", ["$http", "$q", function($http, $q) {
+		var interfaceUpdate = angular.module("interface.update", []);
+		interfaceUpdate.controller("updateController", ["$scope", "updateService", updateCtrl]);
+		interfaceUpdate.service("updateService", ["$http", "$q", function($http, $q) {
 			var baseUrl = "/home/toUpdate";
-			this.addInterface = function(item) {
+			this.updateInterface = function(item) {
 				var deferred = $q.defer();
 				$http({
 					method: "POST",
