@@ -134,6 +134,9 @@
 <script type="text/javascript" src="./layout.js"></script>
 <script type="text/javascript" src="./sound_control.js"></script>
 <script type="text/javascript" src="../wins/win_list.js"></script>
+<script type="text/templete" id="video_layout_tpl">
+	11111
+</script>
 <script type="text/javascript">
 	var layout = vm.module["layout"],
 		dataContainer = vm.module["dataContainer"],
@@ -244,8 +247,9 @@
 		}
 
 		var videoLayoutDialog = win.alert({
-			content: "ccccc",
-			mask: true,
+			id: "video_layout_tpl",
+			header: false,
+			footer: false,
 			sure: function() {
 				videoLayoutDialog.close();
 			}

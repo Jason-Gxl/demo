@@ -1,7 +1,7 @@
 .dialog-wrap {
     box-sizing: border-box;
     position: absolute;
-	box-shadow: 2px 2px 10px 5px #cdcdcd;
+	box-shadow: 0 0 10px 5px #4f4f4f;
 }
 
 .dialog-wrap .dialog-title-wrap {
