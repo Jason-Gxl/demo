@@ -14,7 +14,9 @@ router.get('/', function(req, res, next) {
 
 router.post("/", function(req, res, next) {
 	var query = {username: req.body.username, password: req.body.password};
+	debugger
 	User.count(query, function(err, doc) {
+		debugger
 		if(1===doc) {
 			res.redirect("/home");
 		} else {

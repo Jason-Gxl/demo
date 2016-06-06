@@ -1,0 +1,457 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>视频会议</title>
+	<link rel="stylesheet" type="text/css" href="./meetting.css">
+	<link rel="stylesheet" type="text/css" href="../wins/wins.css">
+</head>
+<body class="video">
+	<div class="header" id="header">
+
+		<!-- ==========================================================会议名称================================================================ -->
+		<span class="topic-wrap">主题：<span class="topic-title"></span></span>
+		<!-- ==========================================================会议名称================================================================ -->
+
+		<!-- ========================================================会议未开始提示============================================================ -->
+		<span class="meetting-no-start-hint">
+			<i class="icon icon-hint"></i>
+			<span class="hint-content">您暂未开始直播，准备好后请点击下方常用操作栏中“<font>开始直播</font>”按钮</span>
+		</span>
+		<!-- ========================================================会议未开始提示============================================================ -->
+
+		<!-- ========================================================会议结束按钮============================================================== -->
+		<span class="close-btn fr">
+			<i class="icon icon-close"></i>
+		</span>
+		<!-- ========================================================会议结束按钮============================================================== -->
+
+		<!-- <span></span> 这里先保留，做网络上、下行检测-->
+		
+		<!-- ============================================================更多应用============================================================== -->
+		<span class="more-app-wrap fr">
+			<span class="more-btn">更多<i class="icon icon-arrrow-down-green ml5"></i></span>
+			<div class="more-app-list-wrap mt10 hidden">
+				<i class="arrow-up"></i>
+				<ul class="more-app-list">
+					<li class="more-app-item" action="sequence">调整画面次序</li>
+					<li class="more-app-item" action="loop">开启轮巡</li>
+					<li class="more-app-item" action="nospeak">禁止发言</li>
+					<li class="more-app-item" action="nochat">禁止聊天</li>
+					<li class="more-app-item" action="calling">发起点名</li>
+					<li class="more-app-item" action="survey">互动调查</li>
+					<li class="more-app-item" action="test">随堂测验</li>
+					<li class="more-app-item" action="lock">锁屏</li>
+					<li class="more-app-item" action="guest">邀请来宾</li>
+					<li class="more-app-item" action="visitor">邀请观摩</li>
+				</ul>
+			</div>
+		</span>
+		<!-- ============================================================更多应用============================================================== -->
+
+		<!-- =============================================================麦克风=============================================================== -->
+		<span id="microphone-wrap" class="fr sound-wrap pt15 mr20"></span>
+		<!-- =============================================================麦克风=============================================================== -->
+
+		<!-- ==============================================================耳机================================================================ -->
+		<span id="earphone-wrap" class="fr sound-wrap pt15 mr20"></span>
+		<!-- ==============================================================耳机================================================================ -->
+		<a href="javascript:void(0);" id="camera" class="icon icon-camera fr camera"></a>
+		<a href="javascript:void(0);" id="record" class="icon icon-record fr record"></a>
+	</div>
+	<div class="container" id="container">
+		<div class="video-wrap">
+			<span class="title">视频
+				<i class="icon icon-full-screen fr full-screen"></i>
+				<i class="icon icon-turn-mode-small turn-mode-small fr"></i>
+				<i class="icon icon-more-screen fr more-screen"></i>
+			</span>
+			<div class="video-box-wrap number9">
+				<div class="video-box video-box-1"></div>
+				<div class="video-box video-box-2"></div>
+				<div class="video-box video-box-3"></div>
+				<div class="video-box video-box-4"></div>
+				<div class="video-box video-box-5"></div>
+				<div class="video-box video-box-6"></div>
+				<div class="video-box video-box-7"></div>
+				<div class="video-box video-box-8"></div>
+				<div class="video-box video-box-9"></div>
+			</div>
+		</div>
+		<div class="pad-wrap">
+			<span class="title">演示<i class="icon icon-turn-mode-small turn-mode-small fr"></i></span>
+			<div class="pad-box"></div>
+		</div>
+		<div class="control-wrap user-list-show">
+			<div class="users-wrap">
+				<span class="title" onclick="showOrHide(1)">用户</span>
+				<ul class="user-list"></ul>
+			</div>
+			<div class="note-wrap">
+				<span class="title" onclick="showOrHide(2)">笔记</span>
+				<div class="note-text-wrap">
+					<textarea></textarea>
+				</div>
+			</div>
+			<div class="chat-wrap">
+				<span class="title" onclick="showOrHide(3)">聊天</span>
+				<div class="chatting"></div>
+			</div>
+		</div>
+		<div class="menu-container">
+			<div class="menu-wrap">
+				<ul class="menu-list main-menu-list hidden fl">
+					<li class="icon icon-turn-mode menu-itme" action="turnMode">切换模式</li>
+					<li class="icon icon-video-layout menu-itme" action="videoLayout">视频布局</li>
+					<li class="icon icon-share-desk menu-itme" action="shareDesk">共享桌面</li>
+					<li class="icon icon-share-video menu-itme" action="shareVideo">共享视频</li>
+					<li class="icon icon-share-file menu-itme" action="shareFile">共享文档</li>
+				</ul>
+				<ul class="menu-list joiner-menu-list hidden fl">
+					<li class="icon icon-apply-speak menu-itme" action="applySpeak">申请发言</li>
+					<li class="icon icon-turn-mode menu-itme" action="turnMode">切换模式</li>
+					<li class="icon icon-share-file menu-itme" action="shareFile">共享文档</li>
+				</ul>
+				<ul class="menu-list speaker-menu-list hidden fl">
+					<li class="icon icon-apply-share-desk menu-itme" action="applyShareDesk">申请共享桌面</li>
+					<li class="icon icon-apply-share-video menu-itme" action="applyShareVideo">申请共享视频</li>
+					<li class="icon icon-cancel-speak menu-itme" action="cancelSpeak">取消发言</li>
+					<li class="icon icon-turn-mode menu-itme" action="turnMode">切换模式</li>
+					<li class="icon icon-share-file menu-itme" action="shareFile">共享文档</li>
+				</ul>
+				<ul class="menu-list visitor-menu-list hidden fl">
+					<li class="icon icon-turn-mode menu-itme" action="turnMode">切换模式</li>
+					<li class="icon icon-share-file menu-itme" action="shareFile">共享文档</li>
+				</ul>
+				<i class="icon icon-hide-menu fr"></i>
+			</div>
+			<div class="menu-wrap-small hidden"></div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../project/data.js"></script>
+<script type="text/javascript" src="../project/tool.js"></script>
+<script type="text/javascript" src="./layout.js"></script>
+<script type="text/javascript" src="./sound_control.js"></script>
+<script type="text/javascript" src="../wins/win_list.js"></script>
+<script type="text/javascript">
+	var layout = vm.module["layout"],
+		dataContainer = vm.module["dataContainer"],
+		soundControl = vm.module["soundControl"],
+		tool = vm.module["tool"],
+		win = vm.module["win"],
+		initData = {
+			title: "随便说说",
+			videoCount: 6,
+			videoLayout: "",
+			role: 0,
+			type: "show",
+			moreScreen: true
+		};
+
+	tool.addEvent(document, "readystatechange", function() {
+		if("complete"===document.readyState) {
+			layout.winChange();
+		}
+	});
+
+	window.onresize = function() {
+		layout.winChange();
+	};
+
+	function showOrHide(type) {
+		dataContainer.setInterimData("showMode", type);
+		var class_str = "";
+		switch(type) {
+			case 1:
+			class_str = "user-list-show";
+			break;
+			case 2:
+			class_str = "note-show";
+			break;
+			case 3:
+			class_str = "chat-show";
+			break;
+		}
+		var controlWrap = document.getElementsByClassName("control-wrap")[0];
+		tool.replaceClass(controlWrap, /user-list-show|note-show|chat-show/g, class_str);
+	}
+
+	function setVideoLayout(count, videoLayout) {
+		var videoBoxWrap = document.getElementsByClassName("video-box-wrap")[0];
+		tool.replaceClass(videoBoxWrap, /number./g, " number"+count);
+		dataContainer.set("videoCount", count);
+		dataContainer.set("videoLayout", videoLayout||"");
+		layout.videoLayout();
+	}
+
+	function initPage() {
+		for(var key in initData) {
+			dataContainer.set(key, initData[key]);
+
+			if("title"===key) {
+				var topicTitle = document.getElementsByClassName("topic-title")[0];
+				topicTitle.title = initData[key];
+				topicTitle.innerHTML = initData[key];
+			}
+
+			if("videoCount"===key) {
+				setVideoLayout(initData[key], initData.videoLayout||"");
+			}
+
+			if("meetState"===key) {
+				if("interactive"===initData[key]) {
+					var hintEle = document.getElementsByClassName("meetting-no-start-hint")[0];
+					tool.addClass(hintEle, "hidden");
+				}
+			}
+
+			if("role"===key) {
+				var menuWrap = document.getElementsByClassName("menu-wrap")[0],
+					menuWrapSmall = document.getElementsByClassName("menu-wrap-small")[0],
+					classStr = "";
+
+				switch(initData[key]) {
+					case 0:
+					classStr = "main-menu-wrap";
+					break;
+					case 1:
+					classStr = "speaker-menu-wrap";
+					break;
+					case 2:
+					classStr = "joiner-menu-wrap";
+					break;
+					case 3:
+					classStr = "visitor-menu-wrap";
+					break;
+				}
+
+				tool.addClass(menuWrap, classStr);
+				dataContainer.setInterimData("menuWrap", menuWrap);
+				dataContainer.setInterimData("menuWrapSmall", menuWrapSmall);
+				dataContainer.set("role", +initData[key]);
+			}
+
+			if("type"===key && initData[key] && "video"!==initData[key]) {
+				tool.replaceClass(document.body, "video", initData[key]);
+			}
+
+			if("moreScreen"===key) {
+				if("show"===initData.type && initData[key]) {
+					tool.replaceClass(document.getElementsByClassName("more-screen")[0], "icon-more-screen", "icon-more-screen-green");
+				}
+			}
+		}
+
+		var videoLayoutDialog = win.alert({
+			content: "ccccc",
+			mask: true,
+			sure: function() {
+				videoLayoutDialog.close();
+			}
+		});
+
+		dataContainer.setInterimData("videoLayoutDialog", videoLayoutDialog);
+	}
+
+	$(function() {
+		var dialogs = {};
+
+		tool.addEvent(".close-btn", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			if("over"===dataContainer.get("meetState")) return;
+			dataContainer.set("meetState", "over");
+			alert("close");
+		});
+
+		tool.addEvent(window, "beforeunload", function() {
+
+		});
+
+		tool.addEvent(".more-btn", "mouseover", function() {
+			var icon = this.firstElementChild || this.lastChild;
+			tool.replaceClass(icon, "icon-arrrow-down-green", "icon-arrrow-down-gray");
+		});
+
+		tool.addEvent(".more-btn", "mouseout", function() {
+			var icon = this.firstElementChild || this.lastChild;
+			tool.replaceClass(icon, "icon-arrrow-down-gray", "icon-arrrow-down-green");
+		});
+
+		tool.addEvent(".more-btn", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var e = arguments[0] || window.event,
+				isShow = dataContainer.getInterimData("moreAppIsShow"),
+				moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
+
+			if(!isShow) {
+				tool.removeClass(moreAppWarp, "hidden");
+			} else {
+				tool.addClass(moreAppWarp, "hidden");
+			}
+
+			dataContainer.setInterimData("moreAppIsShow", !isShow);
+
+			e.preventDefault();
+			e.stopPropagation();
+		});
+
+		tool.addEvent(".more-app-item", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var e = arguments[0] || window.event,
+				moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
+
+			var action = this.getAttribute("action");
+
+			switch(action) {
+				case "sequence":
+				console.log("sequence");
+				break;
+				case "loop":
+				console.log("loop");
+				break;
+				case "nospeak":
+				console.log("nospeak");
+				break;
+				case "nochat":
+				console.log("nochat");
+				break;
+				case "calling":
+				console.log("calling");
+				break;
+				case "survey":
+				console.log("survey");
+				break;
+				case "test":
+				console.log("test");
+				break;
+				case "lock":
+				console.log("lock");
+				break;
+				case "guest":
+				console.log("guest");
+				break;
+				case "visitor":
+				console.log("visitor");
+				break;
+			}
+
+			tool.addClass(moreAppWarp, "hidden");
+			dataContainer.setInterimData("moreAppIsShow", false);
+			e.preventDefault();
+			e.stopPropagation();
+		});
+
+		tool.addEvent(document, "click", function() {
+			if(dataContainer.getInterimData("moreAppIsShow")) {
+				var moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
+				tool.addClass(moreAppWarp, "hidden");
+				dataContainer.setInterimData("moreAppIsShow", false);
+			}
+		});
+
+		var microphone = soundControl.init({
+			id: "microphone-wrap",
+			type: "microphone",
+			switchClick: function(val) {console.log(val);},
+			drag: function(val) {console.log(val);}
+		});
+
+		var earphone = soundControl.init({
+			id: "earphone-wrap",
+			type: "earphone",
+			switchClick: function(val) {console.log(val);},
+			drag: function(val) {console.log(val);}
+		});
+
+		microphone.setSound(dataContainer.getInterimData("microphone"));
+		earphone.setSound(dataContainer.getInterimData("earphone"));
+
+		tool.addEvent("#camera", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var e = arguments[0] || window.event;
+		});
+
+		tool.addEvent(".menu-itme", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var e = arguments[0] || window.event,
+				action = this.getAttribute("action");
+			
+			switch(action) {
+				case "turnMode":
+				turnMode();
+				break;
+				case "videoLayout":
+				showVideoLayoutDiaLog();
+				break;
+			}
+		});
+
+		tool.addEvent(".turn-mode-small", "click", turnMode);
+
+		function turnMode() {
+			var type = dataContainer.get("type");
+			if("video"===type) {
+				tool.replaceClass(document.body, "video", "show");
+				tool.replaceClass(document.getElementsByClassName("more-screen")[0], "icon-more-screen-green", "icon-more-screen");
+				dataContainer.set("type", "show");
+			} else {
+				tool.replaceClass(document.body, "show", "video");
+				dataContainer.set("type", "video");
+			}
+			dataContainer.set("moreScreen", false);
+			layout.winChange();
+		}
+
+		tool.addEvent(".icon-hide-menu", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var menuWrap = dataContainer.getInterimData("menuWrap"),
+				menuWrapSmall = dataContainer.getInterimData("menuWrapSmall");
+			tool.addClass(menuWrap, "hidden");
+			tool.removeClass(menuWrapSmall, "hidden");
+			layout.layoutMenuWrap();
+		});
+
+		tool.addEvent(".menu-wrap-small", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var menuWrap = dataContainer.getInterimData("menuWrap"),
+				menuWrapSmall = dataContainer.getInterimData("menuWrapSmall");
+			tool.removeClass(menuWrap, "hidden");
+			tool.addClass(menuWrapSmall, "hidden");
+			layout.layoutMenuWrap();
+		});
+
+		function showVideoLayoutDiaLog() {
+			var videoLayoutDialog = dataContainer.getInterimData("videoLayoutDialog");
+			videoLayoutDialog.open();
+		}
+
+		tool.addEvent(".full-screen", "click", function() {
+			if(dataContainer.getInterimData("hasDialogShow")) return ;
+			var videoFullScreen = dataContainer.getInterimData("videoFullScreen"),
+				container = document.getElementById("container");
+			if(!videoFullScreen) {
+				tool.addClass(container, "video-full-screen");
+			} else {
+				tool.removeClass(container, "video-full-screen");
+			}
+			dataContainer.setInterimData("videoFullScreen", !videoFullScreen);
+			layout.winChange();
+		});
+
+		tool.addEvent(".more-screen", "click", function() {
+			var moreScreen = dataContainer.get("moreScreen");
+			if(moreScreen) {
+				tool.replaceClass(this, "icon-more-screen-green", "icon-more-screen");
+			} else {
+				tool.replaceClass(this, "icon-more-screen", "icon-more-screen-green");
+			}
+			dataContainer.set("moreScreen", !moreScreen);
+			layout.layoutSmallVideo();
+			layout.resizeControl();
+		});
+
+		initPage();
+	})
+</script>
+</html>

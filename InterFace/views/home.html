@@ -1,18 +1,18 @@
 <%include common\header.html%>
 	<body ng-controller="homeController" class="home-body">
-		<div>
+		<!-- <div>
 			<ul>
 				<li class="form-group">
-					<label for="name" class="control-label col-sm-2">名称：</label>
+					<label for="title" class="control-label col-sm-2">名称：</label>
 					<div class="col-sm-10">
-						<input class="form-control" type="text" required name="name" id="name" ng-model="interface.name">
+						<input class="form-control" type="text" required name="title" id="title" ng-model="interface.title">
 					</div>
 				</li>
 				<li></li>
 				<li></li>
 				<li></li>
 			</ul>
-		</div>
+		</div> -->
 		<div class="cf mt20">
 			<a href="/home/toAdd" class="btn btn-default fr">新增接口</a>
 		</div>
@@ -30,7 +30,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="interFace in interFaceList">
-					<td>{{interFace.name}}</td>
+					<td>{{interFace.title}}</td>
 					<td>{{interFace.type | type}}</td>
 					<td>{{interFace.description}}</td>
 					<td>{{interFace.createBy}}</td>

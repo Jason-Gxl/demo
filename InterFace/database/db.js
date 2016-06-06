@@ -10,7 +10,7 @@ var userSchema = new Schema({
 });
 
 var interfaceSchema = new Schema({
-	name: String,
+	title: String,
 	description: String,
 	createTime: Date,
 	updateTime: Date,
