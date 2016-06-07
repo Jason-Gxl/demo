@@ -6,7 +6,7 @@
 			header: true,
 			footer: true,
 			title: "提示",
-			width: 350,
+			width: "auto",
 			height: "auto",
 			auto: false,
 			time: 3000,
@@ -99,10 +99,12 @@
 				maskCount++;
 			}
 
-			self.winObj.style.width = options.width + "px";
+			if(!isNaN(options.width)) {
+				self.winObj.style.width = options.width + "px";
+			}
 
-			if("auto"!==options.height) {
-				self.winObj.style.width = options.height + "px";
+			if(!isNaN(options.height)) {
+				self.winObj.style.height = options.height + "px";
 			}
 
 			if(content) {
@@ -153,14 +155,14 @@
 				options = self.options,
 				bodyWidth = doc.body.clientWidth,
 				bodyHeight = doc.body.clientHeight,
-				dialogWidth = options.width,
+				dialogWidth = self.winObj.offsetWidth,
 				dialogHeight = self.winObj.offsetHeight,
 				_left = 0,
 				_top = 0;
 
 			if("notice"!==self.name) {
-				_left = (bodyWidth-dialogWidth)/2;
-				_top = (bodyHeight-dialogHeight)/2;
+				_left = (bodyWidth-dialogWidth)/2>=0?(bodyWidth-dialogWidth)/2:0;
+				_top = (bodyHeight-dialogHeight)/2>=0?(bodyHeight-dialogHeight)/2:0;
 			} else {
 				switch(options.position) {
 					case 1 :

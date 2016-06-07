@@ -62,16 +62,10 @@
 			if("video"===type) {
 				this.videoLayout();
 			} else {
-				var len = videoBoxList.length;
-				while(len--) {
-					videoBoxList[len].removeAttribute("style");
-				}
+				this.layoutSmallVideo();
 			}
 
 			this.layoutMenuWrap();
-			if("show"===type && dataContainer.get("moreScreen")) {
-				this.layoutSmallVideo();
-			}
 			this.resizeControl();
 		},
 		layoutMenuWrap: function() {
@@ -89,6 +83,11 @@
 				perVideoBox = null,
 				moreScreen = dataContainer.get("moreScreen"),
 				i = 1;
+
+			var len = videoBoxList.length;
+			while(len--) {
+				videoBoxList[len].removeAttribute("style");
+			}
 
 			if(1===videoCount) return ;
 
@@ -117,15 +116,10 @@
 							videoBox.style.left = perVideoBox.offsetWidth + "px";
 						}
 					}
-				} while (i++<videoCount)
+				} while (++i<videoCount)
 
 				videoBoxWrap.style.height = Math.ceil((videoCount-1)/2)*smallVideoHeight + 180 + "px";
 			} else {
-				do {
-					var videoBox = videoBoxList[i];
-					videoBox.removeAttribute("style");
-				} while (i++<videoCount)
-
 				videoBoxWrap.removeAttribute("style");
 			}
 		},
@@ -149,7 +143,8 @@
 		videoLayout: function() {
 			var videoCount = dataContainer.get("videoCount"),
 				videoBoxWrapWidth = videoBoxWrap.clientWidth,
-				videoBoxWrapHeight = videoBoxWrap.clientHeight;
+				videoBoxWrapHeight = videoBoxWrap.clientHeight,
+				j = videoCount;
 
 			if(1===videoCount) {
 				var videoBox = videoBoxList[0];
@@ -167,6 +162,7 @@
 					videoBox.style.left = 0;
 					videoBox.style.top = (videoBoxWrapHeight-videoBox.offsetHeight)/2 + "px";
 				}
+
 			}
 
 			if(2===videoCount) {
@@ -641,6 +637,10 @@
 						videoBox.style.left = videoBoxList[0].offsetLeft + "px";
 					}
 				} while (++i<videoCount)
+			}
+
+			while(++j<=9) {
+				videoBoxList[j-1].removeAttribute("style");
 			}
 		}
 	};

@@ -135,7 +135,44 @@
 <script type="text/javascript" src="./sound_control.js"></script>
 <script type="text/javascript" src="../wins/win_list.js"></script>
 <script type="text/templete" id="video_layout_tpl">
-	11111
+	<ul class="video-layout-list">
+		<li class="video-layout-item fl" layout="1">
+			<span class="icon icon-video-layout-item1"></span>
+			<span class="title">一分屏</span>
+		</li>
+		<li class="video-layout-item fl ml10" layout="2">
+			<span class="icon icon-video-layout-item2"></span>
+			<span class="title">二分屏</span>
+		</li>
+		<li class="video-layout-item fl ml10" layout="3">
+			<span class="icon icon-video-layout-item3-horizontal"></span>
+			<span class="title">三分屏</span>
+		</li>
+		<li class="video-layout-item fl clear-fix-left mt15" layout="3,vertical">
+			<span class="icon icon-video-layout-item3-vertical"></span>
+			<span class="title">三分屏</span>
+		</li>
+		<li class="video-layout-item fl mt15 ml10" layout="4">
+			<span class="icon icon-video-layout-item4"></span>
+			<span class="title">四分屏</span>
+		</li>
+		<li class="video-layout-item fl mt15 ml10" layout="6">
+			<span class="icon icon-video-layout-item6-left"></span>
+			<span class="title">六分屏</span>
+		</li>
+		<li class="video-layout-item fl clear-fix-left mt15" layout="6,right">
+			<span class="icon icon-video-layout-item6-right"></span>
+			<span class="title">六分屏</span>
+		</li>
+		<li class="video-layout-item fl mt15 ml10" layout="8">
+			<span class="icon icon-video-layout-item8"></span>
+			<span class="title">八分屏</span>
+		</li>
+		<li class="video-layout-item fl mt15 ml10" layout="9">
+			<span class="icon icon-video-layout-item9"></span>
+			<span class="title">九分屏</span>
+		</li>
+	</ul>
 </script>
 <script type="text/javascript">
 	var layout = vm.module["layout"],
@@ -249,12 +286,35 @@
 		var videoLayoutDialog = win.alert({
 			id: "video_layout_tpl",
 			header: false,
-			footer: false,
-			auto: false,
-			time: 5000,
-			sure: function() {
-				videoLayoutDialog.close();
+			footer: false
+		});
+
+		tool.addEvent(".video-layout-item", "mousemove", function() {
+			if(-1!==this.className.indexOf("mouse-move-on")) return ;
+			tool.addClass(this, "mouse-move-on");
+		});
+
+		tool.addEvent(".video-layout-item", "mouseout", function() {
+			if(-1!==this.className.indexOf("mouse-move-on")) tool.removeClass(this, "mouse-move-on");
+		});
+
+		tool.addEvent(".video-layout-item", "click", function() {
+			var _layout = this.getAttribute("layout"),
+				_layouts = _layout.split(","),
+				type = dataContainer.get('type'),
+				videoLayoutDialog = dataContainer.getInterimData("videoLayoutDialog");
+
+			if("video"===type) {
+				setVideoLayout(Number(_layouts[0]), _layouts[1]||"");
+			} else {
+				dataContainer.set("videoCount", Number(_layouts[0]));
+				dataContainer.set("videoLayout", _layouts[1]||"");
+				var videoBoxWrap = document.getElementsByClassName("video-box-wrap")[0];
+				tool.replaceClass(videoBoxWrap, /number./g, " number"+Number(_layouts[0]));
+				layout.winChange();
 			}
+
+			videoLayoutDialog.close();
 		});
 
 		dataContainer.setInterimData("videoLayoutDialog", videoLayoutDialog);
