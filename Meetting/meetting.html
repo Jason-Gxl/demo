@@ -19,6 +19,12 @@
 		</span>
 		<!-- ========================================================会议未开始提示============================================================ -->
 
+		<span class="record-hint hidden">
+			录制时间<span class="record-time ml5">00:00:00</span>
+			<i class="icon icon-recording ml10"></i>
+			<a href="javascript:void(0);" class="stop-record-btn ml35">停止录制</a>
+		</span>
+
 		<!-- ========================================================会议结束按钮============================================================== -->
 		<span class="close-btn fr">
 			<i class="icon icon-close"></i>
@@ -30,19 +36,19 @@
 		<!-- ============================================================更多应用============================================================== -->
 		<span class="more-app-wrap fr">
 			<span class="more-btn">更多<i class="icon icon-arrrow-down-green ml5"></i></span>
-			<div class="more-app-list-wrap mt10 hidden">
+			<div class="more-app-list-wrap more-list-wrap mt10 hidden">
 				<i class="arrow-up"></i>
-				<ul class="more-app-list">
-					<li class="more-app-item" action="sequence">调整画面次序</li>
-					<li class="more-app-item" action="loop">开启轮巡</li>
-					<li class="more-app-item" action="nospeak">禁止发言</li>
-					<li class="more-app-item" action="nochat">禁止聊天</li>
-					<li class="more-app-item" action="calling">发起点名</li>
-					<li class="more-app-item" action="survey">互动调查</li>
-					<li class="more-app-item" action="test">随堂测验</li>
-					<li class="more-app-item" action="lock">锁屏</li>
-					<li class="more-app-item" action="guest">邀请来宾</li>
-					<li class="more-app-item" action="visitor">邀请观摩</li>
+				<ul class="more-list">
+					<li class="more-list-item more-app-list-item" action="sequence">调整画面次序</li>
+					<li class="more-list-item more-app-list-item" action="loop">开启轮巡</li>
+					<li class="more-list-item more-app-list-item" action="nospeak">禁止发言</li>
+					<li class="more-list-item more-app-list-item" action="nochat">禁止聊天</li>
+					<li class="more-list-item more-app-list-item" action="calling">发起点名</li>
+					<li class="more-list-item more-app-list-item" action="survey">互动调查</li>
+					<li class="more-list-item more-app-list-item" action="test">随堂测验</li>
+					<li class="more-list-item more-app-list-item" action="lock">锁屏</li>
+					<li class="more-list-item more-app-list-item" action="guest">邀请来宾</li>
+					<li class="more-list-item more-app-list-item" action="visitor">邀请观摩</li>
 				</ul>
 			</div>
 		</span>
@@ -56,7 +62,17 @@
 		<span id="earphone-wrap" class="fr sound-wrap pt15 mr20"></span>
 		<!-- ==============================================================耳机================================================================ -->
 		<a href="javascript:void(0);" id="camera" class="icon icon-camera fr camera"></a>
-		<a href="javascript:void(0);" id="record" class="icon icon-record fr record"></a>
+
+		<span class="record-wrap fr">
+			<a href="javascript:void(0);" id="record" class="icon icon-record record"></a>
+			<div class="more-record-list-wrap more-list-wrap mt10 hidden">
+				<i class="arrow-up"></i>
+				<ul class="more-list">
+					<li class="more-list-item more-reocrd-list-itme" action="startRecord">开始录制</li>
+					<li class="more-list-item more-reocrd-list-itme" action="archive">归档</li>
+				</ul>
+			</div>
+		</span>
 	</div>
 	<div class="container" id="container">
 		<div class="video-wrap">
@@ -83,17 +99,17 @@
 		</div>
 		<div class="control-wrap user-list-show">
 			<div class="users-wrap">
-				<span class="title" onclick="showOrHide(1)">用户</span>
+				<span class="title control-title" number="1">用户</span>
 				<ul class="user-list"></ul>
 			</div>
 			<div class="note-wrap">
-				<span class="title" onclick="showOrHide(2)">笔记</span>
+				<span class="title control-title" number="2">笔记</span>
 				<div class="note-text-wrap">
 					<textarea></textarea>
 				</div>
 			</div>
 			<div class="chat-wrap">
-				<span class="title" onclick="showOrHide(3)">聊天</span>
+				<span class="title control-title" number="3">聊天</span>
 				<div class="chatting"></div>
 			</div>
 		</div>
@@ -134,6 +150,8 @@
 <script type="text/javascript" src="./layout.js"></script>
 <script type="text/javascript" src="./sound_control.js"></script>
 <script type="text/javascript" src="../wins/win_list.js"></script>
+<script type="text/javascript" src="./record.js"></script>
+<script type="text/javascript" src="./controller.js"></script>
 <script type="text/templete" id="video_layout_tpl">
 	<ul class="video-layout-list">
 		<li class="video-layout-item fl" layout="1">
@@ -174,350 +192,72 @@
 		</li>
 	</ul>
 </script>
+<script type="text/templete" id="loop_setting_tpl">
+	<div class="loop-setting-wrap">
+		<span class="hint">说明：开启轮巡后，默认只能主讲人看到轮巡的视频，当主持人开启“<b>广播轮巡</b>”后，参会者也能看到轮巡的视频</span>
+		<span class="time-wrap mt20">
+			<label>间隔秒数：</label>
+			<select name="loopTime1" id="loopTime1">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="60">60</option>
+				<option value="90">90</option>
+				<option value="120">120</option>
+			</select>
+		</span>
+		<span class="auto-time-wrap mt10">
+			<label>自定义秒数：</label>
+			<input type="text" name="loopTime2" id="loopTime2"/>
+			只能在15~180之间
+		</span>
+		<span class="dialog-btns-wrap mt30">
+			<a href="javascript:void(0);" class="dialog-btn-sure start-loop-btn">开启轮巡</a>
+			<a href="javascript:void(0);" class="dialog-btn-cancel cancel-loop-btn ml10">取消</a>
+		</span>
+	</div>
+</script>
+<script type="text/templete" id="no_speak_tpl">
+	<div class="no-speak-wrap">
+		<span class="dialog-hint-content">禁止发言后，自动取消所有发言人，确定禁止发言吗？</span>
+		<span class="dialog-btns-wrap mt30">
+			<a href="javascript:void(0);" class="dialog-btn-sure" id="run_no_speak">确定</a>
+			<a href="javascript:void(0);" class="dialog-btn-cancel ml10" id="cancel_no_speak">取消</a>
+		</span>
+	</div>
+</script>
+<script type="text/templete" id="calling_main_tpl">
+	<div class="calling-main-wrap">
+		<span class="calling-time-wrap">点名到计时：<span class="calling-time" id="calling_time">30</span>秒</span>
+		<fieldset class="arrived-list-wrap mt20">
+			<legend>已到人员（<span>9</span>/<span>30</span>）</legend>
+			<ul class="arrived-list"></ul>
+		</fieldset>
+		<fieldset class="nonarrival-list-wrap mt20">
+			<legend>未到人员（<span>21</span>/<span>30</span>）</legend>
+			<ul class="nonarrival-list"></ul>
+		</fieldset>
+	</div>
+</script>
+<script type="text/templete" id="calling_receive_tpl">
+	<div class="calling-receive-wrap">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+</script>
 <script type="text/javascript">
-	var layout = vm.module["layout"],
-		dataContainer = vm.module["dataContainer"],
-		soundControl = vm.module["soundControl"],
-		tool = vm.module["tool"],
-		win = vm.module["win"],
-		initData = {
+	var initData = {
 			title: "随便说说",
 			videoCount: 6,
 			videoLayout: "",
 			role: 0,
-			type: "show",
-			moreScreen: true
+			type: "video",
+			moreScreen: true,
+			meetState: "interactive",
+			record: false
 		};
-
-	tool.addEvent(document, "readystatechange", function() {
-		if("complete"===document.readyState) {
-			layout.winChange();
-		}
-	});
-
-	window.onresize = function() {
-		layout.winChange();
-	};
-
-	function showOrHide(type) {
-		dataContainer.setInterimData("showMode", type);
-		var class_str = "";
-		switch(type) {
-			case 1:
-			class_str = "user-list-show";
-			break;
-			case 2:
-			class_str = "note-show";
-			break;
-			case 3:
-			class_str = "chat-show";
-			break;
-		}
-		var controlWrap = document.getElementsByClassName("control-wrap")[0];
-		tool.replaceClass(controlWrap, /user-list-show|note-show|chat-show/g, class_str);
-	}
-
-	function setVideoLayout(count, videoLayout) {
-		var videoBoxWrap = document.getElementsByClassName("video-box-wrap")[0];
-		tool.replaceClass(videoBoxWrap, /number./g, " number"+count);
-		dataContainer.set("videoCount", count);
-		dataContainer.set("videoLayout", videoLayout||"");
-		layout.videoLayout();
-	}
-
-	function initPage() {
-		for(var key in initData) {
-			dataContainer.set(key, initData[key]);
-
-			if("title"===key) {
-				var topicTitle = document.getElementsByClassName("topic-title")[0];
-				topicTitle.title = initData[key];
-				topicTitle.innerHTML = initData[key];
-			}
-
-			if("videoCount"===key) {
-				setVideoLayout(initData[key], initData.videoLayout||"");
-			}
-
-			if("meetState"===key) {
-				if("interactive"===initData[key]) {
-					var hintEle = document.getElementsByClassName("meetting-no-start-hint")[0];
-					tool.addClass(hintEle, "hidden");
-				}
-			}
-
-			if("role"===key) {
-				var menuWrap = document.getElementsByClassName("menu-wrap")[0],
-					menuWrapSmall = document.getElementsByClassName("menu-wrap-small")[0],
-					classStr = "";
-
-				switch(initData[key]) {
-					case 0:
-					classStr = "main-menu-wrap";
-					break;
-					case 1:
-					classStr = "speaker-menu-wrap";
-					break;
-					case 2:
-					classStr = "joiner-menu-wrap";
-					break;
-					case 3:
-					classStr = "visitor-menu-wrap";
-					break;
-				}
-
-				tool.addClass(menuWrap, classStr);
-				dataContainer.setInterimData("menuWrap", menuWrap);
-				dataContainer.setInterimData("menuWrapSmall", menuWrapSmall);
-				dataContainer.set("role", +initData[key]);
-			}
-
-			if("type"===key && initData[key] && "video"!==initData[key]) {
-				tool.replaceClass(document.body, "video", initData[key]);
-			}
-
-			if("moreScreen"===key) {
-				if("show"===initData.type && initData[key]) {
-					tool.replaceClass(document.getElementsByClassName("more-screen")[0], "icon-more-screen", "icon-more-screen-green");
-				}
-			}
-		}
-
-		var videoLayoutDialog = win.alert({
-			id: "video_layout_tpl",
-			header: false,
-			footer: false
-		});
-
-		tool.addEvent(".video-layout-item", "mousemove", function() {
-			if(-1!==this.className.indexOf("mouse-move-on")) return ;
-			tool.addClass(this, "mouse-move-on");
-		});
-
-		tool.addEvent(".video-layout-item", "mouseout", function() {
-			if(-1!==this.className.indexOf("mouse-move-on")) tool.removeClass(this, "mouse-move-on");
-		});
-
-		tool.addEvent(".video-layout-item", "click", function() {
-			var _layout = this.getAttribute("layout"),
-				_layouts = _layout.split(","),
-				type = dataContainer.get('type'),
-				videoLayoutDialog = dataContainer.getInterimData("videoLayoutDialog");
-
-			if("video"===type) {
-				setVideoLayout(Number(_layouts[0]), _layouts[1]||"");
-			} else {
-				dataContainer.set("videoCount", Number(_layouts[0]));
-				dataContainer.set("videoLayout", _layouts[1]||"");
-				var videoBoxWrap = document.getElementsByClassName("video-box-wrap")[0];
-				tool.replaceClass(videoBoxWrap, /number./g, " number"+Number(_layouts[0]));
-				layout.winChange();
-			}
-
-			videoLayoutDialog.close();
-		});
-
-		dataContainer.setInterimData("videoLayoutDialog", videoLayoutDialog);
-	}
-
-	$(function() {
-		var dialogs = {};
-
-		tool.addEvent(".close-btn", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			if("over"===dataContainer.get("meetState")) return;
-			dataContainer.set("meetState", "over");
-			alert("close");
-		});
-
-		tool.addEvent(window, "beforeunload", function() {
-
-		});
-
-		tool.addEvent(".more-btn", "mouseover", function() {
-			var icon = this.firstElementChild || this.lastChild;
-			tool.replaceClass(icon, "icon-arrrow-down-green", "icon-arrrow-down-gray");
-		});
-
-		tool.addEvent(".more-btn", "mouseout", function() {
-			var icon = this.firstElementChild || this.lastChild;
-			tool.replaceClass(icon, "icon-arrrow-down-gray", "icon-arrrow-down-green");
-		});
-
-		tool.addEvent(".more-btn", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var e = arguments[0] || window.event,
-				isShow = dataContainer.getInterimData("moreAppIsShow"),
-				moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
-
-			if(!isShow) {
-				tool.removeClass(moreAppWarp, "hidden");
-			} else {
-				tool.addClass(moreAppWarp, "hidden");
-			}
-
-			dataContainer.setInterimData("moreAppIsShow", !isShow);
-
-			e.preventDefault();
-			e.stopPropagation();
-		});
-
-		tool.addEvent(".more-app-item", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var e = arguments[0] || window.event,
-				moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
-
-			var action = this.getAttribute("action");
-
-			switch(action) {
-				case "sequence":
-				console.log("sequence");
-				break;
-				case "loop":
-				console.log("loop");
-				break;
-				case "nospeak":
-				console.log("nospeak");
-				break;
-				case "nochat":
-				console.log("nochat");
-				break;
-				case "calling":
-				console.log("calling");
-				break;
-				case "survey":
-				console.log("survey");
-				break;
-				case "test":
-				console.log("test");
-				break;
-				case "lock":
-				console.log("lock");
-				break;
-				case "guest":
-				console.log("guest");
-				break;
-				case "visitor":
-				console.log("visitor");
-				break;
-			}
-
-			tool.addClass(moreAppWarp, "hidden");
-			dataContainer.setInterimData("moreAppIsShow", false);
-			e.preventDefault();
-			e.stopPropagation();
-		});
-
-		tool.addEvent(document, "click", function() {
-			if(dataContainer.getInterimData("moreAppIsShow")) {
-				var moreAppWarp = document.getElementsByClassName("more-app-list-wrap")[0];
-				tool.addClass(moreAppWarp, "hidden");
-				dataContainer.setInterimData("moreAppIsShow", false);
-			}
-		});
-
-		var microphone = soundControl.init({
-			id: "microphone-wrap",
-			type: "microphone",
-			switchClick: function(val) {console.log(val);},
-			drag: function(val) {console.log(val);}
-		});
-
-		var earphone = soundControl.init({
-			id: "earphone-wrap",
-			type: "earphone",
-			switchClick: function(val) {console.log(val);},
-			drag: function(val) {console.log(val);}
-		});
-
-		microphone.setSound(dataContainer.getInterimData("microphone"));
-		earphone.setSound(dataContainer.getInterimData("earphone"));
-
-		tool.addEvent("#camera", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var e = arguments[0] || window.event;
-		});
-
-		tool.addEvent(".menu-itme", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var e = arguments[0] || window.event,
-				action = this.getAttribute("action");
-			
-			switch(action) {
-				case "turnMode":
-				turnMode();
-				break;
-				case "videoLayout":
-				showVideoLayoutDiaLog();
-				break;
-			}
-		});
-
-		tool.addEvent(".turn-mode-small", "click", turnMode);
-
-		function turnMode() {
-			var type = dataContainer.get("type");
-			if("video"===type) {
-				tool.replaceClass(document.body, "video", "show");
-				tool.replaceClass(document.getElementsByClassName("more-screen")[0], "icon-more-screen-green", "icon-more-screen");
-				dataContainer.set("type", "show");
-			} else {
-				tool.replaceClass(document.body, "show", "video");
-				dataContainer.set("type", "video");
-			}
-			dataContainer.set("moreScreen", false);
-			layout.winChange();
-		}
-
-		tool.addEvent(".icon-hide-menu", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var menuWrap = dataContainer.getInterimData("menuWrap"),
-				menuWrapSmall = dataContainer.getInterimData("menuWrapSmall");
-			tool.addClass(menuWrap, "hidden");
-			tool.removeClass(menuWrapSmall, "hidden");
-			layout.layoutMenuWrap();
-		});
-
-		tool.addEvent(".menu-wrap-small", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var menuWrap = dataContainer.getInterimData("menuWrap"),
-				menuWrapSmall = dataContainer.getInterimData("menuWrapSmall");
-			tool.removeClass(menuWrap, "hidden");
-			tool.addClass(menuWrapSmall, "hidden");
-			layout.layoutMenuWrap();
-		});
-
-		function showVideoLayoutDiaLog() {
-			var videoLayoutDialog = dataContainer.getInterimData("videoLayoutDialog");
-			videoLayoutDialog.open();
-		}
-
-		tool.addEvent(".full-screen", "click", function() {
-			if(dataContainer.getInterimData("hasDialogShow")) return ;
-			var videoFullScreen = dataContainer.getInterimData("videoFullScreen"),
-				container = document.getElementById("container");
-			if(!videoFullScreen) {
-				tool.addClass(container, "video-full-screen");
-			} else {
-				tool.removeClass(container, "video-full-screen");
-			}
-			dataContainer.setInterimData("videoFullScreen", !videoFullScreen);
-			layout.winChange();
-		});
-
-		tool.addEvent(".more-screen", "click", function() {
-			var moreScreen = dataContainer.get("moreScreen");
-			if(moreScreen) {
-				tool.replaceClass(this, "icon-more-screen-green", "icon-more-screen");
-			} else {
-				tool.replaceClass(this, "icon-more-screen", "icon-more-screen-green");
-			}
-			dataContainer.set("moreScreen", !moreScreen);
-			layout.layoutSmallVideo();
-			layout.resizeControl();
-		});
-
-		initPage();
-	})
 </script>
 </html>

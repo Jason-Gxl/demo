@@ -9,6 +9,7 @@
     line-height: 45px;
     border-bottom: solid 1px #cdcdcd;
     box-sizing: border-box;
+    background: #575757;
 }
 
 .dialog-wrap .dialog-title-wrap .dialog-title {
@@ -87,6 +88,35 @@
 	left: 0;
 	z-index: 1000;
 	background: rgba(0, 0, 0, 0.3);
+}
+
+.dialog-wrap .dialog-title-wrap .dialog-close {
+    background: url(../Meetting/icons.png) no-repeat -609px 12px;
+    width: 45px;
+    height: 45px;
+}
+
+.dialog-wrap .dialog-close {
+    display: inline-block;
+    background: url(../Meetting/icons.png) no-repeat -616px 5px;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.dialog-wrap .dialog-close:hover {
+	background-color: rgba(204, 204, 204, 0.8);
+}
+
+.dialog-wrap .dialog-close.hide {
+	display: none;
+}
+
+.dialog-wrap .dialog-content-wrap {
+	color: #666;
 }
 
 .hidden {

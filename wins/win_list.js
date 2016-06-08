@@ -30,11 +30,12 @@
 	var baseHtml = "\
 			<div id='$DIALOGID$' class='dialog-wrap dialog-hide'>\
 				$HEADER$\
+				<i class='dialog-close hide'></i>\
 				<div class='dialog-content-wrap'>$CONTENT$</div>\
 				$FOOTER$\
 			</div>";
 
-	var headerHtml = "<div class='dialog-title-wrap'><h2 class='dialog-title'>$TITLE$</h2></div>",
+	var headerHtml = "<div class='dialog-title-wrap'><h3 class='dialog-title'>$TITLE$</h3><i class='dialog-close'></i></div>",
 		footerHtml = "<div class='btn-wrap'>$BTNS$</div>",
 		closeBtnHtml = "<button class='btn btn-close ml10'>关闭</button>",
 		sureBtnHtml = "<button class='btn btn-primary btn-sure ml10'>确定</button>";
@@ -53,7 +54,7 @@
 			var winHtml = baseHtml.replace("$DIALOGID$", options.winId)
 					.replace("$HEADER$", options.header?headerHtml:"")
 					.replace("$TITLE$", options.title)
-					.replace("$CONTENT$", options.content || document.getElementById(options.id).innerHTML)
+					.replace("$CONTENT$", options.content || (options.id && document.getElementById(options.id).innerHTML))
 					.replace("$FOOTER$", options.footer?footerHtml:"")
 					.replace("$BTNS$", btns);
 
@@ -61,13 +62,15 @@
 
 			var winObj = doc.getElementById(options.winId),
 				closeBtn = winObj.getElementsByClassName("btn-close")[0],
-				sureBtn = winObj.getElementsByClassName("btn-sure")[0];
+				sureBtn = winObj.getElementsByClassName("btn-sure")[0],
+				shutBtns = winObj.getElementsByClassName("dialog-close"),
+				len = shutBtns.length;
+
 			self.contentObj = winObj.getElementsByClassName("dialog-content-wrap")[0];
 			self.winObj = winObj;
 
 			if(closeBtn) {
 				tool.addEvent(closeBtn, "click", function() {
-					options.beforeClose.call(self);
 					self.close();
 				});
 			}
@@ -76,6 +79,16 @@
 				tool.addEvent(sureBtn, "click", function() {
 					options.sure.call(self);
 				});
+			}
+
+			while(len--) {
+				tool.addEvent(shutBtns[len], "click", function(){
+					self.close();
+				});
+			}
+
+			if(!options.header) {
+				tool.removeClass(shutBtns[0], "hide");
 			}
 
 			if(options.mask && !mask) {
@@ -134,6 +147,13 @@
 			options.isShow = true;
 		},
 		close: function() {
+			var self = this,
+				options = self.options;
+
+			options.beforeClose.call(self);
+			self.hideWin();
+		},
+		hideWin: function() {
 			var self = this,
 				options = self.options;
 

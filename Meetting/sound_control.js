@@ -67,11 +67,7 @@
 				self.controlBtnInfo.x = this.offsetLeft;
 				self.controlBtnInfo.y = this.offsetTop;
 				self.distance = e.clientX - self.controlWrapInfo.x - self.controlBtnInfo.x;
-				if(window.addEventListener) {
-					window.document.addEventListener("mousemove", move, false);
-				} else {
-					window.document.attachEvent("mousemove", move);
-				}
+				tool.addEvent(window.document, "mousemove", move);
 				e.preventDefault();
 				e.stopPropagation();
 			});

@@ -18,6 +18,10 @@ ul {
     list-style: none;
 }
 
+a {
+    text-decoration: none;
+}
+
 .header {
     width: 100%;
     height: 50px;
@@ -257,14 +261,14 @@ ul {
 	border-radius: 3px;
 }
 
-.header .more-app-list-wrap {
+.more-list-wrap {
 	position: absolute;
 	width: 124px;
 	z-index: 2;
 	margin-left: -30px;
 }
 
-.header .more-app-list-wrap .more-app-list {
+.more-list-wrap .more-list {
     width: 100%;
     padding: 1px;
     background: #eaeaea;
@@ -273,17 +277,18 @@ ul {
     box-shadow: 0 0 10px #c8c8c8;
 }
 
-.header .more-app-list-wrap .more-app-list .more-app-item {
+.more-list-wrap .more-list .more-list-item {
     line-height: 34px;
     padding-left: 20px;
     cursor: pointer;
 }
 
-.header .more-app-list-wrap .more-app-list .more-app-item:hover {
+.more-list-wrap .more-list .more-list-item:hover {
 	background: #c0c0c0;
+    font-weight: bold;
 }
 
-.more-app-wrap .arrow-up {
+.more-list-wrap .arrow-up {
 	width: 0;
     height: 0;
     border-left: 10px solid transparent;
@@ -292,6 +297,10 @@ ul {
     position: absolute;
     margin-top: -10px;
     margin-left: 54px;
+}
+
+.record-wrap .more-list-wrap {
+    margin-left: -45px;
 }
 
 .control-wrap .title {
@@ -339,10 +348,18 @@ ul {
 .sound-wrap .icon {
     cursor: pointer;
 }
-
-.header .camera, .header .record {
+.header .camera {
     margin-top: 15px;
     margin-right: 20px;
+}
+.header .record {
+    margin-top: 13px;
+    margin-right: 20px;
+}
+
+.header .record:hover {
+    background-color: #7f7f7f;
+    border-radius: 3px;
 }
 
 .container .menu-container {
@@ -478,6 +495,11 @@ ul {
     top: 0;
 }
 
+.video-layout-list {
+    overflow: hidden;
+    padding: 20px;
+}
+
 .video-layout-list .video-layout-item .icon {
     background-color: #3a3e41;
 }
@@ -514,12 +536,111 @@ ul {
     background-color: inherit;
 }
 
+.record-hint {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 6px 14px;
+    display: inline-block;
+}
+
+.record-hint .record-time {
+    color: #ff0000;
+}
+
+.record-hint .icon-recording {
+    position: absolute;
+}
+
+.record-hint .stop-record-btn {
+    color: #dddddd;
+    text-decoration: none;
+}
+
+.loop-setting-wrap {
+    width: 420px;
+    padding: 20px 30px 0 30px;
+}
+
+.loop-setting-wrap span, .loop-setting-wrap label {
+    display: inline-block;
+    width: 100%;
+}
+
+.loop-setting-wrap label {
+    width: 100px;
+    text-align: right;
+}
+
+.loop-setting-wrap select, .loop-setting-wrap input {
+    width: 100px;
+    height: 30px;
+}
+
+.dialog-btns-wrap {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.dialog-btns-wrap a {
+    display: inline-block;
+    width: 120px;
+    height: 34px;
+    line-height: 34px;
+    color: #fff;
+}
+
+.dialog-btns-wrap .dialog-btn-sure {
+   background: #1CC840;
+}
+
+.dialog-btns-wrap .dialog-btn-cancel {
+    background: #B2B6BF;
+}
+
+.no-speak-wrap {
+    padding: 20px 30px 0 30px;
+    width: 288px;
+}
+
+.no-speak-wrap .dialog-hint-content {
+    display: inline-block;
+    width: 100%;
+    font-size: 18px;
+}
+
+.calling-main-wrap {
+    padding: 20px 30px 20px 30px;
+    width: 500px;
+}
+
+.calling-main-wrap .arrived-list-wrap, .calling-main-wrap .nonarrival-list-wrap {
+    border-radius: 5px;
+    height: 150px;
+}
+
+.calling-main-wrap .calling-time-wrap .calling-time {
+    color: #1FC53E;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.calling-main-wrap li {
+    display: inline-block;
+    width: 19%;
+    text-align: center;
+    line-height: 30px;
+}
+
 .fl {float: left;}
 .fr {float: right;}
 .ml5 {margin-left: 5px;}
 .ml10 {margin-left: 10px;}
+.ml35 {margin-left: 35px;}
 .mt10 {margin-top: 10px;}
 .mt15 {margin-top: 15px;}
+.mt20 {margin-top: 20px;}
+.mt30 {margin-top: 30px;}
 .mr5 {margin-right: 5px;}
 .mr10 {margin-right: 10px;}
 .mr20 {margin-right: 20px;}
@@ -587,9 +708,14 @@ ul {
     height: 20px;
 }
 .icon-record {
-	background: url(./icons.png) no-repeat -305px 0px;
-    width: 23px;
-    height: 20px;
+	background: url(./icons.png) no-repeat -295px 2px;
+    width: 45px;
+    height: 24px;
+}
+.icon-record:hover {
+    background: url(./icons.png) no-repeat -536px 1px;
+    width: 45px;
+    height: 24px;
 }
 .icon-turn-mode {
     background: url(./icons.png) no-repeat 35px -35px;
@@ -772,4 +898,10 @@ ul {
     background: url(./icons.png) no-repeat -136px -340px;
     width: 130px;
     height: 80px;
+}
+
+.icon-recording {
+    background: url(./icons.png) no-repeat -585px -2px;
+    width: 19px;
+    height: 19px;
 }

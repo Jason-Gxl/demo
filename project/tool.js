@@ -126,15 +126,9 @@
 
 		var addEvent = function(item) {
 			if(window.addEventListener) {
-				item.addEventListener(type, function() {
-					var ev = arguments[0] || window.event;
-					fn.call(this, ev);
-				}, use||false);
+				item.addEventListener(type, fn, use||false);
 			} else {
-				item.attachEvent(type, function() {
-					var ev = arguments[0] || window.event;
-					fn.call(this, ev);
-				});
+				item.attachEvent(type, fn);
 			}
 		}
 

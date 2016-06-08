@@ -80,8 +80,8 @@
 			var videoCount = dataContainer.get("videoCount"),
 				videoBoxWrapWidth = videoBoxWrap.clientWidth,
 				videoBoxWrapHeight = videoBoxWrap.clientHeight,
-				perVideoBox = null,
 				moreScreen = dataContainer.get("moreScreen"),
+				perVideoBox = null,
 				i = 1;
 
 			var len = videoBoxList.length;
@@ -312,7 +312,7 @@
 						if(flag) {
 							if(0===i) {
 								videoBox.style.left = (videoBoxWrapWidth - videoBox.offsetWidth)/2 + "px";
-								videoBox.top = 0;
+								videoBox.style.top = 0;
 							}
 						} else {
 							if(0===i) {
