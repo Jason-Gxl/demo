@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>duangJS</title>
+</head>
+<body>
+</body>
+<script type="text/javascript" src="./duang.js"></script>
+<script type="text/javascript">
+(function() {
+	duang.module("module1")
+	.service("service1", [], function() {
+		return {
+			get: function() {
+				return 1;
+			}
+		}
+	})
+	.controller("controller1", ["service1"], function(service1) {
+		console.log(service1.get());
+	});
+
+	duang.module("module", ["module1"])
+	.controller("controller1", ["service1"], function(service1) {
+		console.log(service1.get());
+	});
+}())
+</script>
+</html>

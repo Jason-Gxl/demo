@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Reader</title>
+</head>
+<body>
+	<input type="file" id="file_input"/>
+	<div>
+		<canvas id="visualizer" width="800" height="400">Your browser does not support Canvas tag.</canvas> 
+	</div>
+</body>
+<script type="text/javascript" src="./reader.js"></script>
+<script type="text/javascript">
+	var doc = document,
+		win = window,
+		slice = Array.prototype.slice,
+		AudioContext = win.AudioContext || win.webkitAudioContext;
+
+	var fileInput = document.getElementById("file_input"),
+		fileReader = new FileReader(),
+		audioContext = new AudioContext(),
+		audioBufferSoureNode = null,
+		analyser = audioContext.createAnalyser(),
+		canvas = doc.getElementById("visualizer");
+
+	analyser.fftSize = 256;
+
+	fileInput.addEventListener("change", function() {
+		var fileInfo = this.files[0];
+		fileReader.readAsArrayBuffer(fileInfo);
+	}, false);
+
+	fileReader.addEventListener("load", function() {
+		audioContext.decodeAudioData(this.result, function(buffer) {
+			audioBufferSoureNode && audioBufferSoureNode.stop();
+			audioBufferSoureNode = audioContext.createBufferSource()
+			audioBufferSoureNode.connect(analyser);
+			analyser.connect(audioContext.destination);
+			audioBufferSoureNode.buffer = buffer;
+			audioBufferSoureNode.start(0);
+			win.requestAnimationFrame(render);
+		}, function() {});
+	}, false);
+
+	var render = function() {
+		var ctx = canvas.getContext("2d");
+		ctx.strokeStyle = "#00d0ff"; 
+		ctx.lineWidth = 2; 
+		ctx.clearRect(0, 0, canvas.width, canvas.height); 
+		var dataArray = new Uint8Array(analyser.frequencyBinCount); 
+		analyser.getByteFrequencyData(dataArray); 
+		var step = Math.round(dataArray.length / 60); 
+		for (var i = 0; i < 40; i++) { 
+			var energy = (dataArray[step * i] / 256.0) * 50; 
+			for (var j = 0; j < energy; j++) { 
+				ctx.beginPath(); 
+				ctx.moveTo(20 * i + 2, 200 + 4 * j); 
+				ctx.lineTo(20 * (i + 1) - 2, 200 + 4 * j); 
+				ctx.stroke(); 
+				ctx.beginPath(); 
+				ctx.moveTo(20 * i + 2, 200 - 4 * j); 
+				ctx.lineTo(20 * (i + 1) - 2, 200 - 4 * j);
+				ctx.stroke(); 
+			} 
+			ctx.beginPath(); 
+			ctx.moveTo(20 * i + 2, 200); 
+			ctx.lineTo(20 * (i + 1) - 2, 200);
+			ctx.stroke(); 
+		}
+
+		win.requestAnimationFrame(render);
+	}
+</script>
+</html>
