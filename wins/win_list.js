@@ -1,6 +1,7 @@
 (function(global) {
 	"use strict"
 	var tool = global.vm.module["tool"],
+		doc = window.document,
 		baseConfig = {
 			id: "",
 			header: true,
@@ -16,7 +17,7 @@
 			isShow: false,
 			closeBtn: false,
 			sureBtn: true,
-			beforeClose: function() {},
+			close: function() {},
 			sure: function() {}
 		};
 
@@ -24,8 +25,7 @@
 		confirmCount = 0,
 		noticeCount = 0,
 		mask = null,
-		maskCount = 0,
-		doc = window.document;
+		maskCount = 0;
 
 	var baseHtml = "\
 			<div id='$DIALOGID$' class='dialog-wrap dialog-hide'>\
@@ -37,8 +37,43 @@
 
 	var headerHtml = "<div class='dialog-title-wrap'><h3 class='dialog-title'>$TITLE$</h3><i class='dialog-close'></i></div>",
 		footerHtml = "<div class='btn-wrap'>$BTNS$</div>",
-		closeBtnHtml = "<button class='btn btn-close ml10'>关闭</button>",
+		closeBtnHtml = "<button class='btn btn-close ml10'>取消</button>",
 		sureBtnHtml = "<button class='btn btn-primary btn-sure ml10'>确定</button>";
+
+	function createMask() {
+		mask = doc.createElement("DIV");
+		mask.className = "dialog-mask hide";
+		doc.body.appendChild(mask);
+	}
+
+	function showDialog(obj) {
+		var options = obj.options;
+
+		if(options.mask) {
+			tool.replaceClass(mask, "hide", "show");
+			maskCount++;
+		}
+
+		if(!isNaN(options.width)) {
+			obj.winObj.style.width = options.width + "px";
+		}
+
+		if(!isNaN(options.height)) {
+			obj.winObj.style.height = options.height + "px";
+		}
+
+		tool.replaceClass(obj.winObj, "dialog-hide", "dialog-show");
+
+		obj.rePosition();
+
+		tool.addEvent(window, "resize", function() {
+			if(options.isShow) {
+				obj.rePosition();
+			}
+		});
+
+		options.isShow = true;
+	}
 
 	var Win = function() {
 		this.name = "Win";
@@ -61,29 +96,17 @@
 			tool.insertHTML(doc.body, "BeforeEnd", winHtml);
 
 			var winObj = doc.getElementById(options.winId),
-				closeBtn = winObj.getElementsByClassName("btn-close")[0],
-				sureBtn = winObj.getElementsByClassName("btn-sure")[0],
-				shutBtns = winObj.getElementsByClassName("dialog-close"),
-				len = shutBtns.length;
+				shutBtns = winObj.getElementsByClassName("dialog-close");
 
+			self.closeBtn = winObj.getElementsByClassName("btn-close")[0];
+			self.sureBtn = winObj.getElementsByClassName("btn-sure")[0];
 			self.contentObj = winObj.getElementsByClassName("dialog-content-wrap")[0];
 			self.winObj = winObj;
 
-			if(closeBtn) {
-				tool.addEvent(closeBtn, "click", function() {
-					self.close();
-				});
-			}
-
-			if(sureBtn) {
-				tool.addEvent(sureBtn, "click", function() {
-					options.sure.call(self);
-				});
-			}
-
+			var len = shutBtns.length;
 			while(len--) {
 				tool.addEvent(shutBtns[len], "click", function(){
-					self.close();
+					self.hide();
 				});
 			}
 
@@ -92,68 +115,16 @@
 			}
 
 			if(options.mask && !mask) {
-				mask = doc.createElement("DIV");
-				mask.className = "dialog-mask hide";
-				doc.body.appendChild(mask);
+				createMask();
 			}
 		};
 	};
 
 	Win.prototype = {
 		constructor: Win,
-		open: function(content, type) {
-			var self = this,
-				options = self.options;
-
-			if(options.isShow) return ;
-
-			if(options.mask) {
-				tool.replaceClass(mask, "hide", "show");
-				maskCount++;
-			}
-
-			if(!isNaN(options.width)) {
-				self.winObj.style.width = options.width + "px";
-			}
-
-			if(!isNaN(options.height)) {
-				self.winObj.style.height = options.height + "px";
-			}
-
-			if(content) {
-				if("append"===type) {
-					tool.insertHTML(self.contentObj, "BeforeEnd", content);
-				} else {
-					self.contentObj.innerHTML = content;
-				}
-			}
-
-			tool.replaceClass(self.winObj, "dialog-hide", "dialog-show");
-
-			self.rePosition();
-
-			if(options.auto) {
-				setTimeout(function() {
-					self.close();
-				}, options.time);
-			}
-
-			tool.addEvent(window, "resize", function() {
-				if(options.isShow) {
-					self.rePosition();
-				}
-			});
-
-			options.isShow = true;
-		},
-		close: function() {
-			var self = this,
-				options = self.options;
-
-			options.beforeClose.call(self);
-			self.hideWin();
-		},
-		hideWin: function() {
+		open: function() {},
+		close: function() {},
+		hide: function() {
 			var self = this,
 				options = self.options;
 
@@ -203,6 +174,7 @@
 		}
 	};
 
+// ================================================================Alert======================================================================
 	var Alert = function(opts) {
 		Win.call(this);
 		this.name = "Alert";
@@ -210,9 +182,53 @@
 		this.options = tool.deepCopy(opts, this.options);
 		this.options.winId = "myAlert_" + alertCount++;
 		this.init();
+
+		tool.addEvent(self.closeBtn, "click", function() {
+			self.close();
+		});
 	};
 	Alert.prototype = new Win();
+	Alert.prototype.open = function(p1, p2) {
+		var self = this,
+			options = self.options;
 
+		if(options.isShow) return ;
+
+		if("string"===typeof(p1)) {
+			self.contentObj.innerHTML = p1;
+
+			self.sureBtn.onclick = function() {
+				if("function"===typeof(p2)) {
+					p2.call(self);
+				} else {
+					options.sure.call(self);
+				}
+				self.hide();
+			};
+		} else if("function"===typeof(p1)) {
+			self.sureBtn.onclick = function() {
+				p1.call(self);
+				self.hide();
+			};
+		} else {
+			self.sureBtn.onclick = function() {
+				options.sure.call(self);
+				self.hide();
+			};
+		}
+
+		showDialog(self);
+	};
+	Alert.prototype.close = function() {
+		var self = this,
+			options = self.options;
+
+		options.close.call(self);
+		self.hide();
+	};
+// ================================================================Alert======================================================================
+
+// ================================================================Confirm======================================================================
 	var Confirm = function(opts) {
 		Win.call(this);
 		this.name = "Confirm";
@@ -223,7 +239,60 @@
 		this.init();
 	};
 	Confirm.prototype = new Win();
+	Confirm.prototype.open = function(p1, p2, p3) {
+		var self = this,
+			options = self.options;
 
+		if(options.isShow) return ;
+
+		if("string"===typeof(p1) || "undefined"===typeof(p1) || null==p1) {
+			self.contentObj.innerHTML = p1;
+
+			self.sureBtn.onclick = function() {
+				if("function"===typeof(p2)) {
+					p2.call(self);
+				} else {
+					options.sure.call(self);
+				}
+				self.hide();
+			};
+
+			self.closeBtn.onclick = function() {
+				if("function"===typeof(p3)) {
+					p3.call(self);
+					self.hide();
+				} else {
+					self.close();
+				}
+			}
+		} else {
+			self.sureBtn.onclick = function() {
+				p1.call(self);
+				self.hide();
+			};
+
+			self.closeBtn.onclick = function() {
+				if("function"===typeof(p2)) {
+					p2.call(self);
+					self.hide();
+				} else {
+					self.close();
+				}
+			};
+		}
+
+		showDialog(self);
+	};
+	Confirm.prototype.close = function() {
+		var self = this,
+			options = self.options;
+
+		options.close.call(self);
+		self.hide();
+	};
+// ================================================================Confirm======================================================================
+
+// ================================================================Notice======================================================================
 	var Notice = function(opts) {
 		Win.call(this);
 		this.name = "Notice";
@@ -234,6 +303,7 @@
 		this.init();
 	};
 	Notice.prototype = new Win();
+// ================================================================Notice======================================================================
 
 	global.vm = global.vm || {};
 	global.vm.module = global.vm.module || {};
