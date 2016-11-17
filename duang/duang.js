@@ -62,10 +62,10 @@
 						obj[name] = deps.call(this);
 						break;
 					case "[object Array]"===toString.call(deps):
-						var i = 0,
-							len = deps.length;
-
 						try {
+							var i = 0,
+								len = deps.length;
+							
 							while(i<len) {
 								var mObj = getDepend(moduleName, deps[i]);
 								if(!mObj) throw new Error(5008, deps[i]+" is undefined");
@@ -79,7 +79,7 @@
 						obj[name] = impl.apply(this, deps);
 						break;
 					default:
-						obj[name] = impl.apply(this, getDepend(deps));
+						obj[name] = impl.call(this, getDepend(moduleName, [deps]));
 					}
 				} else {
 					obj[name] = impl.call(this);
