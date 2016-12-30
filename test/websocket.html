@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>websocket</title>
+	<meta charset="utf8">
+</head>
+<body>
+	<div>
+		<label>IP：</label><input type="text" name="ip" id="ip_input"/>
+		<label>PORT:</label><input type="text" name="port" id="port_input">
+		<input type="button" value="连接" id="link_btn">
+	</div>
+	<div>
+		<textarea id="message_box" style="width:370px;"></textarea>
+		<input type="button" value="发送" id="send_btn">
+	</div>
+	<ul id="message_show_board" style="height:300px;overflow:auto;width:500px;"></ul>
+</body>
+<script type="text/javascript">
+	(function() {
+		var doc = document,
+			win = window,
+			messageShowBoard = doc.getElementById("message_show_board"),
+			messageBox = doc.getElementById("message_box");
+
+		var addEvent = doc.addEventListener?function(target, type, fn, use) {
+			target.addEventListener(type, fn, use||false);
+		}:function(target, type, fn) {
+			target.attachEvent("on"+type, fn);
+		};
+
+		addEvent(doc.getElementById("link_btn"), "click", function() {
+			createSocket();
+		});
+
+		function createSocket() {
+			if(win["ws"] && win["ws"].OPEN===win["ws"].readyState) return ;
+
+			var ip = document.getElementById("ip_input").value.replace(/(^\s*)|(\s*$)/g, ""),
+				port = document.getElementById("port_input").value.replace(/(^\s*)|(\s*$)/g, "");
+
+			if(!ip) {
+				alert("请输入有效IP");
+				return ;
+			}
+
+			if(!port) {
+				alert("请输入有效PORT");
+				return 
+			}
+
+			win["ws"] = new WebSocket("ws://"+ip+":"+port);
+
+			win["ws"].onopen = function() {
+				messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>socket 连接成功！</li>";
+			};
+
+			win["ws"].onmessage = function(msg) {
+				msg = "[object String]"!==Object.prototype.toString.call(msg)?JSON.stringify(msg):msg;
+				messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>接收："+msg+"</li>";
+			};
+
+			win["ws"].onclose = function() {
+				messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>socket 断开连接！</li>";
+			};
+
+			win["ws"].onerror = function() {
+				messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>socket 异常！</li>";
+				createSocket();
+				messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>socket 正在尝试重连！</li>";
+			};
+		}
+
+		addEvent(doc.getElementById("send_btn"), "click", function() {
+			var msg = messageBox.value;
+			if(!win["ws"] || win["ws"].OPEN!==win["ws"].readyState) {
+				createSocket();
+				return ;
+			}
+			win["ws"].send(msg);
+			messageShowBoard.innerHTML = messageShowBoard.innerHTML + "<li>发送：" +msg+ "</li>";
+		});
+	}())
+</script>
+</html>

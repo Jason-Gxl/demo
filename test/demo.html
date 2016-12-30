@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -5,34 +6,38 @@
 </head>
 <body>
     <video id="video" width="640" height="480" autoplay></video>
+    <span title="">11</span>
 </body>
+<script type="text/javascript" src="./demo.js"></script>
 <script type="text/javascript">
 // Put event listeners into place
 window.addEventListener("DOMContentLoaded", function() {
     // Grab elements, create settings, etc.
     var video = document.getElementById("video"),
-        videoObj = {"video": true },
+        videoObj = {"video": true},
         errBack = function(error) {
             console.log("Video capture error: ", error.code); 
         };
 
     // Put video listeners into place
-    if(navigator.getUserMedia) { // Standard
-        navigator.getUserMedia(videoObj, function(stream) {
-            video.src = stream;
-            video.play();
-        }, errBack);
-    } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
-        navigator.webkitGetUserMedia(videoObj, function(stream){
-            video.src = window.webkitURL.createObjectURL(stream);
-            video.play();
-        }, errBack);
-    }
-    else if(navigator.mozGetUserMedia) { // Firefox-prefixed
-        navigator.mozGetUserMedia(videoObj, function(stream){
-            video.src = window.URL.createObjectURL(stream);
-            video.play();
-        }, errBack);
+    switch(true) {
+        case void 0!==navigator.webkitGetUserMedia: // WebKit-prefixed
+            navigator.webkitGetUserMedia(videoObj, function(stream){
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            }, errBack);
+        break;
+        case void 0!== navigator.mozGetUserMedia: // Firefox-prefixed
+            navigator.mozGetUserMedia(videoObj, function(stream){
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            }, errBack);
+        break;
+        default: // Standard
+            navigator.getUserMedia(videoObj, function(stream) {
+                video.src = stream;
+                video.play();
+            }, errBack);
     }
 }, false);
 </script>

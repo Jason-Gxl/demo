@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>uploadFile</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<input type="file" id="uploader">
+	<div id="progress_wrap"></div>
+</body>
+<script type="text/javascript" src="../tool.js"></script>
+<script type="text/javascript" src="./upload_file.js"></script>
+<script type="text/javascript">
+	fileUploader.init({
+		uploaderBox: document.getElementById("uploader"),
+		progressWrap: document.getElementById("progress_wrap"),
+		//maxSize: 1024,
+		accept: "*.png,*.jpg",
+		progressWrap: "",
+		auto: true,
+		multi: true,
+		sizeOver: function(files) {
+			console.log(files);
+		},
+		success: function() {
+
+		},
+		error: function() {
+
+		}
+	});
+</script>
+</html>
