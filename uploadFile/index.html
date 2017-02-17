@@ -3,6 +3,7 @@
 <head>
 	<title>uploadFile</title>
 	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./upload_file.css">
 </head>
 <body>
 	<input type="file" id="uploader">
@@ -11,12 +12,11 @@
 <script type="text/javascript" src="../tool.js"></script>
 <script type="text/javascript" src="./upload_file.js"></script>
 <script type="text/javascript">
-	fileUploader.init({
-		uploaderBox: document.getElementById("uploader"),
-		progressWrap: document.getElementById("progress_wrap"),
+	var aaa = fileUploader.init({
+		uploadBox: document.getElementById("uploader"),
+		proWrap: document.getElementById("progress_wrap"),
 		//maxSize: 1024,
 		accept: "*.png,*.jpg",
-		progressWrap: "",
 		auto: true,
 		multi: true,
 		sizeOver: function(files) {

@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>webRTC</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<video id="webrtc_video"></video>
+</body>
+<script type="text/javascript" src="./index.js"></script>
+<script type="text/javascript">
+	(function() {
+		navigator.getUserMedia || (navigator.getUserMedia = navigator.mozGetUserMedia  || navigator.webkitGetUserMedia || navigator.msGetUserMedia);
+
+		navigator.getUserMedia({video: true, audio: true}, function(stream) {
+			var video = document.getElementById("webrtc_video");
+
+			if(window.URL) {
+				video.src = window.URL.createObjectURL(stream);
+			} else {
+				video.src = stream;
+			}
+
+			video.autoplay = true;
+		}, function() {
+
+		});
+	}())
+</script>
+</html>

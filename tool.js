@@ -1,9 +1,9 @@
 /**
- * 
+ *
  * 工具类
  * @Author Jason
  * @Date 2016-9-23
- * 
+ *
  */
 (function(global, fn) {
 	var turnBox = null,
@@ -13,28 +13,28 @@
 		slice = Array.prototype.slice,
 		duang = fn.call(Object.create(null)),
 		base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-		hash = {  
-	        'colgroup': 'table',  
-	        'col': 'colgroup',  
-	        'thead': 'table',  
-	        'tfoot': 'table',  
-	        'tbody': 'table',
-	        'tr': 'tbody',  
-	        'th': 'tr',  
-	        'td': 'tr',  
-	        'optgroup': 'select',  
-	        'option': 'optgroup',  
-	        'legend': 'fieldset'
-	    },
-	    base64DecodeChars = new Array(
-    	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
-    	    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
-    	    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    	    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-    	    -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    	    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
+		hash = {
+			'colgroup': 'table',
+			'col': 'colgroup',
+			'thead': 'table',
+			'tfoot': 'table',
+			'tbody': 'table',
+			'tr': 'tbody',
+			'th': 'tr',
+			'td': 'tr',
+			'optgroup': 'select',
+			'option': 'optgroup',
+			'legend': 'fieldset'
+		},
+		base64DecodeChars = new Array(
+			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
+			52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
+			-1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+			-1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+			41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
 
 	//用户自定义事件构造器
 	var CustomerEvent = function() {
@@ -64,11 +64,11 @@
 					count++;
 				}
 			}
-			
+
 			if(0===count) {
 				var _handle = {
-						target: self,
-						events: {}
+					target: self,
+					events: {}
 				};
 				_handle.events[type] = [];
 				_handle.events[type].push(fn);
@@ -101,7 +101,7 @@
 			var self = this,
 				_handles = self.handles,
 				len = _handles.length;
-			
+
 			while(len--) {
 				var _handle = _handles[len],
 					_target = _handle.target;
@@ -112,10 +112,10 @@
 					if(!_fns) return ;
 					var	_len = _fns.length,
 						i = 0;
-					
+
 					while(i<_len) {
 						var _fn = _fns[i];
-						
+
 						if(fn) {
 							if("[object Array]"===toString.call(fn)) {
 								if(-1!==fn.indexOf(_fn)) {
@@ -128,7 +128,7 @@
 						} else {
 							"function"===typeof _fn && _fn.call(self, obj.message||"");
 						}
-						
+
 						i++;
 					}
 				}
@@ -141,7 +141,7 @@
 		this.name = "Tool";
 		turnBox = document.createElement("DIV");
 	};
-	
+
 	Tool.CustomerEvent = CustomerEvent;
 	Tool.prototype = new CustomerEvent();
 	Tool.prototype.constructor = Tool;
@@ -154,54 +154,27 @@
 	 */
 	Tool.prototype.deepCopy = function(newObj, oldObj) {
 		if(!newObj) return ;
-
 		var oldObj = oldObj || ("[object Object]"===toString.call(newObj)?{}:[]);
 
 		if(toString.call(oldObj)!==toString.call(newObj)) {
 			throw "类型不匹配！";
 		}
-		
-		if("[object Object]"===toString.call(newObj)) {
-			for (var key in newObj) {
-				var val = newObj[key],
-					type = toString.call(val);
-				
-				if("[object Object]"===type || "[object Array]"===type) {
-					var _target = "[object Object]"===type?{}:[];
-					
-					if("[object Array]"===toString.call(oldObj)) {
-						oldObj.push(_target);
-					} else {
-						oldObj[key] = _target;
-					}
-					
-					this.deepCopy(val, _target);
-				} else {
-					if("[object Array]"===toString.call(oldObj)) {
-						oldObj.push(val);
-					} else {
-						oldObj[key] = val;
-					}
-				}
-			}
-		} else {
-			var i = 0,
-				len = newObj.length;
-			
-			if(len>i) {
-				do {
-					var val = newObj[i],
+
+		switch(toString.call(newObj)) {
+			case "[object Object]":
+				for (var key in newObj) {
+					var val = newObj[key],
 						type = toString.call(val);
-					
+
 					if("[object Object]"===type || "[object Array]"===type) {
 						var _target = "[object Object]"===type?{}:[];
-						
+
 						if("[object Array]"===toString.call(oldObj)) {
 							oldObj.push(_target);
 						} else {
 							oldObj[key] = _target;
 						}
-						
+
 						this.deepCopy(val, _target);
 					} else {
 						if("[object Array]"===toString.call(oldObj)) {
@@ -210,16 +183,52 @@
 							oldObj[key] = val;
 						}
 					}
-				} while(++i<len)
-			} else {
-				if("[object Array]"===toString.call(oldObj)) {
-					oldObj.push([]);
-				} else {
-					oldObj[key] = [];
 				}
-			}
+				break;
+			case "[object Array]":
+				var i = 0,
+					len = newObj.length;
+
+				if(len>i) {
+					do {
+						var _newObj = newObj[i];
+
+						for(var key in _newObj) {
+							var val = _newObj[key],
+								type = toString.call(val);
+
+							if("[object Object]"===type || "[object Array]"===type) {
+								var _target = "[object Object]"===type?{}:[];
+
+								if("[object Array]"===toString.call(oldObj)) {
+									oldObj.push(_target);
+								} else {
+									oldObj[key] = _target;
+								}
+
+								this.deepCopy(val, _target);
+							} else {
+								if("[object Array]"===toString.call(oldObj)) {
+									oldObj.push(val);
+								} else {
+									oldObj[key] = val;
+								}
+							}
+						}
+
+					} while(++i<len)
+				} else {
+					if("[object Array]"===toString.call(oldObj)) {
+						oldObj.push([]);
+					} else {
+						oldObj[key] = [];
+					}
+				}
+				break;
+			default:
+				oldObj = newObj.valueOf();
 		}
-		
+
 		return oldObj;
 	};
 
@@ -234,7 +243,7 @@
 		for(; str.length<num; str+=(Math.random()+"").substr(2));
 		return str.substr(0, num);
 	};
-	
+
 	var addEvent = window.addEventListener?function(item, type, fn, use) {
 		if(!item) return ;
 		item.addEventListener(type, fn, use||false);
@@ -242,7 +251,7 @@
 		if(!item) return ;
 		item.attachEvent(type, fn);
 	};
-		
+
 	/**
 	 * 为元素添加事件
 	 * target 需要添加事件的元素标识，可包含的类型（元素对象，id id要以#打头，class class要以.打头， 数组 数组中可包含元素对象 id class）
@@ -306,17 +315,17 @@
 	Tool.prototype.delEvent = function(target, type, fn, use) {
 		var self = this;
 		var toString = Object.prototype.toString;
-		
+
 		var delEvent = function(item) {
 			if(!item) return ;
-			
+
 			if(window.removeEventListener) {
 				item.removeEventListener(type, fn, use||false);
 			} else {
 				item.detachEvent(type, fn);
 			}
 		}
-		
+
 		var getElement = function(selector) {
 			if("string"!==typeof(selector)) return ;
 
@@ -343,7 +352,7 @@
 		}
 
 		if("[object Array]"===toString.call(target)) {
-			var len = target.len;
+			var len = target.length;
 
 			while(len--) {
 				var _target = target[len];
@@ -369,12 +378,26 @@
 	 * val 存储的数据
 	 * time 数据过期时间，单位：毫秒
 	 */
-	Tool.prototype.setCookie = function(name, val, time) {
-		if(!name || !val || isNaN(time)) return;
-		var time = time || 1,
+	Tool.prototype.setCookie = function(name, val, config) {
+		if(!name || !val) return;
+		if(isNaN(config) && (config.time && isNaN(config.time))) return ;
+
+		var str = "",
+			time = (!isNaN(config)?config:config.time) || 1,
 			exp = new Date();
+
 		exp.setTime(exp.getTime() + time);
-		doc.cookie = name + "=" + escape(val) + ";expires=" + exp.toGMTString();
+		str = name + "=" + encodeURIComponent(val) + ";expires=" + exp.toUTCString();
+
+		if("[object Object]"===toString.call(config)) {
+			for(var key in config) {
+				if("time"!==key) {
+					str += ";" + key + "=" + config[key];
+				}
+			}
+		}
+
+		doc.cookie = str;
 	};
 
 	/**
@@ -384,9 +407,9 @@
 	Tool.prototype.getCookie = function(name) {
 		if(!name) return;
 		var arr = "",
-			reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+			reg = new RegExp("(^|\\b)"+name+"=([^;]*)(;|$)");
 		if(arr=doc.cookie.match(reg)) {
-			return unescape(arr[2]);
+			return decodeURIComponent(arr[2]);
 		} else {
 			return "";
 		}
@@ -402,7 +425,7 @@
 		if(!val) return ;
 		var exp = new Date();
 		exp.setTime(exp.getTime() - 1);
-		doc.cookie = name + "=" + escape(val) + ";expires=" + exp.toGMTString();
+		doc.cookie = name + "=" + encodeURIComponent(val) + ";expires=" + exp.toUTCString();
 	};
 
 	/**
@@ -421,30 +444,26 @@
 	 * classname 要添加的class名称
 	 */
 	Tool.prototype.addClass = function(ele, classname) {
-		if(!ele) return ;
-		
+		if(!ele || !classname) return ;
+		var reg = new RegExp("\\b"+classname+"\\b|$");
+
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0,
 				len = ele.length;
-			
 			if(i>=len) return ;
-			
+
 			do {
 				var el = ele[i];
-				if(1===el.nodeType) {
-					var classes = slice.call(el.classList, 0) || el.className.split(/\s+/);
-					if(-1===classes.indexOf(classname)) {
-						el.className = el.className.trim() + " " + classname;
-					}
-				}
+				1===el.nodeType && (el.className = el.className.replace(reg, function(val) {
+					return !val?" ":""+classname;
+				}));
 			} while(++i<len)
 		} else {
-			if(1!==ele.nodeType) return;
-			var classes = slice.call(ele.classList, 0) || ele.className.split(/\s+/);
-			if(-1!==classes.indexOf(classname)) return ;
-			ele.className = ele.className.trim() + " " + classname;
+			1===ele.nodeType && (ele.className = ele.className.replace(reg, function(val) {
+				return !val?" ":""+classname;
+			}));
 		}
-		
+
 		return ele;
 	};
 
@@ -453,25 +472,22 @@
 	 * 参数含义参考给元素添加class接口
 	 */
 	Tool.prototype.removeClass = function(ele, classname) {
-		if(!ele) return ;
-		
+		if(!ele || !classname) return ;
+		var reg = new RegExp(classname+"\\s?", "g");
+
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0,
 				len = ele.length;
-			
 			if(i>=len) return;
-			
+
 			do {
 				var el = ele[i];
-				
-				if(1===el.nodeType) {
-					el.className = el.className.replace(classname, "").trim();
-				}
+				1===el.nodeType && (el.className = el.className.replace(reg, ""));
 			} while(++i<len)
 		} else {
-			if(1!==ele.nodeType) return;
-			ele.className = ele.className.replace(classname, "").trim();
+			1===ele.nodeType && (ele.className = ele.className.replace(reg, ""));
 		}
+
 		return ele;
 	};
 
@@ -481,8 +497,30 @@
 	 * newClass 新的class
 	 */
 	Tool.prototype.replaceClass = function(ele, oldClass, newClass) {
-		this.removeClass(ele, oldClass);
-		this.addClass(ele, newClass);
+		if(!ele || (!oldClass && !newClass)) return ;
+
+		switch(true) {
+			case !oldClass && newClass:
+				this.addClass(ele, newClass);
+			break;
+			case oldClass && !newClass:
+				this.removeClass(ele, oldClass);
+			break;
+			default:
+				if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
+					var i = 0,
+						len = ele.length;
+					if(i>=len) return ;
+
+					do {
+						var el = ele[i];
+						1===el.nodeType && (el.className = el.className.replace(oldClass, newClass));
+					} while(++i<len)
+				} else {
+					1===ele.nodeType && (ele.className = ele.className.replace(oldClass, newClass));
+				}
+		}
+		
 		return ele;
 	};
 
@@ -493,15 +531,15 @@
 	 * html 新插入的元素字符串
 	 */
 	Tool.prototype.insertHTML = function(el, where, html) {
-		if (!el) return false;
-		where = where.toLowerCase();
-		
-		if (el.insertAdjacentHTML) {//IE
+		if (!el || !html) return false;
+		var where = where.toLowerCase() || "beforeend";
+
+		if (el.insertAdjacentHTML) {
 			el.insertAdjacentHTML(where, html);
 		} else {
 			var range = el.ownerDocument.createRange(),
 				frag = null;
-			
+
 			switch (where) {
 				case "beforebegin":
 					range.setStartBefore(el);
@@ -534,15 +572,15 @@
 			}
 		}
 	};
-	
+
 	//弃用，用createElement代替
 	/*Tool.prototype.turnStringToDom = function(str) {
-		turnBox.innerHTML = str;
-		var child = turnBox.children[0].cloneNode(true);
-		turnBox.innerHTML = "";
-		return child;
-	};*/
-	
+	 turnBox.innerHTML = str;
+	 var child = turnBox.children[0].cloneNode(true);
+	 turnBox.innerHTML = "";
+	 return child;
+	 };*/
+
 	/**
 	 * 创建flash对象
 	 * wrap 页面中的装载flash的容器对象
@@ -558,7 +596,7 @@
 			u = [f.shift(), f.join("?")],
 			wh = config.wh ? [config.wh[0]+"px", config.wh[1]+"px"] : ["100%", "100%"],
 			wmode = config.wmode || "transparent";
-	
+
 		var e = '<embed \
 				src="'+ u[0] +'" \
 				name="'+ id +'" \
@@ -573,7 +611,7 @@
 				width="'+ wh[0] +'" \
 				height="'+ wh[1] +'">\
 				</embed>';
-		
+
 		e = '<object class="FlashPlayer" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=11,0,0,0" width="'+ wh[0] +'" height="'+ wh[1] +'" id="'+ id +'">\
 				<param name="wmode" value="'+ wmode +'">\
 				<param name="allowFullScreen" value="true">\
@@ -583,15 +621,15 @@
 				<param name="movie" value="'+ u[0] +'">\
 				<param name="FlashVars" value="'+ u[1] +'">'+ e +'\
 			</object>';
-		
+
 		if (config.returnType == "string") {
 			return e;
 		}
-	
+
 		wrapBox.insertAdjacentHTML('afterBegin', e);
 		return document[id];
 	};
-	
+
 	/**
 	 * 将数字转换成时间字符串
 	 * num 数字
@@ -604,7 +642,7 @@
 		var second = Math.floor(num%3600%60);
 		return format.replace("HH", hour>=10?hour:"0"+hour).replace("mm", minute>=10?minute:"0"+minute).replace("ss", second>=10?second:"0"+second);
 	};
-	
+
 	/**
 	 * 将xml字符串转换成对象
 	 * xml 需要转换的xml字符串
@@ -616,9 +654,9 @@
 			json = {},
 			len = keyValueStrs.length,
 			i = 0;
-		
+
 		json[root] = {};
-		
+
 		do {
 			var keyValueStr = keyValueStrs[i];
 			if(keyValueStr && root!==keyValueStr) {
@@ -626,10 +664,10 @@
 				json[root][_json[0]] = _json[1];
 			}
 		} while (++i<len)
-			
+
 		return json;
 	};
-	
+
 	/**
 	 * 序列化form表单中的数据
 	 * formName form表单名称
@@ -641,29 +679,29 @@
 			names = [],
 			obj = {},
 			i = 0;
-		
+
 		if(0>=len) return obj;
-		
+
 		do {
 			var ele = elements[i],
 				name = ele.name;
-			
+
 			if(-1===names.indexOf(name)) {
 				names.push(name);
 			}
 		} while(++i<len)
-			
+
 		len = names.length;
-		
+
 		if(0>=len) return obj;
-		
+
 		i=0;
 		do {
 			var node = form[names[i]];
-			
+
 			if(!node.nodeType && node.length && 0<node.length && "checkbox"===node[0].type) {
 				obj[names[i]] = "";
-				
+
 				for(var key in node) {
 					if(node[key].checked) {
 						if(obj[names[i]]) obj[names[i]] += ",";
@@ -674,10 +712,10 @@
 				obj[names[i]] = node.value;
 			}
 		} while(++i<len)
-			
+
 		return obj;
 	};
-	
+
 	/**
 	 * 复制input元素中的数据
 	 * boxId input元素的id
@@ -686,19 +724,19 @@
 	 */
 	Tool.prototype.copy = function(boxId, btnId, fn) {
 		var self = this;
-		
+
 		this.addEvent("#"+btnId, "click", function() {
 			var box = document.getElementById(boxId);
 			box.select();
 			var text = document.execCommand("Copy");
 			box.selectionEnd = 0;
-			
+
 			if(fn) {
 				fn.call(self, text);
 			}
 		});
 	};
-	
+
 	/**
 	 * 判断元素上是否有某个class
 	 * ele 需要被判断的元素
@@ -708,14 +746,14 @@
 	Tool.prototype.hasClass = function(ele, cls) {
 		var className = ele.className,
 			flag = false;
-		
+
 		if(-1!==className.indexOf(cls)) {
 			flag = true;
 		}
-		
+
 		return flag;
 	};
-	
+
 	/**
 	 * 获取某个元素的前一个元素
 	 * node 当前元素
@@ -724,7 +762,7 @@
 	Tool.prototype.pre = function(node) {
 		return node.previousElementSibling || node.previousSibling;
 	};
-	
+
 	/**
 	 * 获取某个元素的下一个元素
 	 * node 当前元素
@@ -733,7 +771,7 @@
 	Tool.prototype.next = function(node) {
 		return node.nextElementSibling || node.nextSibling;
 	};
-	
+
 	/**
 	 * 获取某个元素前面的所有同级元素
 	 * node 当前元素
@@ -742,18 +780,18 @@
 	Tool.prototype.preAll = function(node) {
 		var list = [],
 			pre = node;
-		
+
 		do {
 			pre = this.pre(pre);
-			
+
 			if(pre) {
 				list.push(pre);
 			}
 		} while(pre)
-			
+
 		return list;
 	};
-	
+
 	/**
 	 * 获取某个元素后面的所有同级元素
 	 * node 当前元素
@@ -762,18 +800,18 @@
 	Tool.prototype.nextAll = function(node) {
 		var list = [],
 			next = node;
-		
+
 		do {
 			next = this.next(next);
-			
+
 			if(next) {
 				list.push(next);
 			}
 		} while(next)
-			
+
 		return list;
 	};
-	
+
 	/**
 	 * 获取某个元素的所有同级元素
 	 * node 当前元素
@@ -783,30 +821,30 @@
 		var preList = this.preAll(node),
 			nextList = this.nextAll(node),
 			push = Array.prototype.push;
-		
+
 		push.apply(preList, nextList);
 		return preList;
 	};
-	
+
 	Tool.prototype.encodeHTML = function(html) {
 		var reg = /<([a-zA-Z]+)(?=\s|\/>|>)[\s\S]*>/;
-		
+
 		if(reg.test(html)) {
 			html = html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		}
-		
+
 		return html;
 	};
-	
+
 	Tool.prototype.decodeHTML = function(html) {
 		return html.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 	};
-	
+
 	Tool.prototype.createElement = function(html) {
 		var recycled = document.createElement("DIV"),
 			reg = /^<([a-zA-Z]+)(?=\s|\/>|>)[\s\S]*>$/,
 			html = html.trim();
-			
+
 		var _createElement = function(html) {
 			if(!reg.test(html)) {
 				try {
@@ -815,156 +853,156 @@
 					console.log(e);
 				}
 			}
-			
+
 			var tagName = hash[RegExp.$1.toLowerCase()];
-			
+
 			if(!tagName) {
 				recycled.innerHTML = html;
 				return recycled.removeChild(recycled.firstChild);
 			}
-			
+
 			var deep = 0,
 				ele = recycled;
-			
+
 			do {
 				html = "<" + tagName + ">" + html + "</" + tagName + ">";
 				deep++;
 			} while(tagName=hash[tagName])
-			
+
 			ele.innerHTML = html;
-			
+
 			do {
 				ele = ele.removeChild(ele.firstChild);
 			} while(--deep>-1)
-				
+
 			return ele;
 		};
-		
+
 		return _createElement(html);
 	};
-	
+
 	Tool.prototype.encodeBase64 = function(str) {
 		var out, i, len;
-	    var c1, c2, c3;
+		var c1, c2, c3;
 
-	    var len = str.length,
-	    	i = 0,
-	    	out = "";
-	    	
-	    while(i < len) {
-		    c1 = str.charCodeAt(i++) & 0xff;
-		    
-		    if(i == len) {
-		        out += base64EncodeChars.charAt(c1 >> 2);
-		        out += base64EncodeChars.charAt((c1 & 0x3) << 4);
-		        out += "==";
-		        break;
-		    }
-		    
-		    c2 = str.charCodeAt(i++);
-		    
-		    if(i == len) {
-		        out += base64EncodeChars.charAt(c1 >> 2);
-		        out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-		        out += base64EncodeChars.charAt((c2 & 0xF) << 2);
-		        out += "=";
-		        break;
-		    }
-		    
-		    c3 = str.charCodeAt(i++);
-		    out += base64EncodeChars.charAt(c1 >> 2);
-		    out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-		    out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
-		    out += base64EncodeChars.charAt(c3 & 0x3F);
-	    }
-	    
-	    return out;
+		var len = str.length,
+			i = 0,
+			out = "";
+
+		while(i < len) {
+			c1 = str.charCodeAt(i++) & 0xff;
+
+			if(i == len) {
+				out += base64EncodeChars.charAt(c1 >> 2);
+				out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+				out += "==";
+				break;
+			}
+
+			c2 = str.charCodeAt(i++);
+
+			if(i == len) {
+				out += base64EncodeChars.charAt(c1 >> 2);
+				out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+				out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+				out += "=";
+				break;
+			}
+
+			c3 = str.charCodeAt(i++);
+			out += base64EncodeChars.charAt(c1 >> 2);
+			out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+			out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
+			out += base64EncodeChars.charAt(c3 & 0x3F);
+		}
+
+		return out;
 	};
-	
+
 	Tool.prototype.decodeBase64 = function(str) {
 		var c1, c2, c3, c4;
-	    var i, len, out;
+		var i, len, out;
 
-	    len = str.length;
-	    i = 0;
-	    out = "";
-	    
-	    while(i < len) {
-		    /* c1 */
-		    do {
-		        c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-		    } while(i < len && c1 == -1);
-		    
-		    if(c1 == -1) break;
-		
-		    /* c2 */
-		    do {
-		        c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-		    } while(i < len && c2 == -1);
-		    
-		    if(c2 == -1) break;
-		
-		    out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
-		
-		    /* c3 */
-		    do {
-		        c3 = str.charCodeAt(i++) & 0xff;
-		        if(c3 == 61) return utf8to16(out);
-		        c3 = base64DecodeChars[c3];
-		    } while(i < len && c3 == -1);
-		    
-		    if(c3 == -1) break;
-		
-		    out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
-		
-		    /* c4 */
-		    do {
-		        c4 = str.charCodeAt(i++) & 0xff;
-		        if(c4 == 61) return utf8to16(out);
-		        c4 = base64DecodeChars[c4];
-		    } while(i < len && c4 == -1);
-		    
-		    if(c4 == -1) break;
-		    
-		    out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
-	    }
-	    
-	    return utf8to16(out);
+		len = str.length;
+		i = 0;
+		out = "";
+
+		while(i < len) {
+			/* c1 */
+			do {
+				c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+			} while(i < len && c1 == -1);
+
+			if(c1 == -1) break;
+
+			/* c2 */
+			do {
+				c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+			} while(i < len && c2 == -1);
+
+			if(c2 == -1) break;
+
+			out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
+
+			/* c3 */
+			do {
+				c3 = str.charCodeAt(i++) & 0xff;
+				if(c3 == 61) return utf8to16(out);
+				c3 = base64DecodeChars[c3];
+			} while(i < len && c3 == -1);
+
+			if(c3 == -1) break;
+
+			out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
+
+			/* c4 */
+			do {
+				c4 = str.charCodeAt(i++) & 0xff;
+				if(c4 == 61) return utf8to16(out);
+				c4 = base64DecodeChars[c4];
+			} while(i < len && c4 == -1);
+
+			if(c4 == -1) break;
+
+			out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
+		}
+
+		return utf8to16(out);
 	};
-	
+
 	function utf8to16(str) {
 		var out, i, len, c;
-	    var char2, char3;
+		var char2, char3;
 
-	    out = "";
-	    len = str.length;
-	    i = 0;
-	    
-	    while(i < len) {
-		    c = str.charCodeAt(i++);
-		    
-		    switch(c >> 4) { 
-		      case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-		        // 0xxxxxxx
-		        out += str.charAt(i-1);
-		        break;
-		      case 12: case 13:
-		        // 110x xxxx   10xx xxxx
-		        char2 = str.charCodeAt(i++);
-		        out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
-		        break;
-		      case 14:
-		        // 1110 xxxx  10xx xxxx  10xx xxxx
-		        char2 = str.charCodeAt(i++);
-		        char3 = str.charCodeAt(i++);
-		        out += String.fromCharCode(((c & 0x0F) << 12) | ((char2 & 0x3F) << 6) | ((char3 & 0x3F) << 0));
-		        break;
-		    }
-	    }
+		out = "";
+		len = str.length;
+		i = 0;
 
-	    return out;
+		while(i < len) {
+			c = str.charCodeAt(i++);
+
+			switch(c >> 4) {
+				case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+				// 0xxxxxxx
+				out += str.charAt(i-1);
+				break;
+				case 12: case 13:
+				// 110x xxxx   10xx xxxx
+				char2 = str.charCodeAt(i++);
+				out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+				break;
+				case 14:
+					// 1110 xxxx  10xx xxxx  10xx xxxx
+					char2 = str.charCodeAt(i++);
+					char3 = str.charCodeAt(i++);
+					out += String.fromCharCode(((c & 0x0F) << 12) | ((char2 & 0x3F) << 6) | ((char3 & 0x3F) << 0));
+					break;
+			}
+		}
+
+		return out;
 	}
-	
+
 	/**
 	 * 获取最快的dms端口(不发送任何消息)
 	 * @params arguments.data dms对象；
@@ -974,13 +1012,13 @@
 	Tool.prototype.getBestDmsWithoutMessage = function() {
 		var args = [].slice.call(arguments, 0),
 			params = args.shift();
-		
+
 		if("[object Object]"!==toString.call(params)) return ;
-		if(!params.data) return ;
-		
-		var obj = params.data,
-			inList = obj.internal,
-			exList = obj.external,
+		if(!params) return ;
+
+		var data = params.data,
+			inList = data.internal,
+			exList = data.external,
 			ini = 0, exi = 0,
 			count = 0,
 			inLen = inList.length,
@@ -989,63 +1027,64 @@
 			timeList = [],
 			outTime = params.time || 30,
 			outIt = null,
+			protocol = "https:"===location.protocol?"wss://":"ws://",
 			callback = args.shift();
-		
+
 		outIt && clearTimeout(outIt);
-		
-		var testPort = function(port, index) {
+
+		var testPort = function(port, index, type) {
 			var start = Date.now(),
 				it = null;
-			
+
 			var	cancelLink = function() {
 				var end = Date.now(),
 					during = end-start;
 				timeList.push(during);
 				timeMap[during] = port.rtmpUrl;
-				global["ws_in_"+index].close();
-				delete global["ws_in_"+index];
+				global["ws_"+type+"_"+index] && global["ws_"+type+"_"+index].close();
+				delete global["ws_"+type+"_"+index];
 				count++;
 				it && clearTimeout(it);
-				
+
 				if(inLen+exLen<=count) {
-					callback && callback.call(Object.create(null), timeMap[Math.min.apply(Math, timeList)]);
+					callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 					outIt && clearTimeout(outIt);
 				}
 			};
-			
-			global["ws_in_"+index] = new WebSocket(port.socketUrl);
-			
+
+			global["ws_"+type+"_"+index] = new WebSocket(protocol+port.socketUrl);
+
 			it = setTimeout(function() {
 				cancelLink();
 			}, outTime);
-			
-			global["ws_in_"+index].open = function() {
+
+			global["ws_"+type+"_"+index].onopen = function() {
 				outIt && cancelLink();
 			};
 		};
-		
+
 		if(inLen>ini) {
 			do {
-				(function(port, index) {
-					testPort(port, index);
-				}(inList[ini]), ini);
+				(function(port, index, type) {
+					testPort(port, index, type);
+				}(inList[ini], ini, "in"));
 			} while(++ini<inLen)
 		}
-		
+
 		if(exLen>exi) {
 			do {
-				(function(port, index) {
-					testPort(port, index);
-				}(exList[exi]), exi);
+				(function(port, index, type) {
+					testPort(port, index, type);
+				}(exList[exi], exi, "on"));
 			} while(++exi<exLen)
 		}
-		
+
 		outIt = setTimeout(function() {
-			callback && callback.call(Object.create(null), timeMap[Math.min.apply(Math, timeList)]);
+			callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 			outIt && clearTimeout(outIt);
 		}, outTime);
 	};
-	
+
 	/**
 	 * 获取最快的dms端口(发送消息)
 	 * @params arguments.obj dms数据,
@@ -1057,13 +1096,13 @@
 	Tool.prototype.getBestDmsWithMessage = function() {
 		var args = [].slice.call(arguments, 0),
 			params = args.shift();
-		
+
 		if("[object Object]"!==toString.call(params)) return ;
-		if(!params.data) return ;
-		
-		var obj = params.data,
-			inList = obj.internal,
-			exList = obj.external,
+		if(!params) return ;
+
+		var data = params.data,
+			inList = data.internal,
+			exList = data.external,
 			ini = 0, exi = 0,
 			count = 0,
 			inLen = inList.length,
@@ -1074,116 +1113,144 @@
 			outIt = null,
 			msg = JSON.stringify({method: "ping", data: this.random(params.msgLen||100)}),
 			times = params.times || 1,
+			protocol = "https:"===location.protocol?"wss://":"ws://",
 			callback = args.shift();
-		
+
 		outIt && clearTimeout(outIt);
-		
-		var testPort = function(port, index) {
+
+		var testPort = function(port, index, type) {
 			var start = Date.now(),
 				it = null,
 				msgCount = 0;
-			
+
 			var	cancelLink = function() {
 				var end = Date.now(),
 					during = end-start;
 				timeList.push(during);
 				timeMap[during] = port.rtmpUrl;
-				global["ws_in_"+index].close();
-				delete global["ws_in_"+index];
+				global["ws_"+type+"_"+index] && global["ws_"+type+"_"+index].close();
+				delete global["ws_"+type+"_"+index];
 				count++;
 				it && clearTimeout(it);
-				
+
 				if(inLen+exLen<=count) {
-					callback && callback.call(Object.create(null), timeMap[Math.min.apply(Math, timeList)]);
+					callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 					outIt && clearTimeout(outIt);
 				}
 			};
-			
-			global["ws_in_"+index] = new WebSocket(port.socketUrl);
-			
+
+			global["ws_"+type+"_"+index] = new WebSocket(protocol+port.socketUrl);
+
 			it = setTimeout(function() {
 				cancelLink();
 			}, outTime);
-			
-			global["ws_in_"+index].open = function() {
-				global["ws_in_"+index].send(msg);
+
+			global["ws_"+type+"_"+index].onopen = function() {
+				global["ws_"+type+"_"+index].send(msg);
 			};
-			
-			global["ws_in_"+index].onmessage = function(res) {
-				var res = JSON.parse(res);
+
+			global["ws_"+type+"_"+index].onmessage = function(res) {
+				var res = JSON.parse(res.data);
 				if("pingResponse"===res.method) {
 					msgCount++;
 					if(times>msgCount) {
-						global["ws_in_"+index].send(msg);
+						global["ws_"+type+"_"+index].send(msg);
 					} else {
 						outIt && cancelLink();
 					}
 				}
 			};
 		};
-		
+
 		if(inLen>ini) {
 			do {
-				(function(port, index) {
-					testPort(port, index);
-				}(inList[ini]), ini);
+				(function(port, index, type) {
+					testPort(port, index, type);
+				}(inList[ini], ini, "in"));
 			} while(++ini<inLen)
 		}
-		
+
 		if(exLen>exi) {
 			do {
-				(function(port, index) {
-					testPort(port, index);
-				}(exList[exi]), exi);
+				(function(port, index, type) {
+					testPort(port, index, type);
+				}(exList[exi], exi, "on"));
 			} while(++exi<exLen)
 		}
-		
+
 		outIt = setTimeout(function() {
-			callback && callback.call(Object.create(null), timeMap[Math.min.apply(Math, timeList)]);
+			callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 			outIt && clearTimeout(outIt);
 		}, outTime);
 	};
-	
-	global.vm = global.vm || {};
-	global.vm.module = global.vm.module || {};
-	global.vm.module["tool"] = new Tool();
-	global["tool"] = global.vm.module["tool"];	
+
+	Tool.prototype.attr = function(ele, attrName, attrVal) {
+		if(!ele || !attrName || !attrVal) return ;
+		if(!this.isDom(ele)) return ;
+		ele.setAttribute(attrName, attrVal);
+	};
+
+	Tool.prototype.removeAttr = function(ele, attrName) {
+		if(!ele || !attrName) return ;
+		if(!this.isDom(ele)) return ;
+		ele.removeAttribute(attrName);
+	};
+
+	void 0!==duang?(function() {
+		duang.module("Tool", []).controller("tool", function() {return new Tool});
+	}()):(function() {
+		global.vm = global.vm || {};
+		global.vm.module = global.vm.module || {};
+		global.vm.module["tool"] = new Tool();
+		global["tool"] = global.vm.module["tool"];
+	}());
 
 	String.prototype.trim = String.prototype.trim || function() {
-		this.replace(/(^\s*)|(\s*$)/g, "");
-	};
-	
+			this.replace(/(^\s*)|(\s*$)/g, "");
+		};
+
 	Array.prototype.unique = Array.prototype.unique || function(param) {
-		var arr = this, i = 0, len = arr.length, temp = {};
-		if(0===len) return ;
-		do {
-			var data = arr[i];
-			if(!temp[param?data[param]:data]) {
-				temp[param?data[param]:data] = 1;
-				i++;
+			var arr = this, len = arr.length;
+			if(0===len) return ;
+
+			if(void 0===param) {
+				var _arr = new Set(arr);
+				arr = Array.from(_arr);
 			} else {
-				arr.splice(i, 1);
-				len = arr.length;
+				var temp = {}, i = 0;
+
+				do {
+					var data = arr[i];
+
+					if(!temp[data[param]]) {
+						temp[data[param]] = 1;
+						i++;
+					} else {
+						arr.splice(i, 1);
+						len = arr.length;
+					}
+				} while(i<len)
 			}
-		} while(i<len)
-	};
-	
+
+			return arr;
+		};
+
 	Date.prototype.format = function (fmt) {
-	    var o = {
-	        "M+": this.getMonth() + 1, //月份 
-	        "d+": this.getDate(), //日 
-	        "h+": this.getHours(), //小时 
-	        "m+": this.getMinutes(), //分 
-	        "s+": this.getSeconds(), //秒 
-	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-	        "S": this.getMilliseconds() //毫秒 
-	    };
-	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	    for (var k in o)
-	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-	    return fmt;
+		var o = {
+			"M+": this.getMonth() + 1, //月份
+			"d+": this.getDate(), //日
+			"h+": this.getHours(), //小时
+			"m+": this.getMinutes(), //分
+			"s+": this.getSeconds(), //秒
+			"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+			"S": this.getMilliseconds() //毫秒
+		};
+		if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		for (var k in o)
+			if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		return fmt;
 	}
-	
+
 	if (!global.$jsonp) {
 		//jsonp的具体实现
 		var sendScriptRequest = function(url, id) {
@@ -1198,7 +1265,7 @@
 			buildTempFunction = function(callback) {
 				//创建一个全局方法，并将方法名当做请求地址的一个参数
 				var callName = "jsonp" + Math.floor(Math.random()*100000000);
-				
+
 				window[callName] = function(data) {
 					callback.call(this, data);
 					window[callName] = undefined;
@@ -1208,7 +1275,7 @@
 						jsNode.parentNode.removeChild(jsNode);
 					} catch (e) {}
 				};
-				
+
 				return callName;
 			};
 		global.$jsonp = function(url, data, callback) {
@@ -1216,11 +1283,11 @@
 			if (!url) return false;
 			callback = buildTempFunction(callback);
 			url += (url.indexOf("?") > 0) ? "" : "?";
-			
+
 			for (var i in data) {
-				url += "&" + i + "=" + data[i];
+				url += (!url.endsWith("?")?"&":"") + i + "=" + data[i];
 			}
-			
+
 			url += "&callback=" + callback;
 			sendScriptRequest(url, callback);
 		};
