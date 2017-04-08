@@ -39,7 +39,9 @@
 			audioBufferSoureNode.buffer = buffer;
 			audioBufferSoureNode.start(0);
 			win.requestAnimationFrame(render);
-		}, function() {});
+		}, function(err) {
+			console.log(err);
+		});
 	}, false);
 
 	var render = function() {

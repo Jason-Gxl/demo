@@ -2,6 +2,7 @@
     box-sizing: border-box;
     position: absolute;
 	box-shadow: 0 0 10px 5px #4f4f4f;
+    top: -1000px;
 }
 
 .dialog-wrap .dialog-title-wrap {
@@ -19,6 +20,7 @@
 .dialog-wrap .dialog-content-wrap {
 	padding: 20px 10px;
 	box-sizing: border-box;
+    height: 100%;
 	overflow: hidden;
 }
 
@@ -31,7 +33,7 @@
     border-top: solid 1px #cdcdcd;
 }
 
-.btn {
+.dialog-wrap .btn-wrap .btn {
 	display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;

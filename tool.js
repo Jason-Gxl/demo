@@ -152,7 +152,7 @@
 	 * oldObj 接受被拷贝对象的对象
 	 * return oldObj
 	 */
-	Tool.prototype.deepCopy = function(newObj, oldObj) {
+	Tool.prototype.deepCopy = function(newObj, oldObj, notCover) {
 		if(!newObj) return ;
 		var oldObj = oldObj || ("[object Object]"===toString.call(newObj)?{}:[]);
 
@@ -163,39 +163,36 @@
 		switch(toString.call(newObj)) {
 			case "[object Object]":
 				for (var key in newObj) {
-					var val = newObj[key],
-						type = toString.call(val);
+					if(void(0)===oldObj[key] || !notCover) {
+						var val = newObj[key], type = toString.call(val);
 
-					if("[object Object]"===type || "[object Array]"===type) {
-						var _target = "[object Object]"===type?{}:[];
+						if("[object Object]"===type || "[object Array]"===type) {
+							var _target = "[object Object]"===type?{}:[];
 
-						if("[object Array]"===toString.call(oldObj)) {
-							oldObj.push(_target);
+							if("[object Array]"===toString.call(oldObj)) {
+								oldObj.push(_target);
+							} else {
+								oldObj[key] = _target;
+							}
+
+							this.deepCopy(val, _target);
 						} else {
-							oldObj[key] = _target;
-						}
-
-						this.deepCopy(val, _target);
-					} else {
-						if("[object Array]"===toString.call(oldObj)) {
-							oldObj.push(val);
-						} else {
-							oldObj[key] = val;
+							if("[object Array]"===toString.call(oldObj)) {
+								oldObj.push(val);
+							} else {
+								oldObj[key] = val;
+							}
 						}
 					}
 				}
 				break;
 			case "[object Array]":
-				var i = 0,
-					len = newObj.length;
+				var i = 0, len = newObj.length;
 
 				if(len>i) {
 					do {
-						var _newObj = newObj[i];
-
-						for(var key in _newObj) {
-							var val = _newObj[key],
-								type = toString.call(val);
+						if(void(0)===oldObj[i] || !notCover) {
+							var val = newObj[i], type = toString.call(val);
 
 							if("[object Object]"===type || "[object Array]"===type) {
 								var _target = "[object Object]"===type?{}:[];
@@ -208,25 +205,26 @@
 
 								this.deepCopy(val, _target);
 							} else {
-								if("[object Array]"===toString.call(oldObj)) {
+								if ("[object Array]" === toString.call(oldObj)) {
 									oldObj.push(val);
 								} else {
 									oldObj[key] = val;
 								}
 							}
 						}
-
 					} while(++i<len)
 				} else {
-					if("[object Array]"===toString.call(oldObj)) {
-						oldObj.push([]);
-					} else {
-						oldObj[key] = [];
+					if(void(0)===oldObj[i] || !notCover) {
+						if("[object Array]"===toString.call(oldObj)) {
+							oldObj.push([]);
+						} else {
+							oldObj[key] = [];
+						}
 					}
 				}
 				break;
 			default:
-				oldObj = newObj.valueOf();
+				(void(0)===oldObj[i] || !notCover) && (oldObj = newObj.valueOf());
 		}
 
 		return oldObj;
@@ -284,7 +282,7 @@
 					addEvent(eles[l], type, fn, use);
 				}
 			}
-		}
+		};
 
 		if("[object Array]"===toString.call(target) || "[object HTMLCollection]"===toString.call(target)) {
 			var len = target.length;
@@ -324,7 +322,7 @@
 			} else {
 				item.detachEvent(type, fn);
 			}
-		}
+		};
 
 		var getElement = function(selector) {
 			if("string"!==typeof(selector)) return ;
@@ -349,7 +347,7 @@
 				}
 			}
 
-		}
+		};
 
 		if("[object Array]"===toString.call(target)) {
 			var len = target.length;
@@ -387,7 +385,7 @@
 			exp = new Date();
 
 		exp.setTime(exp.getTime() + time);
-		str = name + "=" + encodeURIComponent(val) + ";expires=" + exp.toUTCString();
+		str = name + "=" + escape(val) + ";expires=" + exp.toGMTString();
 
 		if("[object Object]"===toString.call(config)) {
 			for(var key in config) {
@@ -407,9 +405,9 @@
 	Tool.prototype.getCookie = function(name) {
 		if(!name) return;
 		var arr = "",
-			reg = new RegExp("(^|\\b)"+name+"=([^;]*)(;|$)");
+			reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
 		if(arr=doc.cookie.match(reg)) {
-			return decodeURIComponent(arr[2]);
+			return unescape(arr[2]);
 		} else {
 			return "";
 		}
@@ -425,7 +423,7 @@
 		if(!val) return ;
 		var exp = new Date();
 		exp.setTime(exp.getTime() - 1);
-		doc.cookie = name + "=" + encodeURIComponent(val) + ";expires=" + exp.toUTCString();
+		doc.cookie = name + "=" + escape(val) + ";expires=" + exp.toGMTString();
 	};
 
 	/**
@@ -444,24 +442,28 @@
 	 * classname 要添加的class名称
 	 */
 	Tool.prototype.addClass = function(ele, classname) {
-		if(!ele || !classname) return ;
-		var reg = new RegExp("\\b"+classname+"\\b|$");
+		if(!ele) return ;
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0,
 				len = ele.length;
+
 			if(i>=len) return ;
 
 			do {
 				var el = ele[i];
-				1===el.nodeType && (el.className = el.className.replace(reg, function(val) {
-					return !val?" ":""+classname;
-				}));
+				if(1===el.nodeType) {
+					var classes = slice.call(el.classList, 0) || el.className.split(/\s+/);
+					if(-1===classes.indexOf(classname)) {
+						el.className = el.className.trim() + " " + classname;
+					}
+				}
 			} while(++i<len)
 		} else {
-			1===ele.nodeType && (ele.className = ele.className.replace(reg, function(val) {
-				return !val?" ":""+classname;
-			}));
+			if(1!==ele.nodeType) return;
+			var classes = slice.call(ele.classList, 0) || ele.className.split(/\s+/);
+			if(-1!==classes.indexOf(classname)) return ;
+			ele.className = ele.className.trim() + " " + classname;
 		}
 
 		return ele;
@@ -472,22 +474,25 @@
 	 * 参数含义参考给元素添加class接口
 	 */
 	Tool.prototype.removeClass = function(ele, classname) {
-		if(!ele || !classname) return ;
-		var reg = new RegExp(classname+"\\s?", "g");
+		if(!ele) return ;
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0,
 				len = ele.length;
+
 			if(i>=len) return;
 
 			do {
 				var el = ele[i];
-				1===el.nodeType && (el.className = el.className.replace(reg, ""));
+
+				if(1===el.nodeType) {
+					el.className = el.className.replace(classname, "").trim();
+				}
 			} while(++i<len)
 		} else {
-			1===ele.nodeType && (ele.className = ele.className.replace(reg, ""));
+			if(1!==ele.nodeType) return;
+			ele.className = ele.className.replace(classname, "").trim();
 		}
-
 		return ele;
 	};
 
@@ -497,30 +502,8 @@
 	 * newClass 新的class
 	 */
 	Tool.prototype.replaceClass = function(ele, oldClass, newClass) {
-		if(!ele || (!oldClass && !newClass)) return ;
-
-		switch(true) {
-			case !oldClass && newClass:
-				this.addClass(ele, newClass);
-			break;
-			case oldClass && !newClass:
-				this.removeClass(ele, oldClass);
-			break;
-			default:
-				if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
-					var i = 0,
-						len = ele.length;
-					if(i>=len) return ;
-
-					do {
-						var el = ele[i];
-						1===el.nodeType && (el.className = el.className.replace(oldClass, newClass));
-					} while(++i<len)
-				} else {
-					1===ele.nodeType && (ele.className = ele.className.replace(oldClass, newClass));
-				}
-		}
-		
+		this.removeClass(ele, oldClass);
+		this.addClass(ele, newClass);
 		return ele;
 	};
 
@@ -531,10 +514,10 @@
 	 * html 新插入的元素字符串
 	 */
 	Tool.prototype.insertHTML = function(el, where, html) {
-		if (!el || !html) return false;
-		var where = where.toLowerCase() || "beforeend";
+		if (!el) return false;
+		where = where.toLowerCase();
 
-		if (el.insertAdjacentHTML) {
+		if (el.insertAdjacentHTML) {//IE
 			el.insertAdjacentHTML(where, html);
 		} else {
 			var range = el.ownerDocument.createRange(),
@@ -689,7 +672,7 @@
 			if(-1===names.indexOf(name)) {
 				names.push(name);
 			}
-		} while(++i<len)
+		} while(++i<len);
 
 		len = names.length;
 
@@ -711,7 +694,7 @@
 			} else {
 				obj[names[i]] = node.value;
 			}
-		} while(++i<len)
+		} while(++i<len);
 
 		return obj;
 	};
@@ -787,7 +770,7 @@
 			if(pre) {
 				list.push(pre);
 			}
-		} while(pre)
+		} while(pre);
 
 		return list;
 	};
@@ -807,7 +790,7 @@
 			if(next) {
 				list.push(next);
 			}
-		} while(next)
+		} while(next);
 
 		return list;
 	};
@@ -1019,8 +1002,7 @@
 		var data = params.data,
 			inList = data.internal,
 			exList = data.external,
-			ini = 0, exi = 0,
-			count = 0,
+			ini = 0, exi = 0, count = 0,
 			inLen = inList.length,
 			exLen = exList.length,
 			timeMap = {},
@@ -1028,58 +1010,64 @@
 			outTime = params.time || 30,
 			outIt = null,
 			protocol = "https:"===location.protocol?"wss://":"ws://",
-			callback = args.shift();
+			callback = args.shift(),
+			reg = new RegExp("^(0\.)+");
 
 		outIt && clearTimeout(outIt);
 
-		var testPort = function(port, index, type) {
-			var start = Date.now(),
-				it = null;
+		var testPort = function(port) {
+			var start = Date.now(), it = null, ws = null;
 
 			var	cancelLink = function() {
-				var end = Date.now(),
-					during = end-start;
+				var end = Date.now(), during = end-start;
 				timeList.push(during);
 				timeMap[during] = port.rtmpUrl;
-				global["ws_"+type+"_"+index] && global["ws_"+type+"_"+index].close();
-				delete global["ws_"+type+"_"+index];
+				ws && ws.close();
 				count++;
 				it && clearTimeout(it);
 
 				if(inLen+exLen<=count) {
+					console.info(JSON.stringify(timeMap));
+					console.info(timeMap[Math.min.apply(Math, timeList)]);
 					callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 					outIt && clearTimeout(outIt);
 				}
 			};
 
-			global["ws_"+type+"_"+index] = new WebSocket(protocol+port.socketUrl);
+			ws = new WebSocket(protocol+port.socketUrl);
 
 			it = setTimeout(function() {
 				cancelLink();
 			}, outTime);
 
-			global["ws_"+type+"_"+index].onopen = function() {
+			ws.onopen = function() {
 				outIt && cancelLink();
 			};
 		};
 
 		if(inLen>ini) {
 			do {
-				(function(port, index, type) {
-					testPort(port, index, type);
-				}(inList[ini], ini, "in"));
+				(function(port) {
+					if(!reg.test(port.socketUrl)) {
+						testPort(port);
+					} else {
+						count++;
+					}
+				}(inList[ini]));
 			} while(++ini<inLen)
 		}
 
 		if(exLen>exi) {
 			do {
-				(function(port, index, type) {
-					testPort(port, index, type);
-				}(exList[exi], exi, "on"));
+				(function(port) {
+					testPort(port);
+				}(exList[exi]));
 			} while(++exi<exLen)
 		}
 
 		outIt = setTimeout(function() {
+			console.info(JSON.stringify(timeMap));
+			console.info(timeMap[Math.min.apply(Math, timeList)]);
 			callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 			outIt && clearTimeout(outIt);
 		}, outTime);
@@ -1103,8 +1091,7 @@
 		var data = params.data,
 			inList = data.internal,
 			exList = data.external,
-			ini = 0, exi = 0,
-			count = 0,
+			ini = 0, exi = 0, count = 0,
 			inLen = inList.length,
 			exLen = exList.length,
 			timeMap = {},
@@ -1114,47 +1101,48 @@
 			msg = JSON.stringify({method: "ping", data: this.random(params.msgLen||100)}),
 			times = params.times || 1,
 			protocol = "https:"===location.protocol?"wss://":"ws://",
+			reg = new RegExp("^(0\.)+"),
 			callback = args.shift();
 
 		outIt && clearTimeout(outIt);
 
-		var testPort = function(port, index, type) {
-			var start = Date.now(),
-				it = null,
-				msgCount = 0;
+		var testPort = function(port) {
+			var start = Date.now(), it = null, ws = null, msgCount = 0;
 
 			var	cancelLink = function() {
-				var end = Date.now(),
-					during = end-start;
+				var end = Date.now(), during = end-start;
 				timeList.push(during);
 				timeMap[during] = port.rtmpUrl;
-				global["ws_"+type+"_"+index] && global["ws_"+type+"_"+index].close();
-				delete global["ws_"+type+"_"+index];
+				ws && ws.close();
 				count++;
 				it && clearTimeout(it);
 
 				if(inLen+exLen<=count) {
+					console.info(JSON.stringify(timeMap));
+					console.info(timeMap[Math.min.apply(Math, timeList)]);
 					callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 					outIt && clearTimeout(outIt);
 				}
 			};
 
-			global["ws_"+type+"_"+index] = new WebSocket(protocol+port.socketUrl);
+			ws = new WebSocket(protocol+port.socketUrl);
 
 			it = setTimeout(function() {
 				cancelLink();
 			}, outTime);
 
-			global["ws_"+type+"_"+index].onopen = function() {
-				global["ws_"+type+"_"+index].send(msg);
+			ws.onopen = function() {
+				ws.send(msg);
 			};
 
-			global["ws_"+type+"_"+index].onmessage = function(res) {
+			ws.onmessage = function(res) {
 				var res = JSON.parse(res.data);
+
 				if("pingResponse"===res.method) {
 					msgCount++;
+
 					if(times>msgCount) {
-						global["ws_"+type+"_"+index].send(msg);
+						ws.send(msg);
 					} else {
 						outIt && cancelLink();
 					}
@@ -1164,29 +1152,37 @@
 
 		if(inLen>ini) {
 			do {
-				(function(port, index, type) {
-					testPort(port, index, type);
-				}(inList[ini], ini, "in"));
+				(function(port) {
+					if(!reg.test(port.socketUrl)) {
+						testPort(port);
+					} else {
+						count++;
+					}
+				}(inList[ini]));
 			} while(++ini<inLen)
 		}
 
 		if(exLen>exi) {
 			do {
-				(function(port, index, type) {
-					testPort(port, index, type);
-				}(exList[exi], exi, "on"));
+				(function(port) {
+					testPort(port);
+				}(exList[exi]));
 			} while(++exi<exLen)
 		}
 
 		outIt = setTimeout(function() {
+			console.info(JSON.stringify(timeMap));
+			console.info(timeMap[Math.min.apply(Math, timeList)]);
 			callback && callback.call(Object.create(null), "rtmp://"+timeMap[Math.min.apply(Math, timeList)]+"/dms");
 			outIt && clearTimeout(outIt);
 		}, outTime);
 	};
 
 	Tool.prototype.attr = function(ele, attrName, attrVal) {
-		if(!ele || !attrName || !attrVal) return ;
-		if(!this.isDom(ele)) return ;
+		if(!ele || !attrName || !this.isDom(ele)) return ;
+		if(void(0)===attrVal) {
+			return ele.getAttribute(attrName);
+		}
 		ele.setAttribute(attrName, attrVal);
 	};
 
@@ -1206,34 +1202,45 @@
 	}());
 
 	String.prototype.trim = String.prototype.trim || function() {
-			this.replace(/(^\s*)|(\s*$)/g, "");
-		};
+		this.replace(/(^\s*)|(\s*$)/g, "");
+	};
 
 	Array.prototype.unique = Array.prototype.unique || function(param) {
-			var arr = this, len = arr.length;
-			if(0===len) return ;
+		var arr = this, len = arr.length;
+		if(0===len) return ;
 
-			if(void 0===param) {
-				var _arr = new Set(arr);
-				arr = Array.from(_arr);
-			} else {
-				var temp = {}, i = 0;
+		if(void 0===param) {
+			var _arr = new Set(arr);
+			arr = Array.from(_arr);
+		} else {
+			var temp = {}, i = 0;
 
-				do {
-					var data = arr[i];
+			do {
+				var data = arr[i];
 
-					if(!temp[data[param]]) {
-						temp[data[param]] = 1;
-						i++;
-					} else {
-						arr.splice(i, 1);
-						len = arr.length;
-					}
-				} while(i<len)
+				if(!temp[data[param]]) {
+					temp[data[param]] = 1;
+					i++;
+				} else {
+					arr.splice(i, 1);
+					len = arr.length;
+				}
+			} while(i<len)
+		}
+
+		return arr;
+	};
+
+	Array.prototype.removeEmpty = function() {
+		var that = this,
+			arr = [];
+		that.map(function(item) {
+			if(void(0)!==item && null!==item && ""!==item) {
+				arr.push(item);
 			}
-
-			return arr;
-		};
+		});
+		return arr;
+	};
 
 	Date.prototype.format = function (fmt) {
 		var o = {
@@ -1249,10 +1256,9 @@
 		for (var k in o)
 			if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 		return fmt;
-	}
+	};
 
 	if (!global.$jsonp) {
-		//jsonp的具体实现
 		var sendScriptRequest = function(url, id) {
 				//将请求地址以script标签形式插入到页面。（注定是GET请求）
 				var head = document.getElementsByTagName("head")[0];
@@ -1294,4 +1300,4 @@
 	};
 })(window, function() {
 	return window.duang || void 0;
-})
+});

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="./select.css">
+		<link rel="stylesheet" type="text/css" href="./director.css">
+		<link rel="stylesheet" type="text/css" href="./icon/iconfont.css">
+		<link rel="stylesheet" type="text/css" href="../wins/wins.css">
+		<link rel="stylesheet" type="text/css" href="./tab.css">
+	</head>
+	<body>
+		<div class="director-wrap"><!-- 整体 -->
+			<div class="director-head-wrap"><!-- 头 -->
+				<span class="logo-wrap clearfix">
+					<span class="logo fl"></span>
+					<h2 class="title fl">直录播教室导播系统</h2>
+				</span>
+				<span class="quit-btn-wrap fr">
+					<a href="javascript:void(0);" class="btn quit-btn mr5" id="quit_btn"><i class="iconfont"></i>退出</a>
+				</span>
+			</div>
+			<div class="director-ctrl-wrap"><!-- 操作区 -->
+				<div class="director-screen-wrap clearfix"><!-- 画面区 -->
+					<div class="screen-wrap main-screen-wrap fl">
+						<div class="main-screen" id="main_screen"></div>
+						<div class="main-screen-cover main-screen-cover-left"></div>
+						<div class="main-screen-cover main-screen-cover-rigth"></div>
+					</div>
+					<div class="screen-wrap branch-screen-wrap w630 fl">
+						<ul class="clearfix branch-screen-list">
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+							<li class="fl branch-screen-item">
+								<span class="branch-srcreen-title fl"></span>
+								<span class="branch-screen fl"></span>
+							</li>
+						</ul>
+					</div>
+				</div>  
+				<div class="main-ctrl-wrap clearfix"><!-- 操作区 -->
+					<ul class="main-ctrl record-ctrl-wrap fl w250"> <!-- 录制区 -->
+						<li class="record-mode-ctrl lh34">
+							<label>录制模式</label>
+							<span id="record_mode_wrap" class="record-mode-wrap ml10"></span>
+							<span class="fr" id="show_camera_btn"><i class="iconfont icon-setup"></i></span>
+						</li>
+						<li class="record-select-ctrl">
+							<div class="lh34">
+								<label>片头/片尾</label>
+								<span class="fr"><i class="iconfont icon-setup" id="tt_set_btn"></i></span>
+							</div>
+							<div class="lh34">
+								<label>片头名称</label>
+								<span class="movie-header-wrap" id="movie_header_wrap"></span>
+								<a href="javascript:void(0);" class="btn primary-btn fr">片头</a>
+							</div>
+							<div class="lh34">
+								<label>片尾名称</label>
+								<span class="movie-tail-wrap" id="movie_tail_wrap"></span>
+								<a href="javascript:void(0);" class="btn primary-btn fr">片尾</a>
+							</div>
+						</li>
+						<li class="lh34">
+							<label>录制控制</label>
+							<span class="record-ctrl-wrap ml20">
+								<a href="javascript:void(0);" class="record-btn-wrap">
+									<i class="iconfont icon-classroom-recording"></i>
+								</a>
+								<a href="javascript:void(0);" class="stop-btn-wrap">
+									<i class="iconfont icon-switch-point"></i>
+								</a>
+							</span>
+							<label class="record-time-wrap fr">000:00:00</label>
+						</li>
+					</ul>
+					<ul class="main-ctrl special-ctrl-wrap fl w250"> <!-- 台标，特效，字幕，导播模式区 -->
+						<li class="lh34">
+							<label>台标</label>
+							<span class="sel-wrap"></span>
+							<a href="javascript:void(0);" class="btn primary-btn">台标</a>
+							<span class=""><i class="iconfont icon-setup"></i></span>
+						</li>
+						<li class="lh34 special-setting-wrap">
+							<label>特效</label>
+							<span class="sel-wrap"></span>
+							<a href="javascript:void(0);" class="btn primary-btn ">特效</a>
+						</li>
+						<li class="lh34 text-setting-wrap">
+							<label>字幕</label>
+							<span class="sel-wrap"></span>
+							<a href="javascript:void(0);" class="btn primary-btn ">字幕</a>
+							<span class=""><i class="iconfont icon-setup"></i></span>
+						</li>
+						<li class="lh34">
+							<label>导播模式</label>
+							<a href="javascript:void(0);" class="btn director-mode-btn" mode=1>手动</a>
+							<a href="javascript:void(0);" class="btn director-mode-btn" mode=2>自动</a>
+							<a href="javascript:void(0);" class="btn director-mode-btn" mode=3>半自动</a>
+						</li>
+					</ul>
+					<div class="main-ctrl screen-mode-wrap fl w240">
+						<div class="screen-mode-wrap-inner">
+							<div class="lh34 title"><label>画面模式</label><span class="fr"><i class="iconfont icon-setup"></i></span></div>
+							<ul class="clearfix screen-mode-list">
+								<li class="fl screen-mode-item single-screen p5">
+									<span class="select-box"><i class="iconfont"></i></span>
+								</li>
+								<li class="fl screen-mode-item inside-screen ml20 p5">
+									<span class="select-box"><i class="iconfont"></i></span>
+									<span class="small-screen r5 b5"></span>
+									<span class="small-screen r30 b5"></span>
+									<span class="small-screen r55 b5"></span>
+								</li>
+								<li class="fl screen-mode-item outside-screen mt10 p5">
+									<div class="large-screen">
+										<span class="select-box"><i></i></span>
+									</div>
+									<span class="small-screen ml5"></span>
+									<span class="small-screen ml5 mt21"></span>
+									<span class="small-screen ml5 mt43"></span>
+								</li>
+								<li class="fl screen-mode-item conmmuniction-screen ml20 mt10 p5">
+									<div class="left-screen fl">
+										<span class="select-box"><i class="iconfont"></i></span>
+									</div>
+									<div class="right-screen fl ml4"></div>
+								</li>
+							</ul>
+						</div>
+					</div><!-- 画面模式 -->
+					<div class="main-ctrl preset-site-wrap fl w190"><!-- 预置位 -->
+						<div class="preset-site-wrap-inner">
+							<div class="title lh34 tc">预置位</div>
+							<ul class="site-list ml14 mt5">
+								<li class="site-item fl tc">1</li>
+								<li class="site-item fl tc">2</li>
+								<li class="site-item fl tc">3</li>
+								<li class="site-item fl tc">4</li>
+								<li class="site-item fl tc">5</li>
+								<li class="site-item fl tc">6</li>
+								<li class="site-item fl tc">7</li>
+								<li class="site-item fl tc">8</li>
+								<li class="site-item fl tc">9</li>
+							</ul>
+						</div>
+					</div>
+					<div class="main-ctrl camera-ctrl-wrap fl w180"><!-- 摄像机控制区 -->
+						<div class="camera-ctrl-wrap-inner">
+							<div class="title lh34 tc">摄像机控制</div>
+							<div><label>变焦 +</label><span></span><label>-</label></div>
+							<div><label>变倍 +</label><span></span><label>-</label></div>
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</div>
+					<ul class="main-ctrl class-info-wrap fl"> <!-- 教室信息区 -->
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="coco_wrap"></div>
+	</body>
+	<script type="text/template" id="record_camera_tpl">
+		<div class="record-cameras-wrap">
+			<table class="record-cameras-table">
+				<thead>
+					<tr>
+						<td class="record-cameras-name">机位</td>
+						<td class="record-cameras-sure">是否录制</td>
+						<td class="record-cameras-bite">视频质量</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</script>
+	<script type="text/template" id="record_tt_tpl">
+		<div class="record-tt-wrap">
+			<div class="tab-wrap"></div>
+			<div class="show-data-wrap" id="head_list_wrap">
+				<div class="mt10">
+					<label>类型</label>
+					<select class="w100">
+						<option value="">请选择</option>
+						<option value="0">图片</option>
+						<option value="1">视频</option>
+					</select>
+				</div>
+				<table class="mt10 record-title-table">
+					<thead>
+						<tr>
+							<td>名称</td>
+							<td>类型</td>
+							<td>类别</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="show-data-wrap" id="tail_list_wrap">
+				<div class="mt10">
+					<label>类型</label>
+					<select class="w100">
+						<option value="">请选择</option>
+						<option value="0">图片</option>
+						<option value="1">视频</option>
+					</select>
+				</div>
+				<table class="mt10 record-title-table">
+					<thead>
+						<tr>
+							<td>名称</td>
+							<td>类型</td>
+							<td>类别</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="show-data-wrap" id="ht_add_wrap">
+				<form name="addHeadTial" id="addHeadTial">
+					<div class="head-add-wrap">
+						<div>
+							<label>片头类型</label>
+							<select name="headType">
+								<option value="0">图片</option>
+								<option value="1">视频</option>
+							</select>
+							<label>片头显示时间</label>
+							<input type="text" name="headTime"/>秒
+						</div>
+						<div>
+							<label>片头名称</label>
+							<input type="text" name="headName"/>
+						</div>
+						<div>
+							<label>片头上传</label>
+							<input type="text" name="headUrl"/>
+						</div>
+					</div>
+					<div class="tail-add-wrap">
+						<div>
+							<label>片尾类型</label>
+							<select name="tailType">
+								<option value="0">图片</option>
+								<option value="1">视频</option>
+							</select>
+							<label>片尾显示时间</label>
+							<input type="text" name="tailTime"/>秒
+						</div>
+						<div>
+							<label>片尾名称</label>
+							<input type="text" name="tailName"/>
+						</div>
+						<div>
+							<label>片尾上传</label>
+							<input type="text" name="tailUrl"/>
+						</div>
+					</div>
+				</form>
+				<div class="dialog-footer">
+					<a href="javascript:void(0);" class="btn dialog-btn fr mt10 mr10 sure-btn">确定</a>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/javascript">
+		/*var cocoParams = {
+			ip: meetingConfig["meet.cocoServerHost"],
+			port: meetingConfig["meet.cocoServerPort"],
+			backip: "",
+			myid: userId,
+			myName: encodeURIComponent(encodeURIComponent(realName)),
+			gid: parseInt(mid.substr(0,6),16).toString(10),
+			soundUrl: publicPath.replace("/public", "")+"/flash/sound/",
+			getFunc: encodeURIComponent(root + "/meeting/getLicense.do"),
+			debug: 1,
+			serverType: "0",
+			cipher: meetingConfig["meet.cipher"]
+		};*/
+	</script>
+	<script type="text/javascript" src="../duang/duang.js"></script>
+	<script type="text/javascript" src="../jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="../tool.js"></script>
+	<script type="text/javascript" src="./select.js"></script>
+	<script type="text/javascript" src="../wins/win_list.js"></script>
+	<script type="text/javascript" src="./tab.js"></script>
+	<script type="text/javascript" src="./director.js"></script>
+	<!--<script type="text/javascript">
+		var ctrl = function(tool, select) {
+			select.init({
+				wrap: document.getElementById("aaa"),
+				data: [{name: "Jason", id: 1, sex:"男"}, {name: "Tom", id: 2, sex:"男"}],
+				showParam: "name",
+				valParam: "id",
+				value: 1,
+				defaultShow: "请选择",
+				//itemTpl: "<tr><td>{{name}}</td><td>{{sex}}</td></tr>",
+				name: "user1"
+			});
+
+			select.init({
+				wrap: document.getElementById("bbb"),
+				data: [{name: "Jason", id: 1}, {name: "Jacky", id: 2}],
+				showParam: "name",
+				valParam: "id",
+				defaultShow: "请选择",
+				disabled: true,
+				name: "user2"
+			});
+
+			return {
+				select: select
+			}
+		}
+
+		duang.module("OnlineClass", ["Tool", "ex-component"])
+			.controller("ctrl", ["tool", "select"], ctrl);
+	</script>-->
+</html>

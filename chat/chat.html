@@ -1,0 +1,23 @@
+<!DOCTYPE>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./chat.css">
+</head>
+<body>
+	<div id="chat_wrap"></div>
+	<div id="coco_wrap"></div>
+</body>
+<script type="text/javascript" src="../tool.js"></script>
+<script type="text/javascript" src="./chat.js"></script>
+<script type="text/javascript">
+	chat.init({
+		wrap: document.getElementById("chat_wrap"),
+		remoteType: "coco",
+		remoteParams: {
+			wrap: document.getElementById("coco_wrap")
+		}
+	});
+</script>
+</html>
