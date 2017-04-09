@@ -4,30 +4,37 @@
 		win = window,
 		doc = document,
 		tool = win.tool,
-		duang = fn.call(this),
+		duang = fn.call(null),
 		ul = doc.createElement("UL"),
 		li = doc.createElement("LI"),
 		toString = Object.prototype.toString;
 
 	function Tab(params) {
-		var list = params.list,
-			len = list.length,
-			self = this,
+		var self = this,
+			i = 0,
+			lis = [],
+			list = params.list,
+			selectedIndex = params.selectedIndex||0,
 			_ul = ul.cloneNode(true),
 			selectedNode = null,
-			showContainer = null,
-			i = 0;
+			showContainer = null;
 
 		var buildItem = function(d, index) {
-			var _li = li.cloneNode(true),
-				label = d.label,
-				lis = [],
-				container = doc.getElementById(d.linkId);
-
+			if("[object Object]"!==toString.call(d)) return false;
+			var _li = li.cloneNode(true), label = d.label, container = doc.getElementById(d.linkId);
 			_li.innerHTML = label;
-			tool.addClass(_li, "tab-item tab-item-"+i);
+			tool.addClass(_li, "tab-item");
 
 			tool.addEvent(_li, "click", function() {
+				if(selectedIndex===index) return ;
+				tool.removeClass(selectedNode, "selected");
+				tool.addClass(this, "selected");
+				tool.removeClass(container, "tab-hide");
+				tool.addClass(showContainer, "tab-hide");
+				showContainer = container;
+				selectedNode = this;
+				selectedIndex = index;
+
 				if(d.url) {
 					$.post(d.url, d.params||{}, function() {
 						params.select && params.select.call(self, [].slice.call(arguments, 0)[0], d, index);
@@ -35,17 +42,10 @@
 				} else {
 					params.select && params.select.call(self, d, index);
 				}
-				
-				tool.removeClass(selectedNode, "selected");
-				tool.addClass(this, "selected");
-				tool.removeClass(container, "tab-hide");
-				tool.addClass(showContainer, "tab-hide");
-				showContainer = container;
-				selectedNode = this;
 			});
 
-			if(void(0)!==params.selectedIndex) {
-				if(Number(params.selectedIndex)===i) {
+			if(void(0)!==selectedIndex) {
+				if(Number(selectedIndex)===index) {
 					tool.addClass(_li, "selected");
 					tool.removeClass(container, "tab-hide");
 					showContainer = container;
@@ -65,31 +65,71 @@
 			
 			_ul.appendChild(_li);
 			lis.push(_li);
+			return true;
 		};
 
+		var len = list.length;
 		while(i<len) {
-			buildItem(list[i], i);
-			i++;
+			buildItem(list[i], i) && i++;
 		}
-
 		tool.addClass(_ul, "tab tab-"+uuid++);
 		params.wrap.appendChild(_ul);
 
-		this.addItem = function() {
-			var args = [].slice.call(arguments, 0),
-				arg1 = args.shift();
-			if("[object Object]"!==toString.call(arg1)) return ;
-			buildItem(arg1, i);
-			i++;
+		this.addItems = function() {
+			var args = [].slice.call(arguments, 0), arg1 = args.shift();
+			if(!arg1) return ;
+			if("[object Object]"===toString.call(arg1)) {
+				buildItem(arg1, i) && i++;
+				[].push.call(list, arg1);
+			}
+
+			if("[object Array]"===toString.call(arg1)) {
+				var j = 0, l = arg1.length;
+				while(j<l) {
+					buildItem(arg1[j], i) && i++;
+					"[object Object]"===toString.call(arg1) && [].push.call(list, arg1[j]);
+				}
+			}
 		};
 
-		this.removeItemByIndex = function() {
-			var args = [].slice.call(arguments, 0),
-				arg = args.shift();
-			if(isNaN(arg)) return ;
-			var li = lis[Number(arg)];
-			li && li.parentNode.removeChild(li);
-			lis.splice(Number(arg), 1);
+		this.removeItemsByIndex = function() {
+			var args = [].slice.call(arguments, 0), arg1 = args.shift(), _selectedIndex = selectedIndex, removeList=[];
+			if(!arg1) return ;
+
+			if(!isNaN(arg1)) {
+				var index = +arg1, li = lis[index];
+				if(li) {
+					removeList.push(li);
+					_ul.removeChild(li);
+					index===_selectedIndex && (_selectedIndex=index+1>0?index-1:index-1);
+				}
+			}
+
+			if("[object Array]"===toString.call(arg1)) {
+				var j = 0, l = arg1.length;
+
+				while(j<l) {
+					if(!isNaN(arg1[j])) {
+						var index = +arg1[j], li = lis[index];
+						if(li) {
+							removeList.push(li);
+							_ul.removeChild(li);
+							index===_selectedIndex && (_selectedIndex=index+1>0?index-1:index-1);
+						}
+					}
+
+					j++;
+				}
+			}
+
+			_selectedIndex!==selectedIndex && lis[_selectedIndex].click();
+			var j = 0, l = removeList.length;
+			while(j<l) {
+				var index = lis.indexOf(removeList[j]);
+				lis.splice(index, 1);
+				list.splice(index, 1);
+				j++;
+			}
 		};
 	}
 
