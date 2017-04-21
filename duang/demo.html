@@ -7,6 +7,10 @@
 </body>
 <script type="text/javascript" src="./duang.js"></script>
 <script type="text/javascript">
+duang.loadJS(["../jquery-1.11.3.js", "../tool.js"], function() {
+	console.log($);
+	console.log(duang.getModule("Tool"));
+});
 (function() {
 	duang.module("module1")
 	.service("service1", [], function() {

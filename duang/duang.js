@@ -1,4 +1,4 @@
-(function() {
+;(function() {
 	"use strict"
 	var win = window,
 		doc = document,
@@ -226,12 +226,79 @@
 			return _createElement(html);
 		}
 
+		function loadFile() {
+			var args = [].slice.call(arguments, 0), lastArg = args.pop(), count = 0, reg = /^.*?\.(js|css|html)$/;
+
+			if("[object Function]"===toString.call(lastArg)) {
+				var firstArg = args.shift();
+			} else {
+				var firstArg = lastArg;
+				lastArg = null;
+			}
+
+			var total = "[object Array]"===toString.call(firstArg)?firstArg.length:1;
+
+			if("[object Array]"===toString.call(firstArg)) {
+				if(total<=0) {
+					lastArg && lastArg.call(null);
+				} else {
+					var i = 0;
+					do {
+						_loadFile(firstArg[i]);
+					} while(++i<total)
+				}
+			} else {
+				_loadFile(firstArg);
+			}
+
+			function _loadFile(url) {
+				if(!reg.test(url)) {
+					count++;
+
+					if(count>=total) {
+						lastArg && lastArg.call(null);
+					}
+
+					return ;
+				}
+
+				var suffix = RegExp.$1.toLowerCase(),
+					ele = doc.createElement("js"===suffix?"SCRIPT":("css"===suffix?"LINK":"DIV"));
+
+				switch(suffix) {
+					case "js":
+						ele.src = url;
+					break;
+					case "css":
+						ele.type = "text/css";
+						ele.rel="stylesheet";
+						ele.href = url;
+					break;
+					default:
+				}
+				
+				ele.onload = function() {
+					count++;
+
+					if(count>=total) {
+						lastArg && lastArg.call(null);
+					}
+
+					"js"===suffix && this.parentNode.removeChild(this);
+				};
+
+				doc.getElementsByTagName("head")[0].appendChild(ele);
+			}
+		}
+
 		return {
 			module: initModule,
 			getModule: getModule,
-			createElement: createElement
+			createElement: createElement,
+			loadJS: loadFile,
+			loadCSS: loadFile
 		};
 	}());
 
 	win.duang = Duang;
-}(undefined));
+}(void(0)));

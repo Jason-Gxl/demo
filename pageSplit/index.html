@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./page_split.css">
+</head>
+<body>
+
+	<div id="page_split"></div>
+
+</body>
+<script type="text/javascript" src="./page_split.js"></script>
+<script type="text/javascript">
+	var ppp = pageSplit.init({
+		wrap: document.getElementById("page_split"),
+		data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+		count: 1,
+		itemType: "number",
+		searchParams: {},
+		success: function() {
+			console.log([].slice.call(arguments, 0));
+		}
+	});
+</script>
+</html>

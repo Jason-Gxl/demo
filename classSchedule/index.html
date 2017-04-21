@@ -9,4 +9,22 @@
 	
 </body>
 <script type="text/javascript" src="./schedule.js"></script>
+<script type="text/javascript">
+	classSchedule.init({
+		wrap: document.body,
+		value: 1,
+		data: [{daySeq:1, classSeq:2, name:"语言"}],
+		hasTimeLine: true,
+		dayCount: 7,
+		classCount: 8,
+		hasTimeCount: true,
+		hasHeader: true,
+		showParam: "name",
+		headTexts: [{name:"星期1", time:new Date()}],
+		headTpl: "<span>{{@headTexts[*].name}}</span><span>{{@headTexts[*].time}}</span>",
+		name: "aaa",
+		disabled: false,
+		finish: function(val) {}
+	});
+</script>
 </html>

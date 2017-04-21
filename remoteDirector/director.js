@@ -1,5 +1,5 @@
 
-(function(fn, $) {
+;(function(fn, $) {
 	var win = window,
 		doc = document,
 		duang = fn.call(Object.create(null));

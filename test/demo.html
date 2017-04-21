@@ -11,7 +11,7 @@
 <script type="text/javascript" src="./demo.js"></script>
 <script type="text/javascript">
 // Put event listeners into place
-window.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     // Grab elements, create settings, etc.
     var video = document.getElementById("video"),
         videoObj = {"video": true},
@@ -19,26 +19,53 @@ window.addEventListener("DOMContentLoaded", function() {
             console.log("Video capture error: ", error.code); 
         };
 
+    navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+
+    navigator.getUserMedia(videoObj, function(stream){
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+    }, errBack);
+
     // Put video listeners into place
-    switch(true) {
-        case void 0!==navigator.webkitGetUserMedia: // WebKit-prefixed
-            navigator.webkitGetUserMedia(videoObj, function(stream){
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            }, errBack);
-        break;
-        case void 0!== navigator.mozGetUserMedia: // Firefox-prefixed
-            navigator.mozGetUserMedia(videoObj, function(stream){
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            }, errBack);
-        break;
-        default: // Standard
-            navigator.getUserMedia(videoObj, function(stream) {
-                video.src = stream;
-                video.play();
-            }, errBack);
-    }
+    /*switch(true) {
+    case void 0!==navigator.webkitGetUserMedia: // WebKit-prefixed
+        navigator.webkitGetUserMedia(videoObj, function(stream){
+            video.src = window.URL.createObjectURL(stream);
+            video.play();
+        }, errBack);
+    break;
+    case void 0!== navigator.mozGetUserMedia: // Firefox-prefixed
+        navigator.mozGetUserMedia(videoObj, function(stream){
+            video.src = window.URL.createObjectURL(stream);
+            video.play();
+        }, errBack);
+    break;
+    default: // Standard
+        navigator.getUserMedia(videoObj, function(stream) {
+            video.src = stream;
+            video.play();
+        }, errBack);
+    }*/
 }, false);
+
+var A = (function() {
+    var a = 1;
+
+    function B() {
+        this.d = 1;
+    }
+
+    B.prototype = {
+        constructor: B,
+        show: function() {
+            console.log(a);
+        },
+        set: function(num) {
+            a = num;
+        }
+    }
+
+    return B;
+}());
 </script>
 </html>
