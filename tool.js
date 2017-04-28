@@ -834,9 +834,9 @@
 			var out, i, len;
 			var c1, c2, c3;
 
-			var len = str.length,
-				i = 0,
-				out = "";
+			len = str.length;
+			i = 0;
+			out = "";
 
 			while(i < len) {
 				c1 = str.charCodeAt(i++) & 0xff;
@@ -957,13 +957,13 @@
 
 			switch(c >> 4) {
 			case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-			// 0xxxxxxx
-			out += str.charAt(i-1);
+				// 0xxxxxxx
+				out += str.charAt(i-1);
 				break;
 			case 12: case 13:
-			// 110x xxxx   10xx xxxx
-			char2 = str.charCodeAt(i++);
-			out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+				// 110x xxxx   10xx xxxx
+				char2 = str.charCodeAt(i++);
+				out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
 				break;
 			case 14:
 				// 1110 xxxx  10xx xxxx  10xx xxxx
@@ -1209,6 +1209,7 @@
 
 		do {
 			var x = arr[i];
+
 			if(fn) {
 				fn.call(list, x) && list.push(x);
 			} else {
@@ -1240,8 +1241,9 @@
 			"S": this.getMilliseconds() //毫秒
 		};
 		if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-		for (var k in o)
+		for (var k in o) {
 			if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		}
 		return fmt;
 	};
 
