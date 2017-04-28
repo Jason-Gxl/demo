@@ -13,11 +13,26 @@
 		if(!this instanceof Module) {
 			return new Module(name, deps);
 		}
+		var self = this;
+
+		this.name = name;
 
 		this.getDepends = function() {
 			return deps||[];
 		};
 	}
+
+	Module.prototype = {
+		constructor: Module,
+		controller: function() {
+			var args = [].slice.call(arguments, 0),
+				name = args.shift(),
+				fn = args.pop(),
+				deps = args.shift();
+		},
+		director: function() {},
+		service: function() {}
+	};
 
 	function checkDeps(_deps) {
 		return _deps.filter(function(x) {
@@ -97,7 +112,7 @@
 		do {
 			var x = arr[i];
 			if(fn) {
-				fn.call(this, x) && list.push(x);
+				fn.call(list, x) && list.push(x);
 			} else {
 				set.add(x);
 			}

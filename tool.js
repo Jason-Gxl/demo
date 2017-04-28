@@ -5,8 +5,8 @@
  * @Date 2016-9-23
  *
  */
-(function(global, fn) {
-	var turnBox = null,
+;(function(fn) {
+	var win = window,
 		doc = document,
 		toString = Object.prototype.toString,
 		push = Array.prototype.push,
@@ -139,7 +139,6 @@
 	//工具类构造函数
 	var Tool = function() {
 		this.name = "Tool";
-		turnBox = document.createElement("DIV");
 	};
 
 	Tool.CustomerEvent = CustomerEvent;
@@ -161,10 +160,38 @@
 		}
 
 		switch(toString.call(newObj)) {
-			case "[object Object]":
-				for (var key in newObj) {
-					if(void(0)===oldObj[key] || !notCover) {
-						var val = newObj[key], type = toString.call(val);
+		case "[object Object]":
+			for (var key in newObj) {
+				if(void(0)===oldObj[key] || !notCover) {
+					var val = newObj[key], type = toString.call(val);
+
+					if("[object Object]"===type || "[object Array]"===type) {
+						var _target = "[object Object]"===type?{}:[];
+
+						if("[object Array]"===toString.call(oldObj)) {
+							oldObj.push(_target);
+						} else {
+							oldObj[key] = _target;
+						}
+
+						this.deepCopy(val, _target);
+					} else {
+						if("[object Array]"===toString.call(oldObj)) {
+							oldObj.push(val);
+						} else {
+							oldObj[key] = val;
+						}
+					}
+				}
+			}
+			break;
+		case "[object Array]":
+			var i = 0, len = newObj.length;
+
+			if(len>i) {
+				do {
+					if(void(0)===oldObj[i] || !notCover) {
+						var val = newObj[i], type = toString.call(val);
 
 						if("[object Object]"===type || "[object Array]"===type) {
 							var _target = "[object Object]"===type?{}:[];
@@ -177,54 +204,26 @@
 
 							this.deepCopy(val, _target);
 						} else {
-							if("[object Array]"===toString.call(oldObj)) {
+							if ("[object Array]" === toString.call(oldObj)) {
 								oldObj.push(val);
 							} else {
 								oldObj[key] = val;
 							}
 						}
 					}
-				}
-				break;
-			case "[object Array]":
-				var i = 0, len = newObj.length;
-
-				if(len>i) {
-					do {
-						if(void(0)===oldObj[i] || !notCover) {
-							var val = newObj[i], type = toString.call(val);
-
-							if("[object Object]"===type || "[object Array]"===type) {
-								var _target = "[object Object]"===type?{}:[];
-
-								if("[object Array]"===toString.call(oldObj)) {
-									oldObj.push(_target);
-								} else {
-									oldObj[key] = _target;
-								}
-
-								this.deepCopy(val, _target);
-							} else {
-								if ("[object Array]" === toString.call(oldObj)) {
-									oldObj.push(val);
-								} else {
-									oldObj[key] = val;
-								}
-							}
-						}
-					} while(++i<len)
-				} else {
-					if(void(0)===oldObj[i] || !notCover) {
-						if("[object Array]"===toString.call(oldObj)) {
-							oldObj.push([]);
-						} else {
-							oldObj[key] = [];
-						}
+				} while(++i<len)
+			} else {
+				if(void(0)===oldObj[i] || !notCover) {
+					if("[object Array]"===toString.call(oldObj)) {
+						oldObj.push([]);
+					} else {
+						oldObj[key] = [];
 					}
 				}
-				break;
-			default:
-				(void(0)===oldObj[i] || !notCover) && (oldObj = newObj.valueOf());
+			}
+			break;
+		default:
+			(void(0)===oldObj[i] || !notCover) && (oldObj = newObj.valueOf());
 		}
 
 		return oldObj;
@@ -236,8 +235,7 @@
 	 * return 一个指定长度的随机数，如果没有指定长度，默认生成一个8位的随机数
 	 */
 	Tool.prototype.random = function(num) {
-		var str = "",
-			num = num || 8;
+		var str = "", num = num || 8;
 		for(; str.length<num; str+=(Math.random()+"").substr(2));
 		return str.substr(0, num);
 	};
@@ -312,7 +310,6 @@
 	 */
 	Tool.prototype.delEvent = function(target, type, fn, use) {
 		var self = this;
-		var toString = Object.prototype.toString;
 
 		var delEvent = function(item) {
 			if(!item) return ;
@@ -330,16 +327,16 @@
 			var _selector = selector.trim();
 
 			if(_selector.startsWith("#")) {
-				delEvent(global.document.getElementById(_selector.substring(1, _selector.length)));
+				delEvent(win.document.getElementById(_selector.substring(1, _selector.length)));
 			} else if(_selector.startsWith(".")) {
-				var eles = global.document.getElementsByClassName(_selector.substring(1, _selector.length));
+				var eles = win.document.getElementsByClassName(_selector.substring(1, _selector.length));
 				var l = eles.length;
 
 				while(l--) {
 					delEvent(eles[l]);
 				}
 			} else {
-				var eles = global.document.getElementsByTagName(_selector);
+				var eles = win.document.getElementsByTagName(_selector);
 				var l = eles.length;
 
 				while(l--) {
@@ -404,8 +401,8 @@
 	 */
 	Tool.prototype.getCookie = function(name) {
 		if(!name) return;
-		var arr = "",
-			reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+		var arr = "", reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+
 		if(arr=doc.cookie.match(reg)) {
 			return unescape(arr[2]);
 		} else {
@@ -445,8 +442,7 @@
 		if(!ele) return ;
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
-			var i = 0,
-				len = ele.length;
+			var i = 0, len = ele.length;
 
 			if(i>=len) return ;
 
@@ -477,8 +473,7 @@
 		if(!ele) return ;
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
-			var i = 0,
-				len = ele.length;
+			var i = 0, len = ele.length;
 
 			if(i>=len) return;
 
@@ -524,45 +519,37 @@
 				frag = null;
 
 			switch (where) {
-				case "beforebegin":
-					range.setStartBefore(el);
+			case "beforebegin":
+				range.setStartBefore(el);
+				frag = range.createContextualFragment(html);
+				el.parentNode.insertBefore(frag, el);
+				return el.previousSibling;
+			case "afterbegin":
+				if (el.firstChild) {
+					range.setStartBefore(el.firstChild);
 					frag = range.createContextualFragment(html);
-					el.parentNode.insertBefore(frag, el);
-					return el.previousSibling;
-				case "afterbegin":
-					if (el.firstChild) {
-						range.setStartBefore(el.firstChild);
-						frag = range.createContextualFragment(html);
-						el.insertBefore(frag, el.firstChild);
-					} else {
-						el.innerHTML = html;
-					}
-					return el.firstChild;
-				case "beforeend":
-					if (el.lastChild) {
-						range.setStartAfter(el.lastChild);
-						frag = range.createContextualFragment(html);
-						el.appendChild(frag);
-					} else {
-						el.innerHTML = html;
-					}
-					return el.lastChild;
-				case "afterend":
-					range.setStartAfter(el);
+					el.insertBefore(frag, el.firstChild);
+				} else {
+					el.innerHTML = html;
+				}
+				return el.firstChild;
+			case "beforeend":
+				if (el.lastChild) {
+					range.setStartAfter(el.lastChild);
 					frag = range.createContextualFragment(html);
-					el.parentNode.insertBefore(frag, el.nextSibling);
-					return el.nextSibling;
+					el.appendChild(frag);
+				} else {
+					el.innerHTML = html;
+				}
+				return el.lastChild;
+			case "afterend":
+				range.setStartAfter(el);
+				frag = range.createContextualFragment(html);
+				el.parentNode.insertBefore(frag, el.nextSibling);
+				return el.nextSibling;
 			}
 		}
 	};
-
-	//弃用，用createElement代替
-	/*Tool.prototype.turnStringToDom = function(str) {
-	 turnBox.innerHTML = str;
-	 var child = turnBox.children[0].cloneNode(true);
-	 turnBox.innerHTML = "";
-	 return child;
-	 };*/
 
 	/**
 	 * 创建flash对象
@@ -618,8 +605,7 @@
 	 * num 数字
 	 */
 	Tool.prototype.numberToTime = function(num) {
-		var format = "HH:mm:ss",
-			num = num/1000;
+		var format = "HH:mm:ss", num = num/1000;
 		var hour = Math.floor(num/3600);
 		var minute = Math.floor(num%3600/60);
 		var second = Math.floor(num%3600%60);
@@ -642,6 +628,7 @@
 
 		do {
 			var keyValueStr = keyValueStrs[i];
+
 			if(keyValueStr && root!==keyValueStr) {
 				var _json = keyValueStr.split("=");
 				json[root][_json[0]] = _json[1];
@@ -666,8 +653,7 @@
 		if(0>=len) return obj;
 
 		do {
-			var ele = elements[i],
-				name = ele.name;
+			var ele = elements[i], name = ele.name;
 
 			if(-1===names.indexOf(name)) {
 				names.push(name);
@@ -713,10 +699,7 @@
 			box.select();
 			var text = document.execCommand("Copy");
 			box.selectionEnd = 0;
-
-			if(fn) {
-				fn.call(self, text);
-			}
+			fn && fn.call(self, text);
 		});
 	};
 
@@ -727,14 +710,8 @@
 	 * return boolean值，如果有则为true，如果没有则为false
 	 */
 	Tool.prototype.hasClass = function(ele, cls) {
-		var className = ele.className,
-			flag = false;
-
-		if(-1!==className.indexOf(cls)) {
-			flag = true;
-		}
-
-		return flag;
+		var reg = new RegExp("\\b"+cls+"\\b");
+		return reg.test(ele.className);
 	};
 
 	/**
@@ -761,15 +738,11 @@
 	 * return 当前元素前面的所有同级元素集合
 	 */
 	Tool.prototype.preAll = function(node) {
-		var list = [],
-			pre = node;
+		var list = [], pre = node;
 
 		do {
 			pre = this.pre(pre);
-
-			if(pre) {
-				list.push(pre);
-			}
+			pre && list.push(pre);
 		} while(pre);
 
 		return list;
@@ -781,15 +754,11 @@
 	 * return 当前元素后面的所有同级元素集合
 	 */
 	Tool.prototype.nextAll = function(node) {
-		var list = [],
-			next = node;
+		var list = [], next = node;
 
 		do {
 			next = this.next(next);
-
-			if(next) {
-				list.push(next);
-			}
+			next && list.push(next);
 		} while(next);
 
 		return list;
@@ -801,10 +770,7 @@
 	 * return 当前元素的所有同级元素集合
 	 */
 	Tool.prototype.siblings = function(node) {
-		var preList = this.preAll(node),
-			nextList = this.nextAll(node),
-			push = Array.prototype.push;
-
+		var preList = this.preAll(node), nextList = this.nextAll(node);
 		push.apply(preList, nextList);
 		return preList;
 	};
@@ -844,8 +810,7 @@
 				return recycled.removeChild(recycled.firstChild);
 			}
 
-			var deep = 0,
-				ele = recycled;
+			var deep = 0, ele = recycled;
 
 			do {
 				html = "<" + tagName + ">" + html + "</" + tagName + ">";
@@ -865,6 +830,7 @@
 	};
 
 	Tool.prototype.encodeBase64 = function(str) {
+
 		var out, i, len;
 		var c1, c2, c3;
 
@@ -903,55 +869,81 @@
 	};
 
 	Tool.prototype.decodeBase64 = function(str) {
-		var c1, c2, c3, c4;
-		var i, len, out;
+		utf16to8.call(this, str, function(str) {
+			var c1, c2, c3, c4;
+			var i, len, out;
 
-		len = str.length;
-		i = 0;
-		out = "";
+			len = str.length;
+			i = 0;
+			out = "";
 
-		while(i < len) {
-			/* c1 */
-			do {
-				c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-			} while(i < len && c1 == -1);
+			while(i < len) {
+				/* c1 */
+				do {
+					c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+				} while(i < len && c1 == -1);
 
-			if(c1 == -1) break;
+				if(c1 == -1) break;
 
-			/* c2 */
-			do {
-				c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-			} while(i < len && c2 == -1);
+				/* c2 */
+				do {
+					c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+				} while(i < len && c2 == -1);
 
-			if(c2 == -1) break;
+				if(c2 == -1) break;
 
-			out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
+				out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
 
-			/* c3 */
-			do {
-				c3 = str.charCodeAt(i++) & 0xff;
-				if(c3 == 61) return utf8to16(out);
-				c3 = base64DecodeChars[c3];
-			} while(i < len && c3 == -1);
+				/* c3 */
+				do {
+					c3 = str.charCodeAt(i++) & 0xff;
+					if(c3 == 61) return utf8to16(out);
+					c3 = base64DecodeChars[c3];
+				} while(i < len && c3 == -1);
 
-			if(c3 == -1) break;
+				if(c3 == -1) break;
 
-			out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
+				out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
 
-			/* c4 */
-			do {
-				c4 = str.charCodeAt(i++) & 0xff;
-				if(c4 == 61) return utf8to16(out);
-				c4 = base64DecodeChars[c4];
-			} while(i < len && c4 == -1);
+				/* c4 */
+				do {
+					c4 = str.charCodeAt(i++) & 0xff;
+					if(c4 == 61) return utf8to16(out);
+					c4 = base64DecodeChars[c4];
+				} while(i < len && c4 == -1);
 
-			if(c4 == -1) break;
+				if(c4 == -1) break;
 
-			out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
-		}
+				out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
+			}
 
-		return utf8to16(out);
+			return utf8to16(out);
+		});
 	};
+
+	function utf16to8(str, fn) {
+	    var out, i, len, c, self = this;
+
+	    out = "";
+	    len = str.length;
+
+	    for(i = 0; i < len; i++) {
+		    c = str.charCodeAt(i);
+
+		    if ((c >= 0x0001) && (c <= 0x007F)) {
+		        out += str.charAt(i);
+		    } else if (c > 0x07FF) {
+		        out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+		        out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));
+		        out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+		    } else {
+		        out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));
+		        out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+		    }
+	    }
+
+	    fn.call(self, out);
+	}
 
 	function utf8to16(str) {
 		var out, i, len, c;
@@ -965,21 +957,21 @@
 			c = str.charCodeAt(i++);
 
 			switch(c >> 4) {
-				case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-				// 0xxxxxxx
-				out += str.charAt(i-1);
+			case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+			// 0xxxxxxx
+			out += str.charAt(i-1);
 				break;
-				case 12: case 13:
-				// 110x xxxx   10xx xxxx
+			case 12: case 13:
+			// 110x xxxx   10xx xxxx
+			char2 = str.charCodeAt(i++);
+			out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+				break;
+			case 14:
+				// 1110 xxxx  10xx xxxx  10xx xxxx
 				char2 = str.charCodeAt(i++);
-				out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+				char3 = str.charCodeAt(i++);
+				out += String.fromCharCode(((c & 0x0F) << 12) | ((char2 & 0x3F) << 6) | ((char3 & 0x3F) << 0));
 				break;
-				case 14:
-					// 1110 xxxx  10xx xxxx  10xx xxxx
-					char2 = str.charCodeAt(i++);
-					char3 = str.charCodeAt(i++);
-					out += String.fromCharCode(((c & 0x0F) << 12) | ((char2 & 0x3F) << 6) | ((char3 & 0x3F) << 0));
-					break;
 			}
 		}
 
@@ -1195,45 +1187,41 @@
 	void 0!==duang?(function() {
 		duang.module("Tool", []).controller("tool", function() {return new Tool});
 	}()):(function() {
-		global.vm = global.vm || {};
-		global.vm.module = global.vm.module || {};
-		global.vm.module["tool"] = new Tool();
-		global["tool"] = global.vm.module["tool"];
+		win.vm = win.vm || {};
+		win.vm.module = win.vm.module || {};
+		win.vm.module["tool"] = new Tool();
+		win["tool"] = win.vm.module["tool"];
 	}());
 
 	String.prototype.trim = String.prototype.trim || function() {
 		this.replace(/(^\s*)|(\s*$)/g, "");
 	};
 
-	Array.prototype.unique = Array.prototype.unique || function(param) {
-		var arr = this, len = arr.length;
-		if(0===len) return ;
+	Array.prototype.unique = Array.prototype.unique || function() {
+		var args = [].slice.call(arguments, 0),
+			fn = args.shift(),
+			set = new Set(),
+			list = [],
+			arr = this,
+			len=  arr.length,
+			i = 0;
 
-		if(void 0===param) {
-			var _arr = new Set(arr);
-			arr = Array.from(_arr);
-		} else {
-			var temp = {}, i = 0;
+		if(i>len) return ;
 
-			do {
-				var data = arr[i];
+		do {
+			var x = arr[i];
+			if(fn) {
+				fn.call(list, x) && list.push(x);
+			} else {
+				set.add(x);
+			}
+		} while(++i<len)
 
-				if(!temp[data[param]]) {
-					temp[data[param]] = 1;
-					i++;
-				} else {
-					arr.splice(i, 1);
-					len = arr.length;
-				}
-			} while(i<len)
-		}
-
-		return arr;
+		return !fn?Array.from(set):list;
 	};
 
 	Array.prototype.removeEmpty = function() {
-		var that = this,
-			arr = [];
+		var that = this, arr = [];
 		that.map(function(item) {
 			if(void(0)!==item && null!==item && ""!==item) {
 				arr.push(item);
@@ -1258,7 +1246,7 @@
 		return fmt;
 	};
 
-	if (!global.$jsonp) {
+	if (!win.$jsonp) {
 		var sendScriptRequest = function(url, id) {
 				//将请求地址以script标签形式插入到页面。（注定是GET请求）
 				var head = document.getElementsByTagName("head")[0];
@@ -1284,7 +1272,7 @@
 
 				return callName;
 			};
-		global.$jsonp = function(url, data, callback) {
+		win.$jsonp = function(url, data, callback) {
 			//生成GET请求地址
 			if (!url) return false;
 			callback = buildTempFunction(callback);
@@ -1298,6 +1286,6 @@
 			sendScriptRequest(url, callback);
 		};
 	};
-})(window, function() {
+})(function() {
 	return window.duang || void 0;
 });
