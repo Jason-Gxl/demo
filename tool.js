@@ -830,95 +830,94 @@
 	};
 
 	Tool.prototype.encodeBase64 = function(str) {
+		return utf16to8.call(this, str, function(str) {
+			var out, i, len;
+			var c1, c2, c3;
 
-		var out, i, len;
-		var c1, c2, c3;
+			var len = str.length,
+				i = 0,
+				out = "";
 
-		var len = str.length,
-			i = 0,
-			out = "";
+			while(i < len) {
+				c1 = str.charCodeAt(i++) & 0xff;
 
-		while(i < len) {
-			c1 = str.charCodeAt(i++) & 0xff;
+				if(i == len) {
+					out += base64EncodeChars.charAt(c1 >> 2);
+					out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+					out += "==";
+					break;
+				}
 
-			if(i == len) {
-				out += base64EncodeChars.charAt(c1 >> 2);
-				out += base64EncodeChars.charAt((c1 & 0x3) << 4);
-				out += "==";
-				break;
-			}
+				c2 = str.charCodeAt(i++);
 
-			c2 = str.charCodeAt(i++);
+				if(i == len) {
+					out += base64EncodeChars.charAt(c1 >> 2);
+					out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+					out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+					out += "=";
+					break;
+				}
 
-			if(i == len) {
+				c3 = str.charCodeAt(i++);
 				out += base64EncodeChars.charAt(c1 >> 2);
 				out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-				out += base64EncodeChars.charAt((c2 & 0xF) << 2);
-				out += "=";
-				break;
+				out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
+				out += base64EncodeChars.charAt(c3 & 0x3F);
 			}
 
-			c3 = str.charCodeAt(i++);
-			out += base64EncodeChars.charAt(c1 >> 2);
-			out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-			out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
-			out += base64EncodeChars.charAt(c3 & 0x3F);
-		}
-
-		return out;
+			return out;
+		});
 	};
 
 	Tool.prototype.decodeBase64 = function(str) {
-		utf16to8.call(this, str, function(str) {
-			var c1, c2, c3, c4;
-			var i, len, out;
+		var c1, c2, c3, c4;
+		var i, len, out;
 
-			len = str.length;
-			i = 0;
-			out = "";
+		len = str.length;
+		i = 0;
+		out = "";
 
-			while(i < len) {
-				/* c1 */
-				do {
-					c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-				} while(i < len && c1 == -1);
+		while(i < len) {
+			/* c1 */
+			do {
+				c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+			} while(i < len && c1 == -1);
 
-				if(c1 == -1) break;
+			if(c1 == -1) break;
 
-				/* c2 */
-				do {
-					c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-				} while(i < len && c2 == -1);
+			/* c2 */
+			do {
+				c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+			} while(i < len && c2 == -1);
 
-				if(c2 == -1) break;
+			if(c2 == -1) break;
 
-				out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
+			out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
 
-				/* c3 */
-				do {
-					c3 = str.charCodeAt(i++) & 0xff;
-					if(c3 == 61) return utf8to16(out);
-					c3 = base64DecodeChars[c3];
-				} while(i < len && c3 == -1);
+			/* c3 */
+			do {
+				c3 = str.charCodeAt(i++) & 0xff;
+				if(c3 == 61) return utf8to16(out);
+				c3 = base64DecodeChars[c3];
+			} while(i < len && c3 == -1);
 
-				if(c3 == -1) break;
+			if(c3 == -1) break;
 
-				out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
+			out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
 
-				/* c4 */
-				do {
-					c4 = str.charCodeAt(i++) & 0xff;
-					if(c4 == 61) return utf8to16(out);
-					c4 = base64DecodeChars[c4];
-				} while(i < len && c4 == -1);
+			/* c4 */
+			do {
+				c4 = str.charCodeAt(i++) & 0xff;
+				if(c4 == 61) return utf8to16(out);
+				c4 = base64DecodeChars[c4];
+			} while(i < len && c4 == -1);
 
-				if(c4 == -1) break;
+			if(c4 == -1) break;
 
-				out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
-			}
+			out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
+		}
 
-			return utf8to16(out);
-		});
+		return utf8to16(out);
 	};
 
 	function utf16to8(str, fn) {
@@ -942,7 +941,7 @@
 		    }
 	    }
 
-	    fn.call(self, out);
+	    return fn.call(self, out);
 	}
 
 	function utf8to16(str) {
