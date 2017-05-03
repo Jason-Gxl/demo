@@ -443,7 +443,6 @@
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0, len = ele.length;
-
 			if(i>=len) return ;
 
 			do {
@@ -471,22 +470,22 @@
 	 */
 	Tool.prototype.removeClass = function(ele, classname) {
 		if(!ele) return ;
+		var reg = new RegExp("\\b"+classname+"\\b", "g");
 
 		if("[object Array]"===toString.call(ele) || "[object HTMLCollection]"===toString.call(ele)) {
 			var i = 0, len = ele.length;
-
 			if(i>=len) return;
 
 			do {
 				var el = ele[i];
 
 				if(1===el.nodeType) {
-					el.className = el.className.replace(classname, "").trim();
+					el.className = el.className.replace(reg, "").trim();
 				}
 			} while(++i<len)
 		} else {
 			if(1!==ele.nodeType) return;
-			ele.className = ele.className.replace(classname, "").trim();
+			ele.className = ele.className.replace(reg, "").trim();
 		}
 		return ele;
 	};
@@ -654,33 +653,31 @@
 
 		do {
 			var ele = elements[i], name = ele.name;
-
-			if(-1===names.indexOf(name)) {
-				names.push(name);
-			}
+			-1===names.indexOf(name) && names.push(name);
 		} while(++i<len);
 
-		len = names.length;
+		if(0<names.length) {
+			var i = names.length-1;
 
-		if(0>=len) return obj;
+			do {
+				var name = names.shift(), node = form[name];
 
-		i=0;
-		do {
-			var node = form[names[i]];
+				if(node) {
+					if(!node.nodeType && node.length && 0<node.length && "checkbox"===node[0].type) {
+						obj[name] = "";
 
-			if(!node.nodeType && node.length && 0<node.length && "checkbox"===node[0].type) {
-				obj[names[i]] = "";
-
-				for(var key in node) {
-					if(node[key].checked) {
-						if(obj[names[i]]) obj[names[i]] += ",";
-						obj[names[i]] += node[key].value;
+						for(var key in node) {
+							if(node[key].checked) {
+								if(obj[name]) obj[name] += ",";
+								obj[name] += node[key].value;
+							}
+						}
+					} else {
+						obj[name] = node.value;
 					}
 				}
-			} else {
-				obj[names[i]] = node.value;
-			}
-		} while(++i<len);
+			} while(--i>=0);
+		}
 
 		return obj;
 	};
@@ -1183,6 +1180,11 @@
 		ele.removeAttribute(attrName);
 	};
 
+	Tool.prototype.validatePhone = function(phoneNumber) {
+		var reg = /^0?1[34578][0-9]\d{8}$/;
+		return reg.test(phoneNumber);
+	};
+
 	void 0!==duang?(function() {
 		duang.module("Tool", []).controller("tool", function() {return new Tool});
 	}()):(function() {
@@ -1289,4 +1291,4 @@
 	};
 })(function() {
 	return window.duang || void 0;
-});
+}, void(0));
