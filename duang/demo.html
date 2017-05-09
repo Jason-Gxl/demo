@@ -4,6 +4,7 @@
 	<title>duangJS</title>
 </head>
 <body>
+	<input type="text" name="name" class="name-input" id="name_input">
 </body>
 <script type="text/javascript" src="./duang2.js"></script>
 <script type="text/javascript">
@@ -17,7 +18,7 @@
 		}
 	})
 	.controller("controller1", ["service1"], function(service1) {
-		console.log(service1.get());
+		console.log(service1.get().then(function(result) {}));
 	});
 
 	duang.module("module", ["module1"])

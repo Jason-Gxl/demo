@@ -71,3 +71,8 @@
     position: absolute;
     right: 0;
 }
+
+.win-tip {
+    background: #585555;
+    color: #fff;
+}

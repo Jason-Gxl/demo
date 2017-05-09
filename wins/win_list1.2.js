@@ -58,7 +58,7 @@
 
  	function buildWin(params) {
  		var self = this;
- 		var tpl = "<div class='dialog-wrap dialog-hidden'>";
+ 		var tpl = "<div class='dialog-wrap dialog-hidden win-"+this.name.toLowerCase()+"'>";
 
  		if(params.mark && !hasMark) {
  			markObj = tool.createElement(markTpl);
@@ -118,7 +118,7 @@
 
  		if(params.auto) {
  			this.timer = setTimeout(function() {
- 				hideWin.call(self);
+ 				self.close();
  			}, +params.time||3000);
  		}
  	}
@@ -239,6 +239,41 @@
 		}
  	};
 
+ 	function Tip() {
+ 		if(!this instanceof Tip) {
+ 			return new Tip(arguments);
+ 		}
+
+ 		this.name = "Tip";
+ 		this.isShow = false;
+
+ 		var args = [].slice.call(arguments[0], 0),
+ 			config = {
+ 				content: args.shift(),
+ 				auto: true,
+ 				footer: false,
+ 				afterClose: args.pop(),
+ 				time: args.shift(),
+ 				mark: false
+ 			};
+
+ 		if(!isNaN(config.afterClose)) {
+ 			config.time = config.afterClose;
+ 			delete config.afterClose;
+ 		}
+
+ 		var params = tool.deepCopy(defaultConfig, config, true);
+
+ 		this.getParams = function() {
+ 			return params;
+ 		};
+
+ 		buildWin.call(this, params);
+ 	}
+
+ 	Tip.prototype = new Win();
+ 	Tip.prototype.constructor = Tip;
+
  	window.win = {
  		alert: function(params) {
  			if(!params) return ;
@@ -253,6 +288,9 @@
  			var confirmObj = new Confirm(params);
  			params = confirmObj.getParams();
  			return params.disposable?null:confirmObj;
+ 		},
+ 		tip: function() {
+ 			new Tip(arguments);
  		}
  	};
  }(window.tool, void(0)));
