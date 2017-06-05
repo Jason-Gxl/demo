@@ -3,10 +3,33 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    <style type="text/css">
+        .tab_content {
+            height: 800px;
+            background: red;
+            margin-bottom: 100px;
+        }
+        #tab1:target, #tab2:target, #tab3:target {
+            background:blue;
+        }   
+    </style>
 </head>
 <body>
     <video id="video" width="640" height="480" autoplay></video>
     <span title="">11</span>
+    <a href="#index">index</a>
+    <a href="#demo">demo</a>
+    <ul class="tabs">
+        <li><a href="#tab1">标签一</a></li>
+        <li><a href="#tab2">标签二</a></li>
+        <li><a href="#tab3">标签三</a></li>
+    </ul>
+    <div id="tab1" class="tab_content">
+    <!--tabed content--></div>
+    <div id="tab2" class="tab_content">
+    <!--tabed content--></div>
+    <div id="tab3" class="tab_content">
+    <!--tabed content--></div>
 </body>
 <script type="text/javascript" src="../tool.js"></script>
 <script type="text/javascript" src="./demo.js"></script>
@@ -17,7 +40,7 @@ window.addEventListener("DOMContentLoaded", function() {
     var video = document.getElementById("video"),
         videoObj = {"video": true},
         errBack = function(error) {
-            console.log("Video capture error: ", error.code); 
+            console.log("Video capture error: ", error.code);
         };
 
     // Put video listeners into place
@@ -41,5 +64,15 @@ window.addEventListener("DOMContentLoaded", function() {
             }, errBack);
     }
 }, false);
+
+var addEvent = window.addEventListener?function(target, type, fn, use) {
+    target.addEventListener(type, fn, use||false);
+}:function(target, type, fn) {
+    target.attachEvent("on"+type, fn);
+};
+
+addEvent(window, "hashchange", function() {
+    console.log(arguments);
+});
 </script>
 </html>
