@@ -13,8 +13,8 @@
 	}
 	
 	MultiSelect.prototype = {
-			getDoms: function() {},
-			getResult: function() {}
+		getDoms: function() {},
+		getResult: function() {}
 	};
 	
 	function multiSelect() {

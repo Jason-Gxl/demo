@@ -5,7 +5,7 @@
     <title></title>
     <style type="text/css">
         .tab_content {
-            height: 800px;
+            height: 100px;
             background: red;
             margin-bottom: 100px;
         }
@@ -30,6 +30,8 @@
     <!--tabed content--></div>
     <div id="tab3" class="tab_content">
     <!--tabed content--></div>
+    <a href="javascript:void(0);" id="btn1">按钮1</a>
+    <a href="javascript:void(0);" id="btn2">按钮2</a>
 </body>
 <script type="text/javascript" src="../tool.js"></script>
 <script type="text/javascript" src="./demo.js"></script>
@@ -74,5 +76,48 @@ var addEvent = window.addEventListener?function(target, type, fn, use) {
 addEvent(window, "hashchange", function() {
     console.log(arguments);
 });
+
+function loop(callback) {
+    var _loop = function() {
+        console.log("==========================================");
+        callback && callback();
+    };
+
+    if(callback) return 1;
+
+    window.it = setInterval(function() {
+        _loop();
+    }, 5000);
+}
+
+addEvent(document.getElementById("btn1"), "click", function() {
+    loop(function() {
+        console.log("btn1");
+    });
+});
+
+addEvent(document.getElementById("btn2"), "click", function() {
+    loop(function() {
+        console.log("btn2");
+    });
+});
+
+/*loop();*/
+function aa(a , b,c){ //js 群的一道题
+    function a(){}
+
+    console.log(a); //function a 
+    console.log(aa);
+
+    //如果作用域内没有 var a ,则 arguments[0] 为 function a (friefox(version 17) 则一定是function a)
+    console.log(arguments[0]); 
+    var a = "ee";  //注销此句，考擦 arguments[0] 将变为 a 函数
+    var aa = "444";
+    arguments = 6;
+    console.log(a);
+    console.log(aa);
+    console.log(arguments);
+}
+aa(1,2,3); 
 </script>
 </html>
