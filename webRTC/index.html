@@ -9,6 +9,7 @@
 <script type="text/javascript" src="./index.js"></script>
 <script type="text/javascript">
 	(function() {
+		//var getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia;
 		navigator.getUserMedia || (navigator.getUserMedia = navigator.mozGetUserMedia  || navigator.webkitGetUserMedia || navigator.msGetUserMedia);
 
 		navigator.getUserMedia({video: true, audio: true}, function(stream) {

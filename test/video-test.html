@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>video-test</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body, ul, li {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		li {
+			display: inline-block;
+			width: 400px;
+			height: 200px;
+			text-align: center;
+		    line-height: 1.5;
+		}
+
+		video {
+			outline: solid 1px #cdcdcd;
+		}
+	</style>
+</head>
+<body>
+	<ul id="video_list_wrap"></ul>
+</body>
+<script type="text/javascript">
+	window.addEventListener("DOMContentLoaded", function() {
+		var tpl = "\
+			<div><label>Audio:</label><select class='audio-select'><option value=''>音频</option>$AUDIO$</select></div>\
+			<div><label>Video:</label><select class='video-select'><option value=''>视频</option>$VIDEO$</select></div>\
+			<div><video autoplay='autoplay' width='320' height='180'></video></div>";
+		var li = document.createElement("LI"),
+			videoListWrap = document.getElementById("video_list_wrap");
+
+		navigator.mediaDevices.enumerateDevices().then(function(devices) {
+			var audios = [], videos = [], len = 0, aStr = "", vStr = "";
+			var constraints  = {
+				audio: [{sourceId: ""}],
+				video: [{sourceId: ""}]
+			};
+
+			[].forEach.call(devices, function(device) {
+				if("audioinput"===device.kind) {
+					audios.push(device);
+					aStr += "<option value='"+device.deviceId+"'>"+(device.label || audios.length)+"</option>";
+				} else if("videoinput"===device.kind){
+					videos.push(device);
+					vStr += "<option value='"+device.deviceId+"'>"+(device.label || videos.length)+"</option>";
+				} else {
+					console.log('Found ome other kind of source/device: ', device);
+				}
+			});
+
+			len = videos.length;
+			while(len--) {
+				var _li = li.cloneNode(1), _tpl = tpl.replace(/\$AUDIO\$/, aStr).replace(/\$VIDEO\$/, vStr);
+				_li.innerHTML = _tpl;
+
+				(function(li) {
+					var stream = null, 
+						videoEle = li.getElementsByTagName("video")[0],
+						audioSelecet = li.getElementsByClassName("audio-select")[0],
+						videoSelecet = li.getElementsByClassName("video-select")[0];
+
+					audioSelecet.addEventListener("change", function() {
+						if(stream) {
+							stream.getTracks().forEach(function(track) {
+								track.stop();
+							});
+						}
+						constraints.audio[0].sourceId = this.value;
+						navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+							videoEle.srcObject = stream;
+						}).catch(handleError);
+					}, false);
+
+					videoSelecet.addEventListener("change", function() {
+						if(stream) {
+							stream.getTracks().forEach(function(track) {
+								track.stop();
+							});
+						}
+						constraints.video[0].sourceId = this.value;
+						navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+							videoEle.srcObject = stream;
+						}).catch(handleError);
+					}, false);
+				}(_li));
+
+				videoListWrap.appendChild(_li);
+			}
+		}).catch(handleError);
+
+		function handleError(error) {
+	  		console.log('Error: ', error);
+		}
+	}, false);
+</script>
+</html>

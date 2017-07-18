@@ -1,5 +1,5 @@
 
-(function(fn, $) {
+;(function(fn, $, undefined) {
 	var win = window,
 		doc = document,
 		duang = fn.call(Object.create(null));
@@ -214,6 +214,14 @@
 		};
 	};
 
+    /**
+	 * 入口，其它各个模块的初始化工作都将在这个模块完成
+     * @param tool	工具模块对象，文件：public/webpc/js/tool.js
+     * @param dataService	数据模块对象，用于与后端交互，获取数据
+     * @param recordController	录制模块对象，录制的开始，暂停，停止，添加片头/片尾等等与录制相关的操作都在这个模块定义
+     * @param specialController	特效模块对象，视频画面切换的特效等功能都在这个模块定义
+     * @constructor
+     */
 	var IndexController = function(tool, dataService, recordController, specialController) {
 		var directorWrap = doc.getElementsByClassName("director-wrap")[0];
 		resizeWin();
@@ -246,6 +254,17 @@
 		});
 	};
 
+    /**
+	 * 录制模块
+     * @param tool	工具模块对象，文件：public/webpc/js/tool.js
+     * @param remote	通讯模块，此模块用于与课堂交互
+     * @param select	下拉框组件对象，文件：public/webpc/onlineClass/inside/v5.6/director/js/select.js
+     * @param win	弹出层组件对象，文件：public/webpc/js/win_list.js
+     * @param dataService	数据模块对象，用于与后端交互，获取数据
+     * @param tab
+     * @returns {{name: string, init: init}}
+     * @constructor
+     */
 	var RecordController = function(tool, remote, select, win, dataService, tab) {
 		var tpl = "\
 					<tr>\
@@ -466,12 +485,21 @@
 				} else {
 					//本地导播不访问远程课堂
 				}
-			},
+			}
 		};
 
 		return record;
 	};
 
+    /**
+	 * 特效等功能控制模块
+     * @param tool	工具模块对象，文件：public/webpc/js/tool.js
+     * @param remote	通讯模块，此模块用于与课堂交互
+     * @param select	下拉框组件对象，文件：public/webpc/onlineClass/inside/v5.6/director/js/select.js
+     * @param dataService	数据模块对象，用于与后端交互，获取数据
+     * @returns {{name: string, init: init}}
+     * @constructor
+     */
 	var SpecialController = function(tool, remote, select, dataService) {
 		var directorBtn = null,
 			directorMode = 1,
@@ -496,6 +524,12 @@
 		return special;
 	};
 
+    /**
+	 * 公共模块，定义一些公共接口，方便各个模块调用
+     * @param tool
+     * @returns {{name: string, fn: fn}}
+     * @constructor
+     */
 	var CommonController = function(tool) {
 		var toString = Object.prototype.toString;
 
@@ -517,111 +551,12 @@
 		return common;
 	};
 
-	var RemoteController = function(tool, common) {
-		var uuid = 0,
-			swfUrl  ="",
-			callbackMap = {},
-			defaultParams = {},
-			toString = Object.prototype.toString,
-			wrap = doc.getElementById("coco_wrap");
-
-		COCO.cocoEvent.addCustEvent("linkup", function() {
-	        console.log("COCO连接成功！");
-	        COCO.callAll("location.reload");
-	    });
-
-	    COCO.cocoEvent.addCustEvent("loginup", function() {
-	        console.log("COCO登录成功！");
-	    });
-
-	    COCO.cocoEvent.addCustEvent("loadUser", function() {
-	        var uids = arguments[0],
-	            len = uids.length;
-	    });
-
-	    COCO.cocoEvent.addCustEvent("linkDown", function() {
-	        console.log("COCO掉线了！");
-	    });
-
-	    COCO.cocoEvent.addCustEvent("loginNotify", function() {
-	        var info = arguments[0];
-	    });
-
-	    COCO.cocoEvent.addCustEvent("logoutNotify", function() {
-	        var info = arguments[0];
-	    });
-
-	    COCO.cocoEvent.addCustEvent("recePrivateMsg", function() {
-	        var info = arguments[0];
-	    });
-
-	    COCO.cocoEvent.addCustEvent("recePublicMsg", function() {
-	        var info = arguments[0];
-	    });
-
-	    COCO.cocoEvent.addCustEvent("receive", function() {
-	        var data = arguments[0].message;
-	    });
-
-	    var cc = {
-	    	name: "RemoteController",
-	    	init: function(url, cocoParams) {
-	    		wrap.innerHTML = "";
-	    		tool.deepCopy(cocoParams, defaultParams);
-	    		swfUrl = url || swfUrl;
-				COCO.init(wrap, swfUrl, defaultParams);
-	    	},
-	    	send: function() {
-	    		var args = [].slice.call(arguments, 0),
-	    			len = args.length,
-	    			needCallback = 0,
-	    			uid = args.shift();
-
-	    		if(!uid || "[object Function]"===toString.call(uid)) return ;
-	    		if("[object Function]"===toString.call(args[len-1])) {
-	    			callbackMap[++uuid] = args.pop();
-	    			needCallback = 1;
-	    		}
-
-	    		COCO.callOne(uid, "cc.receive", userId, "S", needCallback, uuid, args);
-	    	},
-	    	receive: function() {
-	    		var args = [].slice.call(arguments, 0),
-	    			from = args.shift(),
-	    			type = args.shift(),
-	    			needCallback = args.shift(),
-	    			uuid = args.shift(),
-	    			args = args.shift(),
-	    			fnName = args.shift();
-
-	    		if("S"===type) {
-		    		if(!common || !common[fnName]) return ;
-		    		common[fnName].apply(this, args.push(function() {
-		    			needCallback && COCO.callOne(from, "cc.receive", userId, "B", 0, "", [].slice.call(arguments));
-		    		}));
-	    		} else {
-	    			callbackMap[uuid].apply(this, args);
-	    		}
-	    	},
-	    	sendAll: function() {
-	    		var args = [].slice.call(arguments, 0),
-	    			uid = args.shift();
-	    		COCO.callAll("cc.receive", userId, "S", 0, "", args);
-	    	}
-	    };
-
-	    win.cc = cc;
-
-	    return cc;
-	};
-
 	duang.module("OnlineClass", ["Tool", "Component"])
 		.service("dataService", DataService)
-		.controller("commonController", ["tool"], CommonController)
-		//.controller("remoteController", ["tool", "commonController"], RemoteController)
+		.controller("common", ["tool"], CommonController)
 		.controller("recordController", ["tool", "remote", "select", "win", "dataService", "tab"], RecordController)
 		.controller("specialController", ["tool", "remote", "select", "dataService"], SpecialController)
 		.controller("indexController", ["tool", "dataService", "recordController", "specialController"], IndexController);
 }(function() {
 	return window.duang || null;
-}, jQuery, void(0)));
+}, jQuery));

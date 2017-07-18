@@ -32,92 +32,21 @@
     <!--tabed content--></div>
     <a href="javascript:void(0);" id="btn1">按钮1</a>
     <a href="javascript:void(0);" id="btn2">按钮2</a>
+    <input type="color">
+    <input type="time">
 </body>
 <script type="text/javascript" src="../tool.js"></script>
 <script type="text/javascript" src="./demo.js"></script>
 <script type="text/javascript">
-// Put event listeners into place
-window.addEventListener("DOMContentLoaded", function() {
-    // Grab elements, create settings, etc.
-    var video = document.getElementById("video"),
-        videoObj = {"video": true},
-        errBack = function(error) {
-            console.log("Video capture error: ", error.code);
-        };
+    window.addEventListener("DOMContentLoaded", function() {
 
-    // Put video listeners into place
-    switch(true) {
-        case void 0!==navigator.webkitGetUserMedia: // WebKit-prefixed
-            navigator.webkitGetUserMedia(videoObj, function(stream){
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            }, errBack);
-        break;
-        case void 0!== navigator.mozGetUserMedia: // Firefox-prefixed
-            navigator.mozGetUserMedia(videoObj, function(stream){
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            }, errBack);
-        break;
-        default: // Standard
-            navigator.getUserMedia(videoObj, function(stream) {
-                video.src = stream;
-                video.play();
-            }, errBack);
-    }
-}, false);
+        /*MediaStreamTrack.getSources(function(tracks) {
+            console.log(tracks);
+        });*/
 
-var addEvent = window.addEventListener?function(target, type, fn, use) {
-    target.addEventListener(type, fn, use||false);
-}:function(target, type, fn) {
-    target.attachEvent("on"+type, fn);
-};
-
-addEvent(window, "hashchange", function() {
-    console.log(arguments);
-});
-
-function loop(callback) {
-    var _loop = function() {
-        console.log("==========================================");
-        callback && callback();
-    };
-
-    if(callback) return 1;
-
-    window.it = setInterval(function() {
-        _loop();
-    }, 5000);
-}
-
-addEvent(document.getElementById("btn1"), "click", function() {
-    loop(function() {
-        console.log("btn1");
+        navigator.mediaDevices.enumerateDevices().then(function(devices) {
+            console.log(devices);
+        })
     });
-});
-
-addEvent(document.getElementById("btn2"), "click", function() {
-    loop(function() {
-        console.log("btn2");
-    });
-});
-
-/*loop();*/
-function aa(a , b,c){ //js 群的一道题
-    function a(){}
-
-    console.log(a); //function a 
-    console.log(aa);
-
-    //如果作用域内没有 var a ,则 arguments[0] 为 function a (friefox(version 17) 则一定是function a)
-    console.log(arguments[0]); 
-    var a = "ee";  //注销此句，考擦 arguments[0] 将变为 a 函数
-    var aa = "444";
-    arguments = 6;
-    console.log(a);
-    console.log(aa);
-    console.log(arguments);
-}
-aa(1,2,3); 
 </script>
 </html>
