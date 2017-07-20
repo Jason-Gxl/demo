@@ -12,8 +12,8 @@
 
 		li {
 			display: inline-block;
-			width: 400px;
-			height: 200px;
+			/*width: 400px;
+			height: 200px;*/
 			text-align: center;
 		    line-height: 1.5;
 		}
@@ -26,20 +26,21 @@
 <body>
 	<ul id="video_list_wrap"></ul>
 </body>
+<script type="text/javascript" src="../webRTC/adapter-latest.js"></script>
 <script type="text/javascript">
 	window.addEventListener("DOMContentLoaded", function() {
 		var tpl = "\
 			<div><label>Audio:</label><select class='audio-select'><option value=''>音频</option>$AUDIO$</select></div>\
 			<div><label>Video:</label><select class='video-select'><option value=''>视频</option>$VIDEO$</select></div>\
-			<div><video autoplay='autoplay' width='320' height='180'></video></div>";
+			<div><video autoplay='autoplay' width='800' height='450'></video></div>";
 		var li = document.createElement("LI"),
 			videoListWrap = document.getElementById("video_list_wrap");
 
 		navigator.mediaDevices.enumerateDevices().then(function(devices) {
 			var audios = [], videos = [], len = 0, aStr = "", vStr = "";
 			var constraints  = {
-				audio: [{sourceId: ""}],
-				video: [{sourceId: ""}]
+				audio: {deviceId: undefined},
+				video: {deviceId: undefined}
 			};
 
 			[].forEach.call(devices, function(device) {
@@ -71,7 +72,8 @@
 								track.stop();
 							});
 						}
-						constraints.audio[0].sourceId = this.value;
+
+						constraints.audio.deviceId = {exact: this.value};
 						navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 							videoEle.srcObject = stream;
 						}).catch(handleError);
@@ -83,7 +85,7 @@
 								track.stop();
 							});
 						}
-						constraints.video[0].sourceId = this.value;
+						constraints.video.deviceId = {exact: this.value};
 						navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 							videoEle.srcObject = stream;
 						}).catch(handleError);

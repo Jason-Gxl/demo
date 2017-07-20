@@ -118,7 +118,7 @@ gulp.task("build-file", () => {
 
 //服务任务
 gulp.task("server", () => {
-	browserSync.init({
+	var opts = {
 		ui: false,
 		open: "external",
 		logLevel: "debug",
@@ -126,13 +126,18 @@ gulp.task("server", () => {
 		logFileChanges: true,
 		host: fileConfig.host||"localhost",
 		port: fileConfig.port||8080,
+		https: !!fileConfig.https,
 		startPath: fileConfig.path||"",
-		browser: fileConfig.browser||["firefox", "chrome"],
-		server: {
-			baseDir: "./",
-			proxy: fileConfig.proxy||""
-		}
-	});	
+		browser: fileConfig.browser||["firefox", "chrome"]
+	};
+
+	if(fileConfig.proxy) {
+		opts.proxy = fileConfig.proxy;
+	} else {
+		opts.server = { baseDir: "./" };
+	}
+
+	browserSync.init(opts);	
 });
 
 gulp.watch(html.files).on("change", () => {
