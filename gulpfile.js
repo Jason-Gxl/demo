@@ -1,38 +1,54 @@
+"use strict";
+
 var gulp = require("gulp"),
-	webpack = require("webpack"),
+	del = require("del"),
 	plugins = require("gulp-load-plugins")(),
 	browserSync = require('browser-sync').create(),
 	fileConfig = require("./file.config.js"),
+	reg = /^.*\/([\w\*]+)\.\w+$/,
 	toString = Object.prototype.toString,
-	js = fileConfig.js, css = fileConfig.css, html = fileConfig.html, img = fileConfig.img, file = fileConfig.file,
-	jsBuildTaskList = [], cssBuildTaskList = [];
+	js = fileConfig.js,
+	css = fileConfig.css,
+	html = fileConfig.html, 
+	img = fileConfig.img, 
+	file = fileConfig.file,
+	jsBuildTaskList = [], 
+	cssBuildTaskList = [], 
+	imgBuildTaskList = [], 
+	fileBuildTaskList = [];
 
 //初始化js打包任务
 function initJSBuildTask(tasks) {
+
 	var _initJSBuildTask = (taskName, js) => {
+		var files = js.files;
+		files = "[object Array]"===toString.call(files) && 1===files.length?files[0]:files;
+		var output = "[object String]"===toString.call(files)?files.match(reg)[1]:"";
+		output = /\*/g.test(output)?"":output;
+
 		//js文件打包任务
 		gulp.task(taskName, () => {
-			gulp.src(js.files)
-				.pipe(plugins.webpack({
-					module: {
-						loaders: [{test: /\.js$/, loader: "jsx?harmony"}]
-					},
-					plugins: [new webpack.BannerPlugin("@Author Jason")]
-				}))
-				.pipe(plugins.sourcemaps.init())
-				.pipe(plugins.uglify())
-				.pipe(plugins.rename({
-					dirname: js.dirname || "",
-					prefix: js.prefix || "",
-					basename: js.output || "main",
-					suffix: js.extname || ".min",
-					extname: js.suffix || ".js"
-				}))
-				.pipe(plugins.sourcemaps.write("."))
-				.pipe(gulp.dest("dist"));
+			return del([(js.basePath||".")+"/dist/*"]).then(() => {
+				gulp.src(files)
+					.pipe(plugins.sourcemaps.init({loadMaps: true}))
+					.pipe(plugins.browserify({
+						debug: true
+					}))
+					// .pipe(plugins.uglify())
+					.pipe(plugins.rename({
+						dirname: js.dirname || "js",
+						prefix: js.prefix || "",
+						basename: js.output || output,
+						suffix: js.extname || ".min",
+						extname: js.suffix || ".js"
+					}))
+					.pipe(plugins.sourcemaps.write("."))
+					.pipe(gulp.dest((js.basePath||".")+"/dist"))
+					.pipe(plugins.notify("success!!!"));
+			});
 		});
 
-		gulp.watch(js.files, [taskName]).on("change", () => {
+		gulp.watch(files, [taskName]).on("change", () => {
 			console.log("Script is changed!");
 			browserSync.reload();
 		});
@@ -52,28 +68,37 @@ function initJSBuildTask(tasks) {
 
 //初始化css打包任务
 function initCSSBuildTask(tasks) {
+
 	var _initCSSBuildTask = (taskName, css) => {
+		var files = css.files;
+		files = "[object Array]"===toString.call(files) && 1===files.length?files[0]:files;
+		var output = "[object String]"===toString.call(files)?files.match(reg)[1]:"";
+		output = /\*/g.test(output)?"":output;
+
 		gulp.task(taskName, () => {
-			gulp.src(css.files)
-				.pipe(plugins.less())
-				.pipe(plugins.sass())
-				.pipe(plugins.sourcemaps.init())
-				.pipe(plugins.concat("all.css"))
-				.pipe(plugins.uglifycss({
-					uglyComments: true
-				}))
-				.pipe(plugins.rename({
-					dirname: css.dirname || "",
-					prefix: css.prefix || "",
-					basename: css.output || "main",
-					suffix: css.extname || ".min",
-					extname: css.suffix || ".css"
-				}))
-				.pipe(plugins.sourcemaps.write("."))
-				.pipe(gulp.dest("dist"));
+			return del([(css.basePath||".")+"/dist/*"]).then(() => {
+				gulp.src(files)
+					.pipe(plugins.less())
+					.pipe(plugins.sass())
+					.pipe(plugins.sourcemaps.init({loadMaps: true}))
+					.pipe(plugins.concat("all.css"))
+					.pipe(plugins.uglifycss({
+						uglyComments: true
+					}))
+					.pipe(plugins.rename({
+						dirname: css.dirname || "css",
+						prefix: css.prefix || "",
+						basename: css.output || output,
+						suffix: css.extname || ".min",
+						extname: css.suffix || ".css"
+					}))
+					.pipe(plugins.sourcemaps.write("."))
+					.pipe(gulp.dest((css.basePath||".")+"/dist"))
+					.pipe(plugins.notify("success!!!"));
+			});
 		});
 
-		gulp.watch(css.files, [taskName]).on("change", () => {
+		gulp.watch(files, [taskName]).on("change", () => {
 			console.log("Style is changed!");
 			browserSync.reload();
 		});
@@ -91,30 +116,72 @@ function initCSSBuildTask(tasks) {
 	}
 }
 
-initJSBuildTask(js);
-initCSSBuildTask(css);
+//初始化图片打包任务
+function initImgBuildTask(tasks) {
 
-gulp.task("build-img", () => {
-	gulp.src(img.files)
-		.pipe(plugins.cache(plugins.imagemin({
-			progressive: img.progressive || false,
-			interlaced: img.interlaced || false,
-			multipass: img.multipass || false,
-			optimizationLevel: img.optimizationLevel || 3
-		})))
-		.pipe(plugins.rename({
-			dirname: img.dirname || ""
-		}))
-		.pipe(gulp.dest("dist"));
-});
+	var _initImgBuildTask = function(taskName, img) {
+		gulp.task(taskName, () => {
+			return del([(img.basePath||".")+"/dist/*"]).then(() => {
+				gulp.src(img.files)
+					.pipe(plugins.cache(plugins.imagemin({
+						progressive: img.progressive || false,
+						interlaced: img.interlaced || false,
+						multipass: img.multipass || false,
+						optimizationLevel: img.optimizationLevel || 3
+					})))
+					.pipe(plugins.rename({
+						dirname: img.dirname || "img"
+					}))
+					.pipe(gulp.dest((img.basePath||".")+"/dist"))
+					.pipe(plugins.notify("success!!!"));
+			});
+		});
 
-gulp.task("build-file", () => {
-	gulp.src(file.files)
-		.pipe(plugins.rename({
-			dirname: file.dirname || ""
-		}))
-		.pipe(gulp.dest("dist"));
-});
+		imgBuildTaskList.push(taskName);
+	};
+
+	if("[object Array]"===toString.call(tasks)) {
+		[].forEach.call(tasks, (task, index) => {
+			var taskName = "build-img-"+index;
+			_initImgBuildTask(taskName, task);
+		});
+	} else {
+		_initImgBuildTask("build-img-0", tasks);
+	}
+}
+
+//初始化其它文件打包任务
+function initFileBuildTask(tasks) {
+
+	var _initFileBuildTask = function(taskName, file) {
+		gulp.task(taskName, () => {
+			return del([(file.basePath||".")+"/dist/*"]).then(() => {
+				gulp.src(file.files)
+					.pipe(plugins.rename({
+						dirname: file.dirname || "file"
+					}))
+					.pipe(gulp.dest((file.basePath||".")+"/dist"))
+					.pipe(plugins.notify("success!!!"));
+			});
+		});
+
+		fileBuildTaskList.push(taskName);
+	};
+
+	if("[object Array]"===toString.call(tasks)) {
+		[].forEach.call(tasks, (task, index) => {
+			var taskName = "build-file-"+index;
+			_initFileBuildTask(taskName, task);
+		});
+	} else {
+		_initFileBuildTask("build-file-0", tasks);
+	}
+}
+
+js && initJSBuildTask(js);
+css && initCSSBuildTask(css);
+img && initImgBuildTask(img);
+file && initFileBuildTask(file);
 
 //服务任务
 gulp.task("server", () => {
@@ -125,28 +192,30 @@ gulp.task("server", () => {
 		reloadDelay: 100,
 		logFileChanges: true,
 		host: fileConfig.host||"localhost",
-		port: fileConfig.port||8080,
+		port: fileConfig.port||3000,
 		https: !!fileConfig.https,
-		startPath: fileConfig.path||"",
-		browser: fileConfig.browser||["firefox", "chrome"]
+		startPath: fileConfig.homePage||"",
+		browser: fileConfig.browser||["firefox", "chrome", "explorer"]
 	};
 
 	if(fileConfig.proxy) {
 		opts.proxy = fileConfig.proxy;
 	} else {
-		opts.server = { baseDir: "./" };
+		opts.server = { baseDir: fileConfig.pagePath||"./" };
 	}
 
 	browserSync.init(opts);	
 });
 
-gulp.watch(html.files).on("change", () => {
+html && gulp.watch(html).on("change", () => {
 	console.log("HTML is changed!");
 	browserSync.reload();
 });
 
-console.log([].concat.apply(["build-img", "build-file"], [].concat.apply(jsBuildTaskList, cssBuildTaskList)));
-gulp.task("build", [].concat.apply(["build-img", "build-file"], [].concat.apply(jsBuildTaskList, cssBuildTaskList)));
-gulp.task("default", ["server", "build"]);
+var allTask = [].concat.apply([], [].concat.apply(jsBuildTaskList, [].concat.apply(cssBuildTaskList, [].concat.apply(imgBuildTaskList, fileBuildTaskList))));
+gulp.task("build", allTask);
+gulp.task("default", ["build"], function() {
+    gulp.start("server");
+});
 gulp.task("build-css", cssBuildTaskList);
 gulp.task("build-js", jsBuildTaskList);
