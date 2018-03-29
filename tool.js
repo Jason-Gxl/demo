@@ -606,7 +606,7 @@
 	Tool.prototype.numberToTime = function(num) {
 		var format = "HH:mm:ss", num = num/1000;
 		var hour = Math.floor(num/3600);
-		var minute = Math.floor(num%3600/60);
+		var minute = Math.floor((num-hour*3600)/60);
 		var second = Math.floor(num%3600%60);
 		return format.replace("HH", hour>=10?hour:"0"+hour).replace("mm", minute>=10?minute:"0"+minute).replace("ss", second>=10?second:"0"+second);
 	};

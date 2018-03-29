@@ -3,10 +3,124 @@
 <head>
 	<title>demo</title>
 	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="./dist/css/index.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="./dist/css/index.min.css"> -->
+	<style type="text/css">
+		html, body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			cursor: url(./imgs/pen.ico);
+		}
+
+		.div1 {
+			position: relative;
+			top: 0;
+			left: 10px;
+			width: 200px;
+			height: 200px;
+			background: blue;
+		}
+
+		.div2 {
+			/*position: absolute;*/
+			top: 0;
+			left: 10px;
+			width: 180px;
+			height: 180px;
+			margin-left: 10px;
+			background: green;
+		}
+
+		.div3 {
+			position: absolute;
+			top: 0;
+			left: 10px;
+			width: 160px;
+			height: 160px;
+			background: red;
+			padding:10px;
+		}
+	</style>
 </head>
 <body>
-	<div class="container"></div>
+	<!-- <div class="container"></div> -->
+	<!-- <div id="div1" class="div1">
+		<div id="div2" class="div2">
+			<div id="div3" class="div3"></div>
+		</div>
+	</div> -->
+	<div>
+	    <img src="foo.jpg" style="position:absolute;width:500px; height:500px; left:0px; top:0px;" width="500" height="500" />
+	    <canvas id="CanvasDoodle" texsrc="foo.jpg" imgsrc='bar.jpg' width="500" height="500" style='position:absolute;width:500px; height:500px; left:0px; top:0px;background: transparent;'></canvas>
+	</div>
 </body>
-<script type="text/javascript" src="./dist/js/index.min.js"></script>
+<!-- <script type="text/javascript" src="./dist/js/index.min.js"></script> -->
+<script type="text/javascript">
+	/*var aaa = ["Jason", "Tom", {name: "Kitty", age:8, hobbys: ["singing", "running"]}];
+	var bbb = JSON.stringify(aaa, function(key, value) {
+		//value.push && value.push(2);
+		if("age"===key) return 10;
+		console.log(key + "," + value);
+		return value;
+	}, 4);*/
+function CanvasDoodle(canvas){
+        this.canvas=canvas;
+        this.ctx=canvas.getContext("2d");
+        this.imgSrc=canvas.getAttribute("imgsrc");
+        this.width=canvas.width;
+        this.height=canvas.height;
+        this.left=parseInt(canvas.style.left);
+        this.top=parseInt(canvas.style.top);
+        this.touchX=0;
+        this.touchY=0;
+        this.requireLoop=false;
+        this.init();
+    }
+ 
+    CanvasDoodle.prototype={
+        init:function(){
+            document.body.setAttribute("needRefresh","true");
+            var _self=this;
+            this.img=new Image();
+            this.img.src=this.imgSrc;
+ 
+            this.canvas.addEventListener('mousedown',function(e){
+                e.preventDefault();
+                _self.requireLoop=true;
+                _self.touchX= e.clientX-_self.left,_self.touchY= e.clientY-_self.top;
+                _self.loop();
+            },false);
+ 
+        this.canvas.addEventListener('mousemove',function(e){
+            e.preventDefault();
+            if(_self.requireLoop){
+                _self.touchX= e.clientX-_self.left,_self.touchY= e.clientY-_self.top;
+            }
+        },false);
+ 
+            this.canvas.addEventListener('mouseup',function(e){
+                e.preventDefault();
+                _self.requireLoop=false;
+            });
+        },
+        loop:function(){
+            if(this.requireLoop){
+                var _self=this;
+                requestAnimationFrame(function () {_self.loop()});
+                this.render();
+            }
+        },
+        render:function(){
+            var _self=this;
+            _self.ctx.save();
+            _self.ctx.beginPath();
+            _self.ctx.arc(_self.touchX,_self.touchY,15,0,Math.PI*2,true);
+            _self.ctx.clip();
+            _self.ctx.drawImage(_self.img,0,0,_self.width,_self.height,0,0,_self.width,_self.height);
+            _self.ctx.restore();
+        }
+    };
+    new CanvasDoodle(document.getElementById('CanvasDoodle'));
+</script>
 </html>

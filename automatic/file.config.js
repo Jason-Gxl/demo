@@ -19,19 +19,20 @@ module.exports = {
 			suffix: "" 			//生成的文件的后缀名，默认为.js
 		}
 	],*/
-	/*css: {
-		files: "./demo/css/index.less",
-		dirname: "/css",
-		basePath: "./demo"
-	},
+	css: [{
+		files: "./css/**/*.*",
+		dirname: "",
+		basePath: ""
+	}/*, {
+		files: "./css/demo.less",
+		output: "demo"
+	}*/],
 	js: [{
-		files: ["./demo/js/index.js"],
-		dirname: "/js",		
-		prefix: "",			
-		output: "index",	
-		extname: "",	
-		basePath: "./demo",	
-		suffix: ""
+		files: ["./js/index.js"],
+		output: "index"
+	},{
+		files: ["./js/demo2.js"],
+		output: "demo"
 	}],
 	img: {
 		files: ["./img/*.{png,jpg}"],
@@ -46,13 +47,12 @@ module.exports = {
 		files: ["./icon/iconfont.{eot,svg,ttf,woff}"],
 		basePath: "./demo",
 		dirname: "/css",
-	},*/
-	/*html: ["./page/*.html"],*/
+	},
+	html: ["./page/*.html"],
 	host: "china.dev.com",	//域名
 	port: 3000,	//端口
-	pagePath: "./OnlineClass",	//从哪里开始找页面
+	pagePath: "./",	//从哪里开始找页面
 	homePage: "index.html",	//首页面
-	https: true,
 	//proxy: "china.dev.com:8080",	//代理
 	browser: ["chrome"]    //[object Array]  可选项"chrome", "firefox", "explorer"
 };
