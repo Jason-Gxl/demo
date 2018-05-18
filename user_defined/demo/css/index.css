@@ -1,0 +1,335 @@
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+html, body, ul, li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.edit-pad {
+	width: calc(100% - 100px);
+    margin: 0 auto;
+    position: absolute;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    box-shadow: 0 5px 5px #cdcdcd;
+    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    box-sizing: content-box;
+    top: -300px;
+    user-select: none;
+}
+
+.edit-pad .templete-choose-area, .edit-pad .skin-choose-area {
+	display: table;
+    width: 100%;
+}
+
+.edit-pad .templete-list, .edit-pad .skin-list {
+	display: table-cell;
+}
+
+.edit-pad .title {
+	display: table-cell;
+    width: 200px;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.edit-pad .templete-choose-area .templete-box {
+	display: inline-block;
+    width: 20%;
+    float: left;
+}
+
+.edit-pad .skin-choose-area .skin-box {
+	display: inline-block;
+    width: 18%;
+}
+
+.templete-item {
+	border: solid 1px #cdcdcd;
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+    position: relative;
+}
+
+.templete-item .icon-success {
+	color: #008000;
+    font-size: 20px;
+    border: solid 1px #cdcdcd;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    background: #fff;
+    border-radius: 5px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.templete-item .icon-success.hide::before {
+	display: none;
+}
+
+.templete-item.top-middle-bottom-tpl span{
+	display: inline-block;
+	width: 100%;
+	height: 33%;
+}
+
+.templete-item.left-center-right-tpl span{
+	display: inline-block;
+    width: 32.5%;
+    height: 100%;
+    float: left;
+}
+
+.templete-item.top-middle-bottom-tpl span:nth-child(2) {
+	border-top: solid 1px #cdcdcd;
+	border-bottom: solid 1px #cdcdcd;
+}
+
+.templete-item.left-center-right-tpl span:nth-child(2) {
+	border-left: solid 1px #cdcdcd;
+	border-right: solid 1px #cdcdcd;
+}
+
+.templete-item.left-right-tpl span {
+	display: inline-block;
+	width: 50%;
+}
+
+.templete-item.left-right-tpl span:first-child {
+	height: 100%;
+	border-right: solid 1px #cdcdcd;
+}
+
+.templete-item.left-right-tpl span:nth-child(3) {
+	height: 50%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.templete-item.left-right-tpl span:nth-child(2) {
+	border-bottom: solid 1px #cdcdcd;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.top-middle-bottom-tpl {
+	background: linear-gradient(#000, #fff);
+	background: -o-linear-gradient(#000, #fff);
+	background: -moz-linear-gradient(#000, #fff);
+	background: -webkit-linear-gradient(#000, #fff);
+}
+
+.left-center-right-tpl {
+	background: linear-gradient(to right, red, blue);
+	background: -o-linear-gradient(right, red, blue);
+	background: -moz-linear-gradient(right, red, blue);
+	background: -webkit-linear-gradient(left, red, blue);
+}
+
+.left-right-tpl {
+	background: linear-gradient(to bottom right, green, yellow);
+	background: -o-linear-gradient(bottom right, green, yellow);
+	background: -moz-linear-gradient(bottom right, green, yellow);
+	background: -webkit-linear-gradient(left top, green, yellow);
+}
+
+.edit-pad .skin-choose-area .skin-box .skin-pad {
+	border: solid 1px #cdcdcd;
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    margin: 10px auto;
+    position: relative;
+}
+
+.skin-pad .icon-success {
+	color: #008000;
+    font-size: 18px;
+    border: solid 1px #cdcdcd;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    background: #fff;
+    border-radius: 5px;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.skin-pad .icon-success.hide::before {
+	display: none;
+}
+
+.skin-box:first-child .skin-pad {
+	background: #ececec;
+}
+
+.skin-box:nth-child(2) .skin-pad {
+	background: linear-gradient(to bottom left, #98FB98, #FF4500);
+	background: -o-linear-gradient(bottom left, #98FB98, #FF4500);
+	background: -moz-linear-gradient(bottom left, #98FB98, #FF4500);
+	background: -webkit-linear-gradient(right top, #98FB98, #FF4500);
+}
+
+.skin-box:nth-child(3) .skin-pad {
+	background: radial-gradient(red, green, blue);
+	background: -o-radial-gradient(red, green, blue);
+	background: -moz-radial-gradient(red, green, blue);
+	background: -webkit-radial-gradient(red, green, blue);
+}
+
+.skin-box:nth-child(4) .skin-pad {
+	background: linear-gradient(to bottom right, red, blue);
+	background: -o-linear-gradient(bottom right, red, blue);
+	background: -moz-linear-gradient(bottom right, red, blue);
+	background: -webkit-linear-gradient(left top, red, blue);
+}
+
+.skin-box:nth-child(5) .skin-pad {
+	background: linear-gradient(to right, #98FB98, #fff);
+	background: -o-linear-gradient(right, #98FB98, #fff);
+	background: -moz-linear-gradient(right, #98FB98, #fff);
+	background: -webkit-linear-gradient(right, #98FB98, #fff);
+}
+
+
+.tpl1 .drag-box {
+	background: linear-gradient(#000, #fff);
+	background: -o-linear-gradient(#000, #fff);
+	background: -moz-linear-gradient(#000, #fff);
+	background: -webkit-linear-gradient(#000, #fff);
+}
+
+.tpl2 .drag-box {
+	background: linear-gradient(to right, red, blue);
+	background: -o-linear-gradient(right, red, blue);
+	background: -moz-linear-gradient(right, red, blue);
+	background: -webkit-linear-gradient(left, red, blue);
+}
+
+.tpl3 .drag-box {
+	background: linear-gradient(to bottom right, green, yellow);
+	background: -o-linear-gradient(bottom right, green, yellow);
+	background: -moz-linear-gradient(bottom right, green, yellow);
+	background: -webkit-linear-gradient(left top, green, yellow);
+}
+
+.tpl1 .drag-box .drag-item {
+	display: block;
+    width: 100%;
+    height: 33%;
+}
+
+.tpl1 .drag-box .drag-item:nth-child(2) {
+	border-top: solid 1px #cdcdcd;
+    border-bottom: solid 1px #cdcdcd;
+}
+
+.tpl2 .drag-box .drag-item{
+	display: inline-block;
+    width: 32.5%;
+    height: 100%;
+    float: left;
+}
+
+.tpl2 .drag-box .drag-item:nth-child(2) {
+	border-left: solid 1px #cdcdcd;
+	border-right: solid 1px #cdcdcd;
+}
+
+.tpl3 .drag-box .drag-item {
+	display: inline-block;
+	width: 50%;
+}
+
+.tpl3 .drag-box .drag-item:first-child {
+	height: 100%;
+	border-right: solid 1px #cdcdcd;
+}
+
+.tpl3 .drag-box .drag-item:nth-child(3) {
+	height: 50%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.tpl3 .drag-box .drag-item:nth-child(2) {
+	border-bottom: solid 1px #cdcdcd;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.container {
+	width: 1000px;
+    height: 800px;
+    border: solid 1px #cdcdcd;
+    margin: 50px auto;
+}
+
+.container .drag-box {
+	width: 100%;
+	height: 100%;
+}
+
+.bkg1 .drag-box {
+	background: #ececec !important;
+}
+
+.bkg2 .drag-box {
+	background: #ececec !important;
+}
+
+.bkg2 .drag-box {
+	background: linear-gradient(to bottom left, #98FB98, #FF4500) !important;
+	background: -o-linear-gradient(bottom left, #98FB98, #FF4500) !important;
+	background: -moz-linear-gradient(bottom left, #98FB98, #FF4500) !important;
+	background: -webkit-linear-gradient(right top, #98FB98, #FF4500) !important;
+}
+
+.bkg3 .drag-box {
+	background: radial-gradient(red, green, blue) !important;
+	background: -o-radial-gradient(red, green, blue) !important;
+	background: -moz-radial-gradient(red, green, blue) !important;
+	background: -webkit-radial-gradient(red, green, blue) !important;
+}
+
+.bkg4 .drag-box {
+	background: linear-gradient(to bottom right, red, blue) !important;
+	background: -o-linear-gradient(bottom right, red, blue) !important;
+	background: -moz-linear-gradient(bottom right, red, blue) !important;
+	background: -webkit-linear-gradient(left top, red, blue) !important;
+}
+
+.bkg5 .drag-box {
+	background: linear-gradient(to right, #98FB98, #fff) !important;
+	background: -o-linear-gradient(right, #98FB98, #fff) !important;
+	background: -moz-linear-gradient(right, #98FB98, #fff) !important;
+	background: -webkit-linear-gradient(right, #98FB98, #fff) !important;
+}
+
+@keyframes move {
+	from {top: -268px;}
+	to {top: 0;}
+}
+
+.show-edit-pad .edit-pad {
+	animation: move 1.5s forwards;
+}
