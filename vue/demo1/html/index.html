@@ -5,8 +5,26 @@
 	<meta charset="utf-8">
 </head>
 <body>
+	<div id="app_1">
+		{{message}}
+	</div>
 
+	<div id="app_2">
+		<span v-bind:title="message">鼠标悬停看效果</span>
+	</div>
+
+	<div id="app_3">
+		<span v-if="seen">看得见</span>
+	</div>
+
+	<div id="app_4">
+		<span v-for="todo in todos">{{todo.text}}</span>
+	</div>
+
+	<div id="app_5">
+		<span v-on:click="reverseMessage">{{message}}</span>
+	</div>
 </body>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script type="text/javascript" src="../js/index.js"></script>
 </html>

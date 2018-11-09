@@ -50,8 +50,8 @@ module.exports = {
 	/*html: ["./page/*.html"],*/
 	host: "china.dev.com",	//域名
 	port: 3000,	//端口
-	pagePath: "./OnlineClass",	//从哪里开始找页面
-	homePage: "index.html",	//首页面
+	pagePath: "./vue",	//从哪里开始找页面
+	homePage: "demo1/html/index.html",	//首页面
 	https: true,
 	//proxy: "china.dev.com:8080",	//代理
 	browser: ["chrome"]    //[object Array]  可选项"chrome", "firefox", "explorer"
