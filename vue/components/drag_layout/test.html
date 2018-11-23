@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DragLayout</title>
+	<meta charset="utf-8"/>
+	<style type="text/css">
+		.container {
+			width: 500px;
+			height: 500px;
+			border: solid 1px #000;
+		}
+
+		.container .item {
+			width: 80px;
+			height: 80px;
+			padding: 1px;
+			border: solid 1px #000;
+			float: left;
+			user-select: none;
+			cursor: e-resize;
+			margin: 5px;
+		}
+
+		.container .item .item-inside {
+			width: 100%;
+			height: 100%;
+			cursor: default;
+			background: green;
+		}
+	</style>
+</head>
+<body>
+	<div id="container" class="container">
+		<div class="item">
+			<div class="item-inside">1</div>
+		</div>
+		<div class="item">
+			<div class="item-inside">2</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="./index.js"></script>
+<script type="text/javascript">
+	vm.dragLayout.init({
+		container: document.getElementById("container"),
+		itemClass: "item"
+	});
+</script>
+</html>

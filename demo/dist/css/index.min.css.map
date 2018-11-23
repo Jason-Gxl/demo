@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"index.min.css","sourcesContent":["body {\n  background: green; }\n\nbody .container {\n  width: 500px;\n  height: 200px;\n  background: blue; }\n"]}
