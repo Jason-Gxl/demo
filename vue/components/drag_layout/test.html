@@ -8,17 +8,16 @@
 			width: 500px;
 			height: 500px;
 			border: solid 1px #000;
+			margin: 5px;
 		}
 
 		.container .item {
 			width: 80px;
 			height: 80px;
-			padding: 1px;
 			border: solid 1px #000;
-			float: left;
 			user-select: none;
-			cursor: e-resize;
 			margin: 5px;
+			position: absolute;
 		}
 
 		.container .item .item-inside {
@@ -27,15 +26,32 @@
 			cursor: default;
 			background: green;
 		}
+
+		.container .item .drag-btn {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			cursor: nwse-resize;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			background: #000;
+		}
+
+		.container .item:nth-child(n + 2) {
+			left: 100px;
+		}
 	</style>
 </head>
 <body>
 	<div id="container" class="container">
 		<div class="item">
 			<div class="item-inside">1</div>
+			<i class="drag-btn"></i>
 		</div>
 		<div class="item">
 			<div class="item-inside">2</div>
+			<i class="drag-btn"></i>
 		</div>
 	</div>
 </body>

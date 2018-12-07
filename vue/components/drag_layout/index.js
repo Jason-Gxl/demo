@@ -29,8 +29,9 @@
 			e.path.some(function(item) {
 				// 准备移动块
 				if(/\bitem-inside\b/ig.test(item.className)) {
-					self.dispatchEvent(new CustomEvent("premove", {detail: item.parentNode}));
-					var rect = item.parentNode.getBoundingClientRect();
+					var parentNode = item.parentElement || item.parentNode;
+					self.dispatchEvent(new CustomEvent("premove", {detail: parentNode}));
+					var rect = parentNode.getBoundingClientRect();
 					active = "move";
 					start = {
 						x: e.clientX - rect.left,
@@ -41,9 +42,9 @@
 				}
 
 				// 准备缩放
-				if(/\bitem\b/ig.test(item.className)) {
-					self.dispatchEvent(new CustomEvent("prezoom", {detail: item}));
-					var rect = item.getBoundingClientRect();
+				if(/\bdrag-btn\b/ig.test(item.className)) {
+					var parentNode = item.parentElement || item.parentNode;
+					self.dispatchEvent(new CustomEvent("prezoom", {detail: parentNode}));
 					active = "zoom";
 					start = {
 						x: rect.left,
@@ -86,21 +87,24 @@
 		var container = params.container, // 容器
 			containerRect = container.getBoundingClientRect(), // 获取容器的位置信息
 			cloneItem = null, // 即将被移动块的克隆
-			activeItem = null;	// 即将被操作对象
+			activeItem = null,	// 即将被操作对象
+			realStyle = null;	// 即将被移动的块的真实样式
 
 		// 注册premove事件
 		addEvent(container, "premove", function() {
 			var e = arguments[0] || window.event;
 			activeItem = e.detail || null;
 			if(!activeItem) return ;
-			cloneItem = activeItem.cloneNode(true);
 
-			var itemRect = activeItem.getBoundingClientRect(),
-				style = cloneItem.style;
+			cloneItem = activeItem.cloneNode(true);
+			realStyle = window.getComputedStyle(activeItem);
+
+			var itemRect = activeItem.getBoundingClientRect();
+			var	style = cloneItem.style;
 
 			style.setProperty("position", "absolute");
-			style.setProperty("top", (itemRect.top - (containerRect.top)) + "px");
-			style.setProperty("left", (itemRect.left - containerRect.left) + "px");
+			style.setProperty("top", (itemRect.top - (containerRect.top + (+realStyle.marginTop.match(/^\d+/)) + activeItem.clientTop)) + "px");
+			style.setProperty("left", (itemRect.left - (containerRect.left + (+realStyle.marginLeft.match(/^\d+/)) + activeItem.clientLeft)) + "px");
 			container.appendChild(cloneItem);
 			activeItem.style.setProperty("visibility", "hidden");
 		});
@@ -114,8 +118,10 @@
 		// 注册custmouseup事件
 		addEvent(container, "custmouseup", function() {
 			if(!cloneItem) return ;
-			container.removeChild(cloneItem);
+			activeItem.style.left = cloneItem.offsetLeft - realStyle.marginTop.match(/^\d+/) + "px";
+			activeItem.style.top = cloneItem.offsetTop - realStyle.marginLeft.match(/^\d+/) + "px";
 			activeItem.style.setProperty("visibility", "visible");
+			container.removeChild(cloneItem);
 			cloneItem = null;
 			activeItem = null;
 		});
@@ -126,8 +132,8 @@
 				style = cloneItem.style,
 				data = e.detail;
 
-			style.left = data.x + "px";
-			style.top = data.y + "px";
+			style.left = data.x - (realStyle.marginLeft.match(/^\d+/) * 2) + "px";
+			style.top = data.y - (realStyle.marginTop.match(/^\d+/) * 2) + "px";
 
 			console.log(data.event);
 		});

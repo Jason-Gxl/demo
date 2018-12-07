@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>demo2</title>
+	<meta charset="utf-8">
+	<style type="css/text" id="1">
+		
+	</style>
+</head>
+<body>
+	<div id="app_1">{{message}}</div>
+
+	<div id="app_2"><span v-bind:title="message">鼠标悬停几秒钟查看此处动态绑定的提示信息！</span></div>
+
+	<div id="app_3"><p v-if="seen">现在你看到我了</p></div>
+
+	<ul id="app_4">
+		<li v-for="item in items">
+			{{item}}
+		</li>
+	</ul>
+
+	<div id="app_5">
+		<span>{{message}}</span>
+		<a href="javascript:void(0);" v-on:click="reverse">内容反转</a>
+	</div>
+
+	<div id="app_6">
+		<span>{{message}}</span>
+		<input type="test" v-model="message"/>
+	</div>
+
+	<ul id="app_7">
+		<list-item v-for="item in items" v-bind:item="item"></list-item>
+	</ul>
+
+	<div id="app_8">
+		<span>Original message: {{message}}</span>
+		<span>Computed reversed message: {{reverseMessage}}</span>
+	</div>
+
+	<div id="app_9">
+		first name: <input type="text" v-model="firstName"/>
+		last name: <input type="text" v-model="lastName"/>
+		<p>full name:{{fullName}}</p>
+	</div>
+
+	<div id="app_10">
+		<textarea v-model="message"></textarea>
+		<p>{{regMessage}}</p>
+	</div>
+	
+	<ul id="app_11">
+		<li is="show-item" v-for="(item, index) in items" :key="item.id" :title="item.title" @remove="items.splice(index, 1)"></li>
+	</ul>
+
+	<div id="app_12">
+		<a href="javascript:void(0);" @click="counter += 1">add 1</a>
+		<p>The button above has been clicked {{ counter }} times.</p>
+	</div>
+
+	<div id="app_13">
+		<a href="javascript:void(0);" @click="show">click me</a>
+	</div>
+
+	<div id="app_14">
+		<a href="javascript:void(0);" @click="say('hi')">say hi</a>
+		<a href="javascript:void(0);" @click="say('hello')">say hello</a>
+	</div>
+
+	<div id="app_15">
+		<counter-button></counter-button>
+	</div>
+</body>
+<script type="text/javascript">
+	var process = {
+		env : {
+			NODE_ENV: "dev"
+		}
+	}
+</script>
+<script type="module" src="../js/index.js"></script>
+</html>
